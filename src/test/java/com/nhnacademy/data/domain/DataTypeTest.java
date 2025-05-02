@@ -22,17 +22,17 @@ class DataTypeTest {
     @DisplayName("생성자 테스트: 기본 파라미터 테스트")
     @Test
     void testStaticConstructor1() {
-        DataType dataType = DataType.ofNewDataType(TEST_EN_NAME);
-        Assertions.assertEquals(TEST_EN_NAME, dataType.getDataTypeEnName());
-        Assertions.assertTrue(dataType.isSameTypeKrName("미정"));
+        DataType actual = DataType.ofNewDataType(TEST_EN_NAME);
+        Assertions.assertEquals(TEST_EN_NAME, actual.getDataTypeEnName());
+        Assertions.assertTrue(actual.isSameTypeKrName("미정"));
     }
 
     @DisplayName("생성자 테스트: 모든 파라미터 주입 테스트")
     @Test
     void testStaticConstructor2() {
-        DataType dataType = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
-        Assertions.assertEquals(TEST_EN_NAME, dataType.getDataTypeEnName());
-        Assertions.assertTrue(dataType.isSameTypeKrName(TEST_KR_NAME));
+        DataType actual = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        Assertions.assertEquals(TEST_EN_NAME, actual.getDataTypeEnName());
+        Assertions.assertTrue(actual.isSameTypeKrName(TEST_KR_NAME));
     }
 
     @DisplayName("Entity: 삽입 테스트")
@@ -48,39 +48,39 @@ class DataTypeTest {
     @DisplayName("Entity: 조회 테스트")
     @Test
     void testRead() {
-        DataType testRead = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        DataType testRead = DataType.ofNewDataType(TEST_EN_NAME);
         em.persist(testRead);
 
-        DataType findRead = em.find(DataType.class, testRead.getDataTypeNo());
-        log.debug("find to read entity: {}", findRead);
+        DataType actual = em.find(DataType.class, testRead.getDataTypeNo());
+        log.debug("find to read entity: {}", actual);
 
-        Assertions.assertNotNull(findRead);
+        Assertions.assertNotNull(actual);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(testRead.getDataTypeEnName(), findRead.getDataTypeEnName()),
-                () -> Assertions.assertTrue(testRead.isSameTypeKrName(findRead.getDataTypeKrName()))
+                () -> Assertions.assertEquals(testRead.getDataTypeEnName(), actual.getDataTypeEnName()),
+                () -> Assertions.assertTrue(testRead.isSameTypeKrName(actual.getDataTypeKrName()))
         );
     }
 
     @DisplayName("Entity: 수정 테스트")
     @Test
     void testUpdate() {
-        String key = "키는 키요";
-        String value = "벨류는 벨류로다.";
+        String enName = "temperature";
+        String krName = "온도";
 
         DataType testUpdate = DataType.ofNewDataType(TEST_EN_NAME);
         em.persist(testUpdate);
 
-        testUpdate.updateTypeInfo(key, value);
+        testUpdate.updateTypeInfo(enName, krName);
         em.flush();
         em.clear();
 
-        DataType findUpdate = em.find(DataType.class, testUpdate.getDataTypeNo());
-        log.debug("find to update entity: {}", findUpdate);
+        DataType actual = em.find(DataType.class, testUpdate.getDataTypeNo());
+        log.debug("find to update entity: {}", actual);
 
-        Assertions.assertNotNull(findUpdate);
+        Assertions.assertNotNull(actual);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(testUpdate.getDataTypeEnName(), findUpdate.getDataTypeEnName()),
-                () -> Assertions.assertTrue(testUpdate.isSameTypeKrName(findUpdate.getDataTypeKrName()))
+                () -> Assertions.assertEquals(testUpdate.getDataTypeEnName(), actual.getDataTypeEnName()),
+                () -> Assertions.assertTrue(testUpdate.isSameTypeKrName(actual.getDataTypeKrName()))
         );
     }
 
@@ -95,7 +95,7 @@ class DataTypeTest {
         em.flush();
         em.clear();
 
-        DataType findDelete = em.find(DataType.class, testDelete.getDataTypeNo());
-        Assertions.assertNull(findDelete);
+        DataType actual = em.find(DataType.class, testDelete.getDataTypeNo());
+        Assertions.assertNull(actual);
     }
 }
