@@ -12,14 +12,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 class DataTypeTest {
 
-    @Autowired
-    private EntityManager em;
-
     private static final String TEST_EN_NAME = "test-en-name";
 
     private static final String TEST_KR_NAME = "test-kr-name";
 
-    // Create (생성), Read (읽기), Update (갱신), Delete (삭제)
+    @Autowired
+    private EntityManager em;
 
     @DisplayName("생성자 테스트: 기본 파라미터 테스트")
     @Test
