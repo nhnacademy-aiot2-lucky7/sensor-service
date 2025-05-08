@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -28,6 +27,7 @@ class CustomDataTypeRepositoryTest {
     void testCountByDataTypeKrName_save() {
         String enName = "co2";
         String krName = "이산화탄소";
+
         DataType dataType = DataType.ofNewDataType(enName, krName);
         dataTypeRepository.save(dataType);
 
@@ -51,6 +51,7 @@ class CustomDataTypeRepositoryTest {
     void testExistsByDataTypeKrName_save() {
         String enName = "temperature";
         String krName = "온도";
+
         DataType dataType = DataType.ofNewDataType(enName, krName);
         dataTypeRepository.save(dataType);
 
@@ -72,8 +73,8 @@ class CustomDataTypeRepositoryTest {
     void testFindByDataTypeKrName_save() {
         String enName = "humidity";
         String krName = "습도";
-        DataType expected = DataType.ofNewDataType(enName, krName);
 
+        DataType expected = DataType.ofNewDataType(enName, krName);
         dataTypeRepository.save(expected);
         log.debug("expected: {}", expected);
 
@@ -105,12 +106,10 @@ class CustomDataTypeRepositoryTest {
         Assertions.assertEquals(dataTypes.size(), findAll.size());
 
         findAll.forEach((enName, krName) -> {
-            Optional<DataType> optional = dataTypeRepository.findById(enName);
-            Assertions.assertTrue(optional.isPresent());
-
-            DataType dataType = optional.get();
+            DataType dataType = dataTypeRepository.findByDataTypeKrName(krName);
             log.debug("dataType: {}", dataType);
 
+            Assertions.assertNotNull(dataTypes);
             Assertions.assertAll(
                     () -> Assertions.assertTrue(dataType.hasEnName(enName)),
                     () -> Assertions.assertTrue(dataType.hasKrName(krName))
