@@ -75,7 +75,8 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
 
-        <!-- QueryDSL APT 의존성 -->
+        <!-- QueryDSL APT -->
+        <!-- 쿼리 타입(Q 클래스)를 생성할 때, 필요한 라이브러리 -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
@@ -84,6 +85,7 @@
         </dependency>
 
         <!-- QueryDSL JPA 의존성 -->
+        <!-- QueryDSL JPA 호환 라이브러리 -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>

@@ -78,7 +78,8 @@ public class Sensor {
     }
 
     /**
-     * <b>정적 팩토리 메서드입니다.</b> <br>
+     * <b>정적 팩토리 메서드입니다.</b>
+     * <hr>
      * 주어진 게이트웨이 ID와 센서 ID만을 갖는 새로운 센서를 생성합니다. <br>
      * 설치 장소 및 상세 위치는 {@code null}로 설정됩니다.
      *
@@ -96,8 +97,9 @@ public class Sensor {
     }
 
     /**
-     * <b>정적 팩토리 메서드입니다.</b> <br>
-     * 센서의 게이트웨이 ID, 센서 ID, 설치 장소 및 상세 위치 정보를 모두 포함하는 새로운 센서를 생성합니다.
+     * <b>정적 팩토리 메서드입니다.</b>
+     * <hr>
+     * 주어진 센서의 게이트웨이 ID, 센서 ID, 설치 장소 및 상세 위치 정보를 모두 포함하는 새로운 센서를 생성합니다.
      *
      * @param gatewayId      게이트웨이 ID
      * @param sensorId       센서 ID
@@ -115,7 +117,7 @@ public class Sensor {
     }
 
     /**
-     * 게이트웨이 ID를 갱신합니다.
+     * 게이트웨이 ID를 변경합니다.
      *
      * @param gatewayId 새로 설정할 게이트웨이 ID
      */
@@ -124,7 +126,7 @@ public class Sensor {
     }
 
     /**
-     * 센서의 설치 장소를 갱신합니다.
+     * 센서의 설치 장소를 변경합니다.
      *
      * @param sensorLocation 새로 설정할 센서 설치 장소
      */
@@ -133,7 +135,7 @@ public class Sensor {
     }
 
     /**
-     * 센서의 상세 설치 위치를 갱신합니다.
+     * 센서의 상세 설치 위치를 변경합니다.
      *
      * @param sensorSpot 새로 설정할 센서 상세 설치 위치
      */
@@ -142,7 +144,7 @@ public class Sensor {
     }
 
     /**
-     * 센서의 설치 위치와 상세 위치를 동시에 갱신합니다.
+     * 센서의 설치 위치와 상세 위치를 동시에 변경합니다.
      *
      * @param sensorLocation 새로 설정할 센서 설치 장소
      * @param sensorSpot     새로 설정할 센서 상세 설치 위치
