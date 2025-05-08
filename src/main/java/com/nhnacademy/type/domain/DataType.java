@@ -8,6 +8,12 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
+/**
+ * 센서 데이터의 타입(예: 온도, 습도 등)을 정의하는 엔티티입니다. <br>
+ * 각 데이터 타입은 영문명과 한글명을 가지며, 센서로부터 수집되는 데이터의 종류를 구분하는 데 사용됩니다.
+ *
+ * <p><b>테이블명:</b> {@code data_types}</p>
+ */
 @Entity
 @Table(name = "data_types")
 @Getter
@@ -35,7 +41,7 @@ public class DataType {
      *
      * @param dataTypeEnName 데이터 타입의 영문 이름
      * @param dataTypeKrName 데이터 타입의 한글 이름
-     * @see #ofNewDataType(String)
+     * @see DataType#ofNewDataType(String)
      */
     private DataType(String dataTypeEnName, String dataTypeKrName) {
         this.dataTypeEnName = dataTypeEnName;
@@ -51,7 +57,10 @@ public class DataType {
      * @return 새로 생성된 {@link DataType} 인스턴스
      */
     public static DataType ofNewDataType(String dataTypeEnName) {
-        return ofNewDataType(dataTypeEnName, "미정");
+        return ofNewDataType(
+                dataTypeEnName,
+                "미정"
+        );
     }
 
     /**
@@ -63,7 +72,10 @@ public class DataType {
      * @return 새로 생성된 {@link DataType} 인스턴스
      */
     public static DataType ofNewDataType(String dataTypeEnName, String dataTypeKrName) {
-        return new DataType(dataTypeEnName, dataTypeKrName);
+        return new DataType(
+                dataTypeEnName,
+                dataTypeKrName
+        );
     }
 
     /**

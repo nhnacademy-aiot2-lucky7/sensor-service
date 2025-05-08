@@ -11,6 +11,14 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
+/**
+ * 센서 정보를 나타내는 JPA 엔티티입니다. <br>
+ * 각 센서는 고유의 센서 ID와 게이트웨이 ID를 가지며, 설치 위치에 대한 정보도 포함합니다. <br>
+ * 동일한 게이트웨이 내에서 센서 ID는 유일해야 합니다.
+ *
+ * <p><b>테이블명:</b> {@code sensors}</p>
+ * <p><b>인덱스:</b> {@code uk_gateway_id_and_sensor_id} (게이트웨이 ID + 센서 ID 조합의 유일성 보장)</p>
+ */
 @Entity
 @Table(
         name = "sensors",
@@ -60,7 +68,7 @@ public class Sensor {
      * @param sensorId       센서 ID
      * @param sensorLocation 센서 설치 장소
      * @param sensorSpot     센서 상세 설치 위치
-     * @see #ofNewSensor(String, String)
+     * @see Sensor#ofNewSensor(String, String)
      */
     private Sensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
         this.gatewayId = gatewayId;
@@ -79,7 +87,12 @@ public class Sensor {
      * @return 새로 생성된 {@link Sensor} 인스턴스
      */
     public static Sensor ofNewSensor(String gatewayId, String sensorId) {
-        return ofNewSensor(gatewayId, sensorId, null, null);
+        return ofNewSensor(
+                gatewayId,
+                sensorId,
+                null,
+                null
+        );
     }
 
     /**
@@ -93,7 +106,12 @@ public class Sensor {
      * @return 새로 생성된 {@link Sensor} 인스턴스
      */
     public static Sensor ofNewSensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
-        return new Sensor(gatewayId, sensorId, sensorLocation, sensorSpot);
+        return new Sensor(
+                gatewayId,
+                sensorId,
+                sensorLocation,
+                sensorSpot
+        );
     }
 
     /**
