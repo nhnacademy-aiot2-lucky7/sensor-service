@@ -97,7 +97,7 @@ class CustomDataTypeRepositoryTest {
     @DisplayName("QueryDSL: 모든 Entity를 Map<enName, krName> 구조로 조회")
     @ParameterizedTest
     @MethodSource("dataTypes")
-    void test(List<DataType> dataTypes) {
+    void testFindAllAsMap(List<DataType> dataTypes) {
         dataTypeRepository.saveAll(dataTypes);
 
         Map<String, String> findAll = dataTypeRepository.findAllAsMap();
