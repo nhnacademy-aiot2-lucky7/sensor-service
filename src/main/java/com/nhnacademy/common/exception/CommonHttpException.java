@@ -16,9 +16,4 @@ public class CommonHttpException extends RuntimeException {
         super(message, cause);
         this.statusCode = statusCode;
     }
-
-    public CommonHttpException(final CommonHttpException other) {
-        super(other.getMessage(), other.getCause());
-        this.statusCode = other.getStatusCode();
-    }
 }
