@@ -62,12 +62,14 @@ class SensorRepositoryTest {
         String spot = "후문";
 
         sensorRepository.save(test);
-        test.updateSensorPosition(location, spot);
+
+        Sensor testUpdate = get(test.getSensorNo());
+        testUpdate.updateSensorPosition(location, spot);
         sensorRepository.flush();
 
         Sensor actual = get(test.getSensorNo());
         log.debug("update actual: {}", actual);
-        equals(test, actual);
+        equals(testUpdate, actual);
     }
 
     @DisplayName("JPA: 삭제 테스트")
