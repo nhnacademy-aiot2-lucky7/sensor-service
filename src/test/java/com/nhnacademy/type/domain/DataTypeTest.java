@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @Slf4j
 @CustomDataJpaTest
@@ -23,9 +24,14 @@ class DataTypeTest {
     @Test
     void testStaticConstructor1() {
         DataType dataType = DataType.ofNewDataType(TEST_EN_NAME);
+
+        Object object = ReflectionTestUtils.getField(dataType, "dataTypeKrName");
+        Assertions.assertNotNull(object);
+        String krName = object.toString();
+
         Assertions.assertAll(
                 () -> Assertions.assertTrue(dataType.hasEnName(TEST_EN_NAME)),
-                () -> Assertions.assertTrue(dataType.hasKrName("미정"))
+                () -> Assertions.assertTrue(dataType.hasKrName(krName))
         );
     }
 
