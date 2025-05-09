@@ -2,7 +2,9 @@ package com.nhnacademy.sensor.repository.impl;
 
 import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.repository.CustomSensorRepository;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -37,9 +39,17 @@ public class CustomSensorRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Sensor findBySensorId(String sensorId) {
+    public SensorInfoResponse findBySensorId(String sensorId) {
         return queryFactory
-                .select(qSensor)
+                .select(
+                        Projections.constructor(
+                                SensorInfoResponse.class,
+                                qSensor.gatewayId,
+                                qSensor.sensorId,
+                                qSensor.sensorLocation,
+                                qSensor.sensorSpot
+                        )
+                )
                 .from(qSensor)
                 .where(qSensor.sensorId.eq(sensorId))
                 .fetchOne();

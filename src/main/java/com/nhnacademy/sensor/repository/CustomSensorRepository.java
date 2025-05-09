@@ -1,6 +1,7 @@
 package com.nhnacademy.sensor.repository;
 
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.sensor.dto.SensorInfoResponse;
 
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public interface CustomSensorRepository {
      * FROM sensors
      * WHERE sensor_id = ?
      */
-    Sensor findBySensorId(String sensorId);
+    SensorInfoResponse findBySensorId(String sensorId);
 
     /**
      * SELECT sensor_id

@@ -2,6 +2,7 @@ package com.nhnacademy.sensor.repository;
 
 import com.nhnacademy.CustomDataJpaTest;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,14 +25,20 @@ class CustomSensorRepositoryTest {
 
     private static final String TEST_SENSOR_ID = "test-sensor-id";
 
+    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
+
+    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
+
     @Autowired
     private SensorRepository sensorRepository;
 
     @DisplayName("QueryDSL: 존재하는 센서 아이디 카운트 체크")
     @Test
     void testCountBySensorId_save() {
-        String sensorId = "24e124785c389010";
-        Sensor sensor = Sensor.ofNewSensor(TEST_GATEWAY_ID, sensorId);
+        Sensor sensor = Sensor.ofNewSensor(
+                TEST_GATEWAY_ID, TEST_SENSOR_ID,
+                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+        );
         sensorRepository.save(sensor);
 
         Assertions.assertNotEquals(
@@ -45,15 +52,17 @@ class CustomSensorRepositoryTest {
     void testCountBySensorId_notSave() {
         Assertions.assertEquals(
                 0,
-                sensorRepository.countBySensorId("24e124785c389010")
+                sensorRepository.countBySensorId(TEST_SENSOR_ID)
         );
     }
 
     @DisplayName("QueryDSL: 존재하는 센서 아이디 중복 체크")
     @Test
     void testExistsBySensorId_save() {
-        String sensorId = "24e124743d012436";
-        Sensor sensor = Sensor.ofNewSensor(TEST_GATEWAY_ID, sensorId);
+        Sensor sensor = Sensor.ofNewSensor(
+                TEST_GATEWAY_ID, TEST_SENSOR_ID,
+                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+        );
         sensorRepository.save(sensor);
 
         Assertions.assertTrue(
@@ -65,7 +74,7 @@ class CustomSensorRepositoryTest {
     @Test
     void testExistsBySensorId_notSave() {
         Assertions.assertFalse(
-                sensorRepository.existsBySensorId("24e124743d012436")
+                sensorRepository.existsBySensorId(TEST_SENSOR_ID)
         );
     }
 
@@ -80,7 +89,7 @@ class CustomSensorRepositoryTest {
         Assertions.assertEquals(sensors.size(), findSensorIds.size());
 
         findSensorIds.forEach(sensorId -> {
-            Sensor actual = sensorRepository.findBySensorId(sensorId);
+            SensorInfoResponse actual = sensorRepository.findBySensorId(sensorId);
             log.debug("sensor: {}", actual);
 
             Assertions.assertNotNull(actual);
@@ -99,7 +108,10 @@ class CustomSensorRepositoryTest {
         List<Sensor> sensors = new ArrayList<>();
         for (int n = 1; n < 6; n++) {
             sensors.add(
-                    Sensor.ofNewSensor(TEST_GATEWAY_ID, "%s-%d".formatted(TEST_SENSOR_ID, n))
+                    Sensor.ofNewSensor(
+                            TEST_GATEWAY_ID, "%s-%d".formatted(TEST_SENSOR_ID, n),
+                            TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+                    )
             );
         }
         return Stream.of(

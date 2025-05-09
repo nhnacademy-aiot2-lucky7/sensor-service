@@ -38,7 +38,7 @@ public class Sensor {
     @Comment("센서_번호")
     private Integer sensorNo;
 
-    @Column(name = "gateway_id", length = 50, nullable = false)
+    @Column(name = "gateway_id", length = 50, nullable = false, updatable = false)
     @Comment("게이트웨이_아이디")
     private String gatewayId;
 
@@ -68,32 +68,13 @@ public class Sensor {
      * @param sensorId       센서 ID
      * @param sensorLocation 센서 설치 장소
      * @param sensorSpot     센서 상세 설치 위치
-     * @see Sensor#ofNewSensor(String, String)
+     * @see Sensor#ofNewSensor(String, String, String, String)
      */
     private Sensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
         this.sensorLocation = sensorLocation;
         this.sensorSpot = sensorSpot;
-    }
-
-    /**
-     * <b>정적 팩토리 메서드입니다.</b>
-     * <hr>
-     * 주어진 게이트웨이 ID와 센서 ID만을 갖는 새로운 센서를 생성합니다. <br>
-     * 설치 장소 및 상세 위치는 {@code null}로 설정됩니다.
-     *
-     * @param gatewayId 게이트웨이 ID
-     * @param sensorId  센서 ID
-     * @return 새로 생성된 {@link Sensor} 인스턴스
-     */
-    public static Sensor ofNewSensor(String gatewayId, String sensorId) {
-        return ofNewSensor(
-                gatewayId,
-                sensorId,
-                null,
-                null
-        );
     }
 
     /**
@@ -117,40 +98,17 @@ public class Sensor {
     }
 
     /**
-     * 게이트웨이 ID를 변경합니다.
-     *
-     * @param gatewayId 새로 설정할 게이트웨이 ID
-     */
-    public void updateGatewayId(String gatewayId) {
-        this.gatewayId = gatewayId;
-    }
-
-    /**
-     * 센서의 설치 장소를 변경합니다.
-     *
-     * @param sensorLocation 새로 설정할 센서 설치 장소
-     */
-    public void updateSensorLocation(String sensorLocation) {
-        this.sensorLocation = sensorLocation;
-    }
-
-    /**
-     * 센서의 상세 설치 위치를 변경합니다.
-     *
-     * @param sensorSpot 새로 설정할 센서 상세 설치 위치
-     */
-    public void updateSensorSpot(String sensorSpot) {
-        this.sensorSpot = sensorSpot;
-    }
-
-    /**
-     * 센서의 설치 위치와 상세 위치를 동시에 변경합니다.
+     * 센서의 설치 위치와 상세 위치를 변경합니다.
      *
      * @param sensorLocation 새로 설정할 센서 설치 장소
      * @param sensorSpot     새로 설정할 센서 상세 설치 위치
      */
     public void updateSensorPosition(String sensorLocation, String sensorSpot) {
-        updateSensorLocation(sensorLocation);
-        updateSensorSpot(sensorSpot);
+        if (sensorLocation != null) {
+            this.sensorLocation = sensorLocation;
+        }
+        if (sensorSpot != null) {
+            this.sensorSpot = sensorSpot;
+        }
     }
 }

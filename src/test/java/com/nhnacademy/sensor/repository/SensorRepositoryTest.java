@@ -19,6 +19,10 @@ class SensorRepositoryTest {
 
     private static final String TEST_SENSOR_ID = "test-sensor-id";
 
+    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
+
+    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
+
     @Autowired
     private SensorRepository sensorRepository;
 
@@ -26,7 +30,10 @@ class SensorRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        test = Sensor.ofNewSensor(TEST_GATEWAY_ID, TEST_SENSOR_ID);
+        test = Sensor.ofNewSensor(
+                TEST_GATEWAY_ID, TEST_SENSOR_ID,
+                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+        );
     }
 
     @DisplayName("JPA: 삽입 테스트")
@@ -45,13 +52,7 @@ class SensorRepositoryTest {
 
         Sensor actual = get(test.getSensorNo());
         log.debug("read actual: {}", actual);
-
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(test.getGatewayId(), actual.getGatewayId()),
-                () -> Assertions.assertEquals(test.getSensorId(), actual.getSensorId()),
-                () -> Assertions.assertNull(actual.getSensorLocation()),
-                () -> Assertions.assertNull(actual.getSensorSpot())
-        );
+        equals(test, actual);
     }
 
     @DisplayName("JPA: 수정 테스트")
@@ -66,14 +67,7 @@ class SensorRepositoryTest {
 
         Sensor actual = get(test.getSensorNo());
         log.debug("update actual: {}", actual);
-
-        Assertions.assertAll(
-                () -> Assertions.assertNotNull(actual.getSensorLocation()),
-                () -> Assertions.assertEquals(test.getSensorLocation(), actual.getSensorLocation()),
-
-                () -> Assertions.assertNotNull(actual.getSensorSpot()),
-                () -> Assertions.assertEquals(test.getSensorSpot(), actual.getSensorSpot())
-        );
+        equals(test, actual);
     }
 
     @DisplayName("JPA: 삭제 테스트")
@@ -93,5 +87,15 @@ class SensorRepositoryTest {
         Optional<Sensor> optional = sensorRepository.findById(sensorNo);
         Assertions.assertTrue(optional.isPresent());
         return optional.get();
+    }
+
+    private void equals(Sensor expected, Sensor actual) {
+        Assertions.assertNotNull(actual);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(expected.getGatewayId(), actual.getGatewayId()),
+                () -> Assertions.assertEquals(expected.getSensorId(), actual.getSensorId()),
+                () -> Assertions.assertEquals(expected.getSensorLocation(), actual.getSensorLocation()),
+                () -> Assertions.assertEquals(expected.getSensorSpot(), actual.getSensorSpot())
+        );
     }
 }
