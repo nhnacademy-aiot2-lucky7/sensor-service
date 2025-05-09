@@ -2,6 +2,7 @@ package com.nhnacademy.type.repository;
 
 import com.nhnacademy.CustomDataJpaTest;
 import com.nhnacademy.type.domain.DataType;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +23,14 @@ class DataTypeRepositoryTest {
     @Autowired
     private DataTypeRepository dataTypeRepository;
 
+    @Autowired
+    private EntityManager em;
+
     private DataType test;
 
     @BeforeEach
     void setUp() {
-        test = DataType.ofNewDataType(TEST_EN_NAME);
+        test = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
     }
 
     @DisplayName("JPA: 삽입 테스트")
@@ -45,11 +49,7 @@ class DataTypeRepositoryTest {
 
         DataType actual = get(test.getDataTypeEnName());
         log.debug("read actual: {}", actual);
-
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(actual.hasEnName(test.getDataTypeEnName())),
-                () -> Assertions.assertTrue(actual.hasKrName(test.getDataTypeKrName()))
-        );
+        equals(test, actual);
     }
 
     @DisplayName("JPA: 수정 테스트")
@@ -58,13 +58,14 @@ class DataTypeRepositoryTest {
         String krName = "습도";
 
         dataTypeRepository.save(test);
-        test.updateTypeKrName(krName);
+
+        DataType testUpdate = get(test.getDataTypeEnName());
+        testUpdate.updateTypeKrName(krName);
         dataTypeRepository.flush();
 
         DataType actual = get(test.getDataTypeEnName());
-        log.debug("update actual: {}", actual);
-
-        Assertions.assertFalse(actual.hasKrName(TEST_KR_NAME));
+        log.debug("update actual: {}", get(test.getDataTypeEnName()));
+        equals(testUpdate, actual);
     }
 
     @DisplayName("JPA: 삭제 테스트")
@@ -84,5 +85,13 @@ class DataTypeRepositoryTest {
         Optional<DataType> optional = dataTypeRepository.findById(dataTypeEnName);
         Assertions.assertTrue(optional.isPresent());
         return optional.get();
+    }
+
+    private void equals(DataType expected, DataType actual) {
+        Assertions.assertNotNull(actual);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(expected.getDataTypeEnName(), actual.getDataTypeEnName()),
+                () -> Assertions.assertEquals(expected.getDataTypeKrName(), actual.getDataTypeKrName())
+        );
     }
 }

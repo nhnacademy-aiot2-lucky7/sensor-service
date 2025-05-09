@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
 
 @Slf4j
 @CustomDataJpaTest
@@ -20,35 +19,20 @@ class DataTypeTest {
     @Autowired
     private EntityManager em;
 
-    @DisplayName("생성자 테스트: 파라미터 주입 테스트 1")
+    @DisplayName("생성자 테스트: 파라미터 주입 테스트")
     @Test
-    void testStaticConstructor1() {
-        DataType dataType = DataType.ofNewDataType(TEST_EN_NAME);
-
-        Object object = ReflectionTestUtils.getField(dataType, "dataTypeKrName");
-        Assertions.assertNotNull(object);
-        String krName = object.toString();
-
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(dataType.hasEnName(TEST_EN_NAME)),
-                () -> Assertions.assertTrue(dataType.hasKrName(krName))
-        );
-    }
-
-    @DisplayName("생성자 테스트: 파라미터 주입 테스트 2")
-    @Test
-    void testStaticConstructor2() {
+    void testStaticConstructor() {
         DataType dataType = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
         Assertions.assertAll(
-                () -> Assertions.assertTrue(dataType.hasEnName(TEST_EN_NAME)),
-                () -> Assertions.assertTrue(dataType.hasKrName(TEST_KR_NAME))
+                () -> Assertions.assertEquals(TEST_EN_NAME, dataType.getDataTypeEnName()),
+                () -> Assertions.assertEquals(TEST_KR_NAME, dataType.getDataTypeKrName())
         );
     }
 
     @DisplayName("Entity: 삽입 테스트")
     @Test
     void testCreate() {
-        DataType testSave = DataType.ofNewDataType(TEST_EN_NAME);
+        DataType testSave = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
         em.persist(testSave);
 
         log.debug("create entity: {}", testSave);
@@ -58,17 +42,12 @@ class DataTypeTest {
     @DisplayName("Entity: 조회 테스트")
     @Test
     void testRead() {
-        DataType testRead = DataType.ofNewDataType(TEST_EN_NAME);
+        DataType testRead = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
         em.persist(testRead);
 
         DataType actual = em.find(DataType.class, testRead.getDataTypeEnName());
         log.debug("find read entity: {}", actual);
-
-        Assertions.assertNotNull(actual);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(actual.hasEnName(testRead.getDataTypeEnName())),
-                () -> Assertions.assertTrue(actual.hasKrName(testRead.getDataTypeKrName()))
-        );
+        equals(testRead, actual);
     }
 
     @DisplayName("Entity: 수정 테스트")
@@ -77,7 +56,7 @@ class DataTypeTest {
         String enName = "temperature";
         String krName = "온도";
 
-        DataType testUpdate = DataType.ofNewDataType(enName);
+        DataType testUpdate = DataType.ofNewDataType(enName, enName);
         em.persist(testUpdate);
 
         testUpdate.updateTypeKrName(krName);
@@ -86,17 +65,13 @@ class DataTypeTest {
 
         DataType actual = em.find(DataType.class, testUpdate.getDataTypeEnName());
         log.debug("find update entity: {}", actual);
-
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(actual.hasEnName(testUpdate.getDataTypeEnName())),
-                () -> Assertions.assertTrue(actual.hasKrName(testUpdate.getDataTypeKrName()))
-        );
+        equals(testUpdate, actual);
     }
 
     @DisplayName("Entity: 삭제 테스트")
     @Test
     void testDelete() {
-        DataType testDelete = DataType.ofNewDataType(TEST_EN_NAME);
+        DataType testDelete = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
         em.persist(testDelete);
         log.debug("delete entity: {}", testDelete);
 
@@ -107,5 +82,13 @@ class DataTypeTest {
 
         DataType actual = em.find(DataType.class, testDelete.getDataTypeEnName());
         Assertions.assertNull(actual);
+    }
+
+    private void equals(DataType expected, DataType actual) {
+        Assertions.assertNotNull(actual);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(expected.getDataTypeEnName(), actual.getDataTypeEnName()),
+                () -> Assertions.assertEquals(expected.getDataTypeKrName(), actual.getDataTypeKrName())
+        );
     }
 }

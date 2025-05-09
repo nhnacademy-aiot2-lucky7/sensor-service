@@ -42,29 +42,14 @@ public class DataType {
      *
      * @param dataTypeEnName 데이터 타입의 영문 이름
      * @param dataTypeKrName 데이터 타입의 한글 이름
-     * @see DataType#ofNewDataType(String)
+     * @see DataType#ofNewDataType(String, String)
      */
     private DataType(String dataTypeEnName, String dataTypeKrName) {
         this.dataTypeEnName = dataTypeEnName;
         this.dataTypeKrName = dataTypeKrName;
     }
 
-    /**
-     * <b>정적 팩토리 메서드입니다.</b>
-     * <hr>
-     * 주어진 원문명으로 새로운 객체를 생성합니다. <br>
-     * 한글명이 "미정"으로 설정된 새로운 데이터 타입을 생성합니다.
-     *
-     * @param dataTypeEnName 데이터 타입의 영문 명칭
-     * @return 새로 생성된 {@link DataType} 인스턴스
-     */
-    public static DataType ofNewDataType(String dataTypeEnName) {
-        return ofNewDataType(
-                dataTypeEnName,
-                "미정"
-        );
-    }
-
+    /// TODO: 한글명은 구글 번역기 라이브러리를 활용해 즉시, 반영한다.
     /**
      * <b>정적 팩토리 메서드입니다.</b>
      * <hr>
@@ -88,25 +73,5 @@ public class DataType {
      */
     public void updateTypeKrName(String dataTypeKrName) {
         this.dataTypeKrName = dataTypeKrName;
-    }
-
-    /**
-     * 주어진 영문명이 현재 데이터 타입의 영문명과 같은지 비교합니다.
-     *
-     * @param dataTypeEnName 비교할 데이터 타입 영문명
-     * @return 동일하면 {@code true}, 다르면 {@code false}
-     */
-    public boolean hasEnName(String dataTypeEnName) {
-        return this.dataTypeEnName.equals(dataTypeEnName);
-    }
-
-    /**
-     * 주어진 한글명이 현재 데이터 타입의 한글명과 같은지 비교합니다.
-     *
-     * @param dataTypeKrName 비교할 데이터 타입 한글명
-     * @return 동일하면 {@code true}, 다르면 {@code false}
-     */
-    public boolean hasKrName(String dataTypeKrName) {
-        return this.dataTypeKrName.equals(dataTypeKrName);
     }
 }
