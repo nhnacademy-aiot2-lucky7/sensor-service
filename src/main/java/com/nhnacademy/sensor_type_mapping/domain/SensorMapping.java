@@ -52,11 +52,13 @@ public class SensorMapping {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sensor_no", referencedColumnName = "sensor_no", nullable = false, updatable = false)
     @Comment("센서_번호")
+    @ToString.Exclude
     private Sensor sensor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_en_name", referencedColumnName = "type_en_name", nullable = false)
+    @JoinColumn(name = "type_en_name", referencedColumnName = "type_en_name", nullable = false, updatable = false)
     @Comment("데이터_타입_영문명")
+    @ToString.Exclude
     private DataType dataType;
 
     /**
@@ -72,30 +74,12 @@ public class SensorMapping {
      * @param sensor       센서 엔티티
      * @param dataType     데이터 타입 엔티티
      * @param sensorStatus 센서 상태
-     * @see SensorMapping#ofNewSensorDataType(Sensor, DataType)
+     * @see SensorMapping#ofNewSensorDataType(Sensor, DataType, SensorStatus)
      */
     private SensorMapping(Sensor sensor, DataType dataType, SensorStatus sensorStatus) {
         this.sensor = sensor;
         this.dataType = dataType;
         this.sensorStatus = sensorStatus;
-    }
-
-    /**
-     * <b>정적 팩토리 메서드입니다.</b>
-     * <hr>
-     * 주어진 센서와 데이터 타입을 기준으로 새로운 매핑 인스턴스를 생성합니다. <br>
-     * 센서 상태는 기본적으로 {@link SensorStatus#PENDING}으로 설정됩니다.
-     *
-     * @param sensor   센서 엔티티
-     * @param dataType 데이터 타입 엔티티
-     * @return 새로 생성된 {@link SensorMapping} 인스턴스
-     */
-    public static SensorMapping ofNewSensorDataType(Sensor sensor, DataType dataType) {
-        return ofNewSensorDataType(
-                sensor,
-                dataType,
-                SensorStatus.PENDING
-        );
     }
 
     /**
@@ -114,15 +98,6 @@ public class SensorMapping {
                 dataType,
                 sensorStatus
         );
-    }
-
-    /**
-     * 데이터 타입을 변경합니다.
-     *
-     * @param dataType 새로 설정할 데이터 타입
-     */
-    public void updateDataType(DataType dataType) {
-        this.dataType = dataType;
     }
 
     /**

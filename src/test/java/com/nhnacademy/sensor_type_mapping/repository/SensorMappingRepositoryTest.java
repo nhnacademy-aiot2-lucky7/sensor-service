@@ -24,9 +24,15 @@ class SensorMappingRepositoryTest {
 
     private static final String TEST_SENSOR_ID = "test-sensor-id";
 
+    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
+
+    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
+
     private static final String TEST_EN_NAME = "test-en-name";
 
     private static final String TEST_KR_NAME = "test-kr-name";
+
+    private static final SensorStatus DEFAULT_STATUS = SensorStatus.PENDING;
 
     @Autowired
     private SensorRepository sensorRepository;
@@ -39,23 +45,25 @@ class SensorMappingRepositoryTest {
 
     private Sensor sensor;
 
+    private DataType dataType;
+
     private SensorMapping test;
 
     @BeforeEach
     void setUp() {
         sensor = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID,
-                TEST_SENSOR_ID
+                TEST_GATEWAY_ID, TEST_SENSOR_ID,
+                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
         );
         sensorRepository.save(sensor);
 
-        DataType dataType = DataType.ofNewDataType(
+        dataType = DataType.ofNewDataType(
                 TEST_EN_NAME,
                 TEST_KR_NAME
         );
         dataTypeRepository.save(dataType);
 
-        test = SensorMapping.ofNewSensorDataType(sensor, dataType);
+        test = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
     }
 
     @DisplayName("JPA: 삽입 테스트")
@@ -74,7 +82,6 @@ class SensorMappingRepositoryTest {
 
         SensorMapping actual = get(test.getSensorDataNo());
         log.debug("read actual: {}", actual);
-
         equals(test, actual);
     }
 
@@ -83,23 +90,19 @@ class SensorMappingRepositoryTest {
     void testUpdate() {
         String location = "클래스 A";
         String spot = "단상 위";
-        String enName = "humidity";
         String krName = "습도";
         SensorStatus sensorStatus = SensorStatus.COMPLETED;
 
         // 최초 할당
         sensorMappingRepository.save(test);
 
-        // 새로운 데이터 타입 할당
-        DataType newDataType = DataType.ofNewDataType(enName, krName);
-        dataTypeRepository.save(newDataType);
-        dataTypeRepository.flush();
-
         // 센서 위치 정보 수정
         sensor.updateSensorPosition(location, spot);
 
-        // 데이터 타입 및 상태 수정
-        test.updateDataType(newDataType);
+        // 데이터 타입 정보 수정
+        dataType.updateTypeKrName(krName);
+
+        // 센서 상태 수정
         test.updateStatus(sensorStatus);
         sensorMappingRepository.flush();
 
@@ -111,7 +114,7 @@ class SensorMappingRepositoryTest {
                 () -> Assertions.assertEquals(location, actual.getSensor().getSensorLocation()),
                 () -> Assertions.assertEquals(spot, actual.getSensor().getSensorSpot()),
 
-                () -> Assertions.assertEquals(enName, actual.getDataType().getDataTypeEnName()),
+                () -> Assertions.assertEquals(dataType.getDataTypeEnName(), actual.getDataType().getDataTypeEnName()),
                 () -> Assertions.assertEquals(krName, actual.getDataType().getDataTypeKrName()),
 
                 () -> Assertions.assertEquals(sensorStatus, actual.getSensorStatus())
@@ -132,7 +135,7 @@ class SensorMappingRepositoryTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(sensorRepository.existsBySensorId(TEST_SENSOR_ID)),
-                () -> Assertions.assertTrue(dataTypeRepository.existsByDataTypeKrName(TEST_KR_NAME))
+                () -> Assertions.assertTrue(dataTypeRepository.existsById(TEST_EN_NAME))
         );
     }
 

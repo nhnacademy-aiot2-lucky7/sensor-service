@@ -5,7 +5,7 @@ import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor_type_mapping.domain.SensorMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
-import com.nhnacademy.sensor_type_mapping.dto.SensorMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorMappingFrontResponse;
 import com.nhnacademy.type.domain.DataType;
 import com.nhnacademy.type.repository.DataTypeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -138,33 +138,33 @@ class CustomSensorMappingRepositoryTest {
         sensors.forEach(sensor -> {
 
             // 조건에 해당하는 데이터들을 검색
-            List<SensorMappingInfo> sensorMappingInfos =
+            List<SensorMappingFrontResponse> sensorMappingFrontResponses =
                     sensorMappingRepository.findMappingInfoBySensorId(sensor.getSensorId());
-            Assertions.assertEquals(2, sensorMappingInfos.size());
+            Assertions.assertEquals(2, sensorMappingFrontResponses.size());
 
             // 실제 데이터와 동일한지 검증
             AtomicInteger count = new AtomicInteger();
-            sensorMappingInfos.forEach(sensorMappingInfo -> {
+            sensorMappingFrontResponses.forEach(sensorMappingFrontResponse -> {
                 SensorMapping expected =
                         sensorMappingRepository.findByGatewayIdAndSensorIdAndDataTypeEnName(
-                                sensorMappingInfo.getGatewayId(),
-                                sensorMappingInfo.getSensorId(),
-                                sensorMappingInfo.getDataTypeEnName()
+                                sensorMappingFrontResponse.getGatewayId(),
+                                sensorMappingFrontResponse.getSensorId(),
+                                sensorMappingFrontResponse.getDataTypeEnName()
                         );
                 Assertions.assertNotNull(expected);
 
                 Sensor expectedSensor = expected.getSensor();
                 DataType expectedDataType = expected.getDataType();
                 Assertions.assertAll(
-                        () -> Assertions.assertEquals(expectedSensor.getGatewayId(), sensorMappingInfo.getGatewayId()),
-                        () -> Assertions.assertEquals(expectedSensor.getSensorId(), sensorMappingInfo.getSensorId()),
-                        () -> Assertions.assertEquals(expectedSensor.getSensorLocation(), sensorMappingInfo.getSensorLocation()),
-                        () -> Assertions.assertEquals(expectedSensor.getSensorSpot(), sensorMappingInfo.getSensorSpot()),
+                        () -> Assertions.assertEquals(expectedSensor.getGatewayId(), sensorMappingFrontResponse.getGatewayId()),
+                        () -> Assertions.assertEquals(expectedSensor.getSensorId(), sensorMappingFrontResponse.getSensorId()),
+                        () -> Assertions.assertEquals(expectedSensor.getSensorLocation(), sensorMappingFrontResponse.getSensorLocation()),
+                        () -> Assertions.assertEquals(expectedSensor.getSensorSpot(), sensorMappingFrontResponse.getSensorSpot()),
 
-                        () -> Assertions.assertEquals(expectedDataType.getDataTypeEnName(), sensorMappingInfo.getDataTypeEnName()),
-                        () -> Assertions.assertEquals(expectedDataType.getDataTypeKrName(), sensorMappingInfo.getDataTypeKrName()),
+                        () -> Assertions.assertEquals(expectedDataType.getDataTypeEnName(), sensorMappingFrontResponse.getDataTypeEnName()),
+                        () -> Assertions.assertEquals(expectedDataType.getDataTypeKrName(), sensorMappingFrontResponse.getDataTypeKrName()),
 
-                        () -> Assertions.assertEquals(expected.getSensorStatus(), sensorMappingInfo.getSensorStatus())
+                        () -> Assertions.assertEquals(expected.getSensorStatus(), sensorMappingFrontResponse.getSensorStatus())
                 );
             });
         });
@@ -173,9 +173,9 @@ class CustomSensorMappingRepositoryTest {
     @DisplayName("QueryDSL: 존재하지 않는 센서 매핑 DTO 조회 시도")
     @Test
     void testFindMappingInfoBySensorId_notSave() {
-        List<SensorMappingInfo> sensorMappingInfos =
+        List<SensorMappingFrontResponse> sensorMappingFrontResponses =
                 sensorMappingRepository.findMappingInfoBySensorId("test-sensor-id");
-        Assertions.assertEquals(0, sensorMappingInfos.size());
+        Assertions.assertEquals(0, sensorMappingFrontResponses.size());
     }
 
     private List<Sensor> testSensors() {

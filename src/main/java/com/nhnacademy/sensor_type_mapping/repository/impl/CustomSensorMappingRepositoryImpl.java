@@ -4,7 +4,7 @@ package com.nhnacademy.sensor_type_mapping.repository.impl;
 import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor_type_mapping.domain.QSensorMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorMapping;
-import com.nhnacademy.sensor_type_mapping.dto.SensorMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorMappingFrontResponse;
 import com.nhnacademy.sensor_type_mapping.repository.CustomSensorMappingRepository;
 import com.nhnacademy.type.domain.QDataType;
 import com.querydsl.core.types.Projections;
@@ -32,7 +32,7 @@ public class CustomSensorMappingRepositoryImpl extends QuerydslRepositorySupport
     }
 
     /**
-     * 특정 센서가 보내는 데이터 타입의 상태를 업데이트할 목적으로 사용되는 메서드입니다.
+     * 센서 상태를 업데이트 하기 위해서, 만든 Entity 조회 Method 입니다.
      */
     @Override
     public SensorMapping findByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
@@ -50,11 +50,11 @@ public class CustomSensorMappingRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<SensorMappingInfo> findMappingInfoBySensorId(String sensorId) {
+    public List<SensorMappingFrontResponse> findMappingInfoBySensorId(String sensorId) {
         return queryFactory
                 .select(
                         Projections.constructor(
-                                SensorMappingInfo.class,
+                                SensorMappingFrontResponse.class,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
                                 qSensorMapping.sensorStatus,
