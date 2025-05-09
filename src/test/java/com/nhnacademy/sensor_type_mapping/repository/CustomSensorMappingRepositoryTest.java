@@ -143,7 +143,6 @@ class CustomSensorMappingRepositoryTest {
             Assertions.assertEquals(2, sensorMappingFrontResponses.size());
 
             // 실제 데이터와 동일한지 검증
-            AtomicInteger count = new AtomicInteger();
             sensorMappingFrontResponses.forEach(sensorMappingFrontResponse -> {
                 SensorMapping expected =
                         sensorMappingRepository.findByGatewayIdAndSensorIdAndDataTypeEnName(

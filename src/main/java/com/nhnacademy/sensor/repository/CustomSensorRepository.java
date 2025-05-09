@@ -1,6 +1,5 @@
 package com.nhnacademy.sensor.repository;
 
-import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 
 import java.util.Set;
