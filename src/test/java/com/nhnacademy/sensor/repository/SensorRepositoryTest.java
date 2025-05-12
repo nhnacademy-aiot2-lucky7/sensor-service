@@ -1,6 +1,7 @@
 package com.nhnacademy.sensor.repository;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -15,14 +16,6 @@ import java.util.Optional;
 @CustomDataJpaTest
 class SensorRepositoryTest {
 
-    private static final String TEST_GATEWAY_ID = "test-gateway-id";
-
-    private static final String TEST_SENSOR_ID = "test-sensor-id";
-
-    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
-
-    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
-
     @Autowired
     private SensorRepository sensorRepository;
 
@@ -31,8 +24,8 @@ class SensorRepositoryTest {
     @BeforeEach
     void setUp() {
         test = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+                SensorTestingData.TEST_GATEWAY_ID, SensorTestingData.TEST_SENSOR_ID,
+                SensorTestingData.TEST_SENSOR_LOCATION, SensorTestingData.TEST_SENSOR_SPOT
         );
     }
 
