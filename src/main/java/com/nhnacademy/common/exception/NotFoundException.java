@@ -10,7 +10,11 @@ public class NotFoundException extends CommonHttpException {
         super(HTTP_STATUS_CODE, "resource not found");
     }
 
-    public NotFoundException(String message) {
+    public NotFoundException(final String message) {
         super(HTTP_STATUS_CODE, message);
+    }
+
+    public NotFoundException(final String message, final Throwable cause) {
+        super(HTTP_STATUS_CODE, message, cause);
     }
 }
