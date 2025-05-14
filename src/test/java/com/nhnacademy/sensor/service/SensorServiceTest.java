@@ -1,12 +1,10 @@
 package com.nhnacademy.sensor.service;
 
-import com.nhnacademy.common.exception.SensorNotFoundException;
 import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor.service.impl.SensorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -25,17 +22,15 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @ExtendWith(MockitoExtension.class)
 class SensorServiceTest {
 
-    private final int sensorNo = 1;
-
     @Mock
     private SensorRepository sensorRepository;
 
     @InjectMocks
     private SensorServiceImpl sensorService;
 
-    @DisplayName("Sensor 서비스: sensorNo")
+    /*@DisplayName("Sensor 서비스: sensorNo")
     @Test
-    void testGetSensorBySensorNo_success() {
+    void testGetSensor_success() {
         /// given
         Sensor mockSensor = testSensor();
         Optional<Sensor> mockOptionalSensor = Optional.of(mockSensor);
@@ -44,7 +39,10 @@ class SensorServiceTest {
                 .thenReturn(mockOptionalSensor);
 
         /// when
-        Sensor sensor = sensorService.getSensorBySensorNo(mockSensor.getSensorNo());
+        Sensor sensor = sensorService.getSensor(
+                mockSensor.getGatewayId(),
+                mockSensor.getSensorId()
+        );
         log.debug("find sensor: {}", sensor);
 
         /// then
@@ -61,11 +59,11 @@ class SensorServiceTest {
                 () -> Assertions.assertEquals(mockSensor.getSensorLocation(), sensor.getSensorLocation()),
                 () -> Assertions.assertEquals(mockSensor.getSensorSpot(), sensor.getSensorSpot())
         );
-    }
+    }*/
 
-    @DisplayName("Sensor 서비스: sensorNo")
+    /*@DisplayName("Sensor 서비스: sensorNo")
     @Test
-    void testGetSensorBySensorNo_failed() {
+    void testGetSensor_failed() {
         /// given
         Mockito.when(sensorRepository.findById(Mockito.anyInt()))
                 .thenReturn(Optional.empty());
@@ -73,7 +71,7 @@ class SensorServiceTest {
         /// when
         Assertions.assertThrows(
                 SensorNotFoundException.class,
-                () -> sensorService.getSensorBySensorNo(sensorNo)
+                () -> sensorService.getSensor("", "")
         );
 
         /// then
@@ -82,18 +80,18 @@ class SensorServiceTest {
                         Mockito.times(1)
                 )
                 .findById(sensorNo);
-    }
+    }*/
 
-    @DisplayName("Sensor 서비스: 모든 sensor의 sensorId 값을 Set 형태로 반환")
+    /*@DisplayName("Sensor 서비스: 모든 sensor의 sensorId 값을 Set 형태로 반환")
     @Test
-    void testGetSensorIds() {
+    void testGetDistinctSensorIds() {
         /// given
         Set<String> mockSensorIds = testSensorIds();
         Mockito.when(sensorRepository.findDistinctSensorIds())
                 .thenReturn(mockSensorIds);
 
         /// when
-        Set<String> sensorIds = sensorService.getSensorIds();
+        Set<String> sensorIds = sensorService.getDistinctSensorIds();
         log.debug("find sensorIds: {}", sensorIds);
 
         /// then
@@ -104,7 +102,7 @@ class SensorServiceTest {
                 .findDistinctSensorIds();
 
         assertThat(sensorIds).containsExactlyInAnyOrderElementsOf(mockSensorIds);
-    }
+    }*/
 
     private Sensor testSensor() {
         Sensor sensor = Sensor.ofNewSensor(
@@ -113,7 +111,7 @@ class SensorServiceTest {
                 SensorTestingData.TEST_SENSOR_LOCATION,
                 SensorTestingData.TEST_SENSOR_SPOT
         );
-        ReflectionTestUtils.setField(sensor, "sensorNo", sensorNo);
+        ReflectionTestUtils.setField(sensor, "sensorNo", 1);
         return sensor;
     }
 

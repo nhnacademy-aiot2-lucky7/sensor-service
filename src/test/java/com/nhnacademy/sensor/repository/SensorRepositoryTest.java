@@ -24,18 +24,23 @@ class SensorRepositoryTest {
     @BeforeEach
     void setUp() {
         test = Sensor.ofNewSensor(
-                SensorTestingData.TEST_GATEWAY_ID, SensorTestingData.TEST_SENSOR_ID,
-                SensorTestingData.TEST_SENSOR_LOCATION, SensorTestingData.TEST_SENSOR_SPOT
+                SensorTestingData.TEST_GATEWAY_ID,
+                SensorTestingData.TEST_SENSOR_ID,
+                SensorTestingData.TEST_SENSOR_LOCATION,
+                SensorTestingData.TEST_SENSOR_SPOT
         );
     }
 
     @DisplayName("JPA: 삽입 테스트")
     @Test
     void testCreate() {
-        sensorRepository.save(test);
+        Sensor sensor = sensorRepository.save(test);
+        log.debug("create actual: {}", sensor);
 
-        log.debug("create actual: {}", test);
-        Assertions.assertTrue(sensorRepository.findById(test.getSensorNo()).isPresent());
+        Assertions.assertAll(
+                () -> Assertions.assertNotNull(sensor),
+                () -> Assertions.assertTrue(sensorRepository.findById(test.getSensorNo()).isPresent())
+        );
     }
 
     @DisplayName("JPA: 조회 테스트")
@@ -76,6 +81,30 @@ class SensorRepositoryTest {
 
         Optional<Sensor> actual = sensorRepository.findById(test.getSensorNo());
         Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @DisplayName("JPA: 조회 테스트(gatewayId & sensorId)")
+    @Test
+    void testFindByGatewayIdAndSensorId() {
+        sensorRepository.save(test);
+
+        Sensor actual = sensorRepository.findByGatewayIdAndSensorId(
+                test.getGatewayId(), test.getSensorId()
+        );
+        log.debug("find actual: {}", actual);
+        equals(test, actual);
+    }
+
+    @DisplayName("JPA: 존재 테스트(gatewayId & sensorId)")
+    @Test
+    void testExistsByGatewayIdAndSensorId() {
+        sensorRepository.save(test);
+
+        Assertions.assertTrue(
+                sensorRepository.existsByGatewayIdAndSensorId(
+                        test.getGatewayId(), test.getSensorId()
+                )
+        );
     }
 
     private Sensor get(Integer sensorNo) {

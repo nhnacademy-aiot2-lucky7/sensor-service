@@ -1,35 +1,29 @@
 package com.nhnacademy.sensor.repository;
 
+import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
+import com.nhnacademy.sensor.dto.SensorSearchRequest;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CustomSensorRepository {
 
-    /**
-     * SELECT COUNT(sensor_no)
-     * FROM sensors
-     * WHERE sensor_id = ?
-     */
-    long countBySensorId(String sensorId);
+    long countByConditions(SensorSearchRequest request);
 
     /**
-     * {@link CustomSensorRepository#countBySensorId(String sensorId)} > 0
+     * {@link CustomSensorRepository#countByConditions(SensorSearchRequest)} > 0
      */
-    boolean existsBySensorId(String sensorId);
+    boolean existsByConditions(SensorSearchRequest request);
+
+    List<SensorInfoResponse> findByConditions(SensorSearchRequest request);
 
     /**
-     * SELECT *
-     * FROM sensors
-     * WHERE sensor_id = ?
-     */
-    SensorInfoResponse findBySensorId(String sensorId);
-
-    /**
-     * SELECT sensor_id
+     * SELECT gateway_id, sensor_id
      * FROM sensors
      * <hr>
-     * {@code Key}: sensor_id
+     * {@code Key}: <b>SensorDataHandlerResponse</b>
+     * @see SensorDataHandlerResponse
      */
-    Set<String> findDistinctSensorIds();
+    Set<SensorDataHandlerResponse> findAllSensorUniqueKeys();
 }
