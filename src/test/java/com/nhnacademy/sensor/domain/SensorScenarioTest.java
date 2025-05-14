@@ -5,6 +5,7 @@ import com.nhnacademy.sensor.SensorTestingData;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,14 +21,6 @@ import java.util.stream.Stream;
 @CustomDataJpaTest
 class SensorScenarioTest {
 
-    private final String testGatewayId = SensorTestingData.TEST_GATEWAY_ID;
-
-    private final String testSensorId = SensorTestingData.TEST_SENSOR_ID;
-
-    private final String testSensorLocation = SensorTestingData.TEST_SENSOR_LOCATION;
-
-    private final String testSensorSpot = SensorTestingData.TEST_SENSOR_SPOT;
-
     @Autowired
     private EntityManager em;
 
@@ -35,22 +28,26 @@ class SensorScenarioTest {
 
     @BeforeEach
     void setUp() {
-        sample = Sensor.ofNewSensor(
-                testGatewayId, testSensorId,
-                testSensorLocation, testSensorSpot
-        );
+        sample = SensorTestingData.sample();
         em.persist(sample);
     }
 
-    @DisplayName("Sensor Entity: 서로 다른 GatewayId 및 SensorId 조합이면 저장 성공")
+    @AfterEach
+    void tearDown() {
+        sample = null;
+    }
+
+    @DisplayName("Sensor Entity: 서로 다른 gatewayId 및 sensorId 조합이면 저장 성공")
     @ParameterizedTest
     @MethodSource("testSensorData")
-    void testUnique_success(String gatewayId, String SensorId) {
+    void testUnique_success(String gatewayId, String sensorId) {
         Assertions.assertDoesNotThrow(
                 () -> em.persist(
                         Sensor.ofNewSensor(
-                                gatewayId, SensorId,
-                                null, null
+                                gatewayId,
+                                sensorId,
+                                null,
+                                null
                         )
                 )
         );
@@ -66,15 +63,17 @@ class SensorScenarioTest {
         );
     }
 
-    @DisplayName("Sensor Entity: 동일한 GatewayId + SensorId 저장 시, 무결성 제약 위반 예외 발생 테스트")
+    @DisplayName("Sensor Entity: 동일한 gatewayId + sensorId 저장 시, 무결성 제약 위반 예외 발생 테스트")
     @Test
     void testUnique_failed() {
         Assertions.assertThrows(
                 ConstraintViolationException.class,
                 () -> em.persist(
                         Sensor.ofNewSensor(
-                                testGatewayId, testSensorId,
-                                null, null
+                                SensorTestingData.TEST_GATEWAY_ID,
+                                SensorTestingData.TEST_SENSOR_ID,
+                                null,
+                                null
                         )
                 )
         );
@@ -93,14 +92,14 @@ class SensorScenarioTest {
                 () -> Assertions.assertEquals(
                         (sensorLocation != null && !sensorLocation.isBlank()) ?
                                 sensorLocation
-                                : testSensorLocation,
+                                : SensorTestingData.TEST_SENSOR_LOCATION,
                         actual.getSensorLocation()
                 ),
 
                 () -> Assertions.assertEquals(
                         (sensorSpot != null && !sensorSpot.isBlank()) ?
                                 sensorSpot
-                                : testSensorSpot,
+                                : SensorTestingData.TEST_SENSOR_SPOT,
                         actual.getSensorSpot()
                 )
         );

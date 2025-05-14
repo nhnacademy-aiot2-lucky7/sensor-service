@@ -19,17 +19,46 @@ public final class SensorTestingData {
         throw new IllegalStateException("Utility class");
     }
 
-    public static List<Sensor> sensors() {
-        int index = 0;
+    public static Sensor sample() {
+        return Sensor.ofNewSensor(
+                TEST_GATEWAY_ID,
+                TEST_SENSOR_ID,
+                TEST_SENSOR_LOCATION,
+                TEST_SENSOR_SPOT
+        );
+    }
+
+    public static List<Sensor> samples() {
+        String[][] loc = {
+                {
+                        "%s-A".formatted(TEST_SENSOR_LOCATION),
+                        "%s-A".formatted(TEST_SENSOR_LOCATION),
+                        null,
+                        null
+                },
+                {
+                        "%s-B".formatted(TEST_SENSOR_LOCATION),
+                        "%s-B".formatted(TEST_SENSOR_LOCATION),
+                        null,
+                        null
+                }
+        };
+        String[] spot = {
+                "%s-A".formatted(TEST_SENSOR_SPOT),
+                null,
+                "%s-B".formatted(TEST_SENSOR_SPOT),
+                null
+        };
+
         List<Sensor> sensors = new ArrayList<>();
-        for (int n = 1; n < 4; n++) {
-            for (int m = 0; m < 2; m++) {
+        for (int n = 0; n < 2; n++) {
+            for (int m = 0; m < 4; m++) {
                 sensors.add(
                         Sensor.ofNewSensor(
-                                "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, n),
-                                "%s-%d".formatted(SensorTestingData.TEST_SENSOR_ID, ++index),
-                                SensorTestingData.TEST_SENSOR_LOCATION,
-                                SensorTestingData.TEST_SENSOR_SPOT
+                                "%s-%d".formatted(TEST_GATEWAY_ID, n + 1),
+                                "%s-%d".formatted(TEST_SENSOR_ID, m + 1),
+                                loc[n][m],
+                                spot[m]
                         )
                 );
             }

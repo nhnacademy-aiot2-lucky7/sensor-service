@@ -3,6 +3,7 @@ package com.nhnacademy.sensor.repository;
 import com.nhnacademy.CustomDataJpaTest;
 import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorSearchRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -22,137 +24,134 @@ import java.util.stream.Stream;
 @CustomDataJpaTest
 class CustomSensorRepositoryTest {
 
-    private final String testGatewayId = SensorTestingData.TEST_GATEWAY_ID;
-
-    private final String testSensorId = SensorTestingData.TEST_SENSOR_ID;
-
-    private final String testSensorLocation = SensorTestingData.TEST_SENSOR_LOCATION;
-
-    private final String testSensorSpot = SensorTestingData.TEST_SENSOR_SPOT;
-
     @Autowired
     private SensorRepository sensorRepository;
 
-    @DisplayName("QueryDSL: 게이트웨이 ID에 해당하는 데이터 수를 조회")
-    @Test
-    void testCountByConditions_search_gatewayId() {
-        SensorSearchRequest request = new SensorSearchRequest(
-                testGatewayId,
-                null,
-                null,
-                null
-        );
-    }
+    /// TODO: 추후에 다양한 테스트 구조를 추가할 예정...
 
-    /*@DisplayName("QueryDSL: 모든 검색 조건에 해당하는 데이터 하나를 특정해낸 경우")
-    @Test
-    void testCountByConditions_search_all() {
-        SensorSearchRequest request = new SensorSearchRequest(
-                testGatewayId,
-                testSensorId,
-                testSensorLocation,
-                testSensorSpot
-        );
-        long searchAll = sensorRepository.countByConditions(request);
-        Assertions.assertEquals(1L, searchAll);
-    }*/
-
-    @DisplayName("QueryDSL: 모든 검색 조건에 해당하는 데이터가 없는 경우")
-    @Test
-    void testCountByConditions_search_all_empty() {
-        SensorSearchRequest request = new SensorSearchRequest(
-                testGatewayId,
-                testSensorId,
-                testSensorLocation,
-                testSensorSpot
-        );
-        long empty = sensorRepository.countByConditions(request);
-        Assertions.assertEquals(0L, empty);
-    }
-
-    /*@DisplayName("QueryDSL: 존재하는 센서 아이디 카운트 체크")
-    @Test
-    void testCountBySensorId_save() {
-        Sensor sensor = Sensor.ofNewSensor(
-                testGatewayId, testSensorId,
-                testSensorLocation, testSensorSpot
-        );
-        sensorRepository.save(sensor);
-
-        Assertions.assertNotEquals(
-                0,
-                sensorRepository.countBySensorId(sensor.getSensorId())
-        );
-    }
-
-    @DisplayName("QueryDSL: 존재하지 않는 센서 아이디 카운트 체크")
-    @Test
-    void testCountBySensorId_notSave() {
-        Assertions.assertEquals(
-                0,
-                sensorRepository.countBySensorId(testSensorId)
-        );
-    }
-
-    @DisplayName("QueryDSL: 존재하는 센서 아이디 중복 체크")
-    @Test
-    void testExistsBySensorId_save() {
-        Sensor sensor = Sensor.ofNewSensor(
-                testGatewayId, testSensorId,
-                testSensorLocation, testSensorSpot
-        );
-        sensorRepository.save(sensor);
-
-        Assertions.assertTrue(
-                sensorRepository.existsBySensorId(sensor.getSensorId())
-        );
-    }
-
-    @DisplayName("QueryDSL: 존재하지 않는 센서 아이디 중복 체크")
-    @Test
-    void testExistsBySensorId_notSave() {
-        Assertions.assertFalse(
-                sensorRepository.existsBySensorId(testSensorId)
-        );
-    }*/
-
-
-    /*@DisplayName("QueryDSL: 모든 Entity 데이터들에서 센서 ID만 가져와 Set<sensorId> 처리")
+    @DisplayName("Sensor QueryDSL: (gatewayId) 조건으로 countByConditions 결과 검증")
     @ParameterizedTest
-    @MethodSource("sensors")
-    void testFindDistinctSensorIds(List<Sensor> sensors) {
-        sensorRepository.saveAll(sensors);
+    @MethodSource("testSensorSearchRequestByGatewayId")
+    void testCountByConditions_search_gatewayId(SensorSearchRequest request) {
+        List<Sensor> samples = SensorTestingData.samples();
+        sensorRepository.saveAll(samples);
 
-        Set<String> findSensorIds = sensorRepository.findDistinctSensorIds();
-        log.debug("sensors: {}", findSensorIds);
-        Assertions.assertEquals(sensors.size(), findSensorIds.size());
+        long expected = getExpectedCount(samples, request);
+        log.debug("count expected: {}", expected);
 
-        findSensorIds.forEach(sensorId -> {
-            SensorSearchRequest request = new SensorSearchRequest(
-                    null, sensorId, null, null
-            );
+        long actual = sensorRepository.countByConditions(request);
+        log.debug("count actual: {}", actual);
 
-            /// TODO: 테스트 코드 조정 예정...
-            SensorInfoResponse actual = sensorRepository.findByConditions(request).getFirst();
-            log.debug("sensor: {}", actual);
+        Assertions.assertEquals(expected, actual);
+    }
 
-            Assertions.assertNotNull(actual);
-            Assertions.assertNotEquals(
-                    0,
-                    sensors.stream()
-                            .filter(sensor ->
-                                    sensor.getSensorId().equals(actual.getSensorId())
-                            )
-                            .count()
-            );
-        });
-    }*/
+    @DisplayName("Sensor QueryDSL: (gatewayId) 조건으로 existsByConditions 결과 검증")
+    @ParameterizedTest
+    @MethodSource("testSensorSearchRequestByGatewayId")
+    void testExistsByConditions_search_gatewayId(SensorSearchRequest request) {
+        List<Sensor> samples = SensorTestingData.samples();
+        sensorRepository.saveAll(samples);
 
-    private static Stream<Arguments> sensors() {
+        boolean actual = sensorRepository.existsByConditions(request);
+        if (getExpectedCount(samples, request) > 0) {
+            Assertions.assertTrue(actual);
+        } else {
+            Assertions.assertFalse(actual);
+        }
+    }
+
+    @DisplayName("Sensor QueryDSL: (gatewayId) 조건으로 findByConditions 결과 검증")
+    @ParameterizedTest
+    @MethodSource("testSensorSearchRequestByGatewayId")
+    void testFindByConditions_search_gatewayId(SensorSearchRequest request) {
+        List<Sensor> samples = SensorTestingData.samples();
+        sensorRepository.saveAll(samples);
+
+        long expected = getExpectedCount(samples, request);
+
+        List<SensorInfoResponse> results = sensorRepository.findByConditions(request);
+        Assertions.assertEquals(expected, results.size());
+
+        long actual = 0;
+        for (SensorInfoResponse response : results) {
+            for (Sensor sample : samples) {
+                if (isNotEquals(sample, response)) continue;
+                actual++;
+            }
+        }
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> testSensorSearchRequestByGatewayId() {
+        int index = 0;
         return Stream.of(
-                Arguments.of(
-                        SensorTestingData.sensors()
+                Arguments.of(new SensorSearchRequest(
+                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        null, null, null
+                )),
+                Arguments.of(new SensorSearchRequest(
+                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        null, null, null
+                )),
+                Arguments.of(new SensorSearchRequest(
+                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        null, null, null
+                ))
+        );
+    }
+
+    @DisplayName("Sensor QueryDSL: 저장된 모든 센서의 Set(gatewayId, sensorId) 조회")
+    @Test
+    void testFindAllSensorUniqueKeys_success() {
+        List<Sensor> samples = SensorTestingData.samples();
+        sensorRepository.saveAll(samples);
+
+        Set<SensorDataHandlerResponse> results =
+                sensorRepository.findAllSensorUniqueKeys();
+        Assertions.assertEquals(samples.size(), results.size());
+
+        results.forEach(response ->
+                Assertions.assertTrue(
+                        sensorRepository.existsByGatewayIdAndSensorId(
+                                response.getGatewayId(),
+                                response.getSensorId()
+                        )
                 )
         );
+    }
+
+    @DisplayName("Sensor QueryDSL: 저장된 센서 데이터가 없을 시, 빈 Set 반환")
+    @Test
+    void testFindAllSensorUniqueKeys_empty() {
+        Assertions.assertTrue(
+                sensorRepository.findAllSensorUniqueKeys().isEmpty()
+        );
+    }
+
+    private long getExpectedCount(List<Sensor> samples, SensorSearchRequest request) {
+        long expected = 0;
+        for (Sensor sample : samples) {
+            if (request.isNotNullGatewayId() && !Objects.equals(sample.getGatewayId(), request.getGatewayId())) {
+                continue;
+            }
+            if (request.isNotNullSensorId() && !Objects.equals(sample.getSensorId(), request.getSensorId())) {
+                continue;
+            }
+            if (request.isNotNullSensorLocation() && !Objects.equals(sample.getSensorLocation(), request.getSensorLocation())) {
+                continue;
+            }
+            if (request.isNotNullSensorSpot() && !Objects.equals(sample.getSensorSpot(), request.getSensorSpot())) {
+                continue;
+            }
+            expected++;
+        }
+        return expected;
+    }
+
+    private boolean isNotEquals(Sensor sample, SensorInfoResponse response) {
+        return !Objects.equals(sample.getGatewayId(), response.getGatewayId())
+                || !Objects.equals(sample.getSensorId(), response.getSensorId())
+                || !Objects.equals(sample.getSensorLocation(), response.getSensorLocation())
+                || !Objects.equals(sample.getSensorSpot(), response.getSensorSpot());
     }
 }

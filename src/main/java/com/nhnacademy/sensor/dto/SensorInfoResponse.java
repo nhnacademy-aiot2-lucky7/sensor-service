@@ -2,6 +2,7 @@ package com.nhnacademy.sensor.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
@@ -19,6 +20,7 @@ public final class SensorInfoResponse {
     @JsonProperty("sensor_spot")
     private final String sensorSpot;
 
+    @QueryProjection
     public SensorInfoResponse(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;

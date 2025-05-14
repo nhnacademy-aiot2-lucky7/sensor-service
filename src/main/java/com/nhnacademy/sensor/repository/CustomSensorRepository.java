@@ -23,6 +23,7 @@ public interface CustomSensorRepository {
      * FROM sensors
      * <hr>
      * {@code Key}: <b>SensorDataHandlerResponse</b>
+     *
      * @see SensorDataHandlerResponse
      */
     Set<SensorDataHandlerResponse> findAllSensorUniqueKeys();

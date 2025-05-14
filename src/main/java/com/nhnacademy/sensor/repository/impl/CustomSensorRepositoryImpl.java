@@ -3,12 +3,12 @@ package com.nhnacademy.sensor.repository.impl;
 import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.dto.QSensorDataHandlerResponse;
+import com.nhnacademy.sensor.dto.QSensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorSearchRequest;
 import com.nhnacademy.sensor.repository.CustomSensorRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -66,8 +66,7 @@ public class CustomSensorRepositoryImpl extends QuerydslRepositorySupport implem
     public List<SensorInfoResponse> findByConditions(SensorSearchRequest request) {
         return queryFactory
                 .select(
-                        Projections.constructor(
-                                SensorInfoResponse.class,
+                        new QSensorInfoResponse(
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
                                 qSensor.sensorLocation,
