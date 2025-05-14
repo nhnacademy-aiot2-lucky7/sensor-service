@@ -1,8 +1,8 @@
 package com.nhnacademy.type.repository;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.type.DataTypeTestingData;
 import com.nhnacademy.type.domain.DataType;
-import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,30 +16,29 @@ import java.util.Optional;
 @CustomDataJpaTest
 class DataTypeRepositoryTest {
 
-    private static final String TEST_EN_NAME = "test-en-name";
-
-    private static final String TEST_KR_NAME = "test-kr-name";
-
     @Autowired
     private DataTypeRepository dataTypeRepository;
-
-    @Autowired
-    private EntityManager em;
 
     private DataType test;
 
     @BeforeEach
     void setUp() {
-        test = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        test = DataType.ofNewDataType(
+                DataTypeTestingData.TEST_EN_NAME,
+                DataTypeTestingData.TEST_KR_NAME
+        );
     }
 
     @DisplayName("JPA: 삽입 테스트")
     @Test
     void testCreate() {
-        dataTypeRepository.save(test);
+        DataType dataType = dataTypeRepository.save(test);
+        log.debug("create actual: {}", dataType);
 
-        log.debug("create actual: {}", test);
-        Assertions.assertTrue(dataTypeRepository.findById(test.getDataTypeEnName()).isPresent());
+        Assertions.assertAll(
+                () -> Assertions.assertNotNull(dataType),
+                () -> Assertions.assertTrue(dataTypeRepository.findById(dataType.getDataTypeEnName()).isPresent())
+        );
     }
 
     @DisplayName("JPA: 조회 테스트")

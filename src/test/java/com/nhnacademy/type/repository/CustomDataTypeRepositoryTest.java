@@ -1,6 +1,7 @@
 package com.nhnacademy.type.repository;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.type.DataTypeTestingData;
 import com.nhnacademy.type.domain.DataType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -49,11 +50,7 @@ class CustomDataTypeRepositoryTest {
     private static Stream<Arguments> dataTypes() {
         return Stream.of(
                 Arguments.of(
-                        List.of(
-                                DataType.ofNewDataType("temperature", "온도"),
-                                DataType.ofNewDataType("humidity", "습도"),
-                                DataType.ofNewDataType("co2", "이산화탄소")
-                        )
+                        DataTypeTestingData.dataTypes()
                 )
         );
     }

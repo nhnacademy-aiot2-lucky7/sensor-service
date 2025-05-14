@@ -1,4 +1,6 @@
-package com.nhnacademy.common.exception;
+package com.nhnacademy.common.exception.http.extend;
+
+import com.nhnacademy.common.exception.http.NotFoundException;
 
 public class DataTypeNotFoundException extends NotFoundException {
 

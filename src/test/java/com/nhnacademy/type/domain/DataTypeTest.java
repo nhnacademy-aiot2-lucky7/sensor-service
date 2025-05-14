@@ -1,6 +1,7 @@
 package com.nhnacademy.type.domain;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.type.DataTypeTestingData;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -8,13 +9,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @CustomDataJpaTest
 class DataTypeTest {
 
-    private static final String TEST_EN_NAME = "test-en-name";
+    private final String testEnName = DataTypeTestingData.TEST_EN_NAME;
 
-    private static final String TEST_KR_NAME = "test-kr-name";
+    private final String testKrName = DataTypeTestingData.TEST_KR_NAME;
 
     @Autowired
     private EntityManager em;
@@ -22,17 +25,17 @@ class DataTypeTest {
     @DisplayName("생성자 테스트: 파라미터 주입 테스트")
     @Test
     void testStaticConstructor() {
-        DataType dataType = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        DataType dataType = DataType.ofNewDataType(testEnName, testKrName);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(TEST_EN_NAME, dataType.getDataTypeEnName()),
-                () -> Assertions.assertEquals(TEST_KR_NAME, dataType.getDataTypeKrName())
+                () -> Assertions.assertEquals(testEnName, dataType.getDataTypeEnName()),
+                () -> Assertions.assertEquals(testKrName, dataType.getDataTypeKrName())
         );
     }
 
     @DisplayName("Entity: 삽입 테스트")
     @Test
     void testCreate() {
-        DataType testSave = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        DataType testSave = DataType.ofNewDataType(testEnName, testKrName);
         em.persist(testSave);
 
         log.debug("create entity: {}", testSave);
@@ -42,7 +45,7 @@ class DataTypeTest {
     @DisplayName("Entity: 조회 테스트")
     @Test
     void testRead() {
-        DataType testRead = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        DataType testRead = DataType.ofNewDataType(testEnName, testKrName);
         em.persist(testRead);
 
         DataType actual = em.find(DataType.class, testRead.getDataTypeEnName());
@@ -71,7 +74,7 @@ class DataTypeTest {
     @DisplayName("Entity: 삭제 테스트")
     @Test
     void testDelete() {
-        DataType testDelete = DataType.ofNewDataType(TEST_EN_NAME, TEST_KR_NAME);
+        DataType testDelete = DataType.ofNewDataType(testEnName, testKrName);
         em.persist(testDelete);
         log.debug("delete entity: {}", testDelete);
 
