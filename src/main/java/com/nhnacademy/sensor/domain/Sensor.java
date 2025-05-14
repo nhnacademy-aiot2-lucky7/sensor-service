@@ -104,10 +104,10 @@ public class Sensor {
      * @param sensorSpot     새로 설정할 센서 상세 설치 위치
      */
     public void updateSensorPosition(String sensorLocation, String sensorSpot) {
-        if (sensorLocation != null) {
+        if (sensorLocation != null && !sensorLocation.isBlank()) {
             this.sensorLocation = sensorLocation;
         }
-        if (sensorSpot != null) {
+        if (sensorSpot != null && !sensorSpot.isBlank()) {
             this.sensorSpot = sensorSpot;
         }
     }
