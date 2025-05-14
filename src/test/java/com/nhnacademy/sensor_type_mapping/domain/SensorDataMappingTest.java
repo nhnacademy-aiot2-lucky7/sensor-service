@@ -1,7 +1,9 @@
 package com.nhnacademy.sensor_type_mapping.domain;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.type.DataTypeTestingData;
 import com.nhnacademy.type.domain.DataType;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -13,19 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 @CustomDataJpaTest
-class SensorMappingTest {
+class SensorDataMappingTest {
 
-    private static final String TEST_GATEWAY_ID = "test-gateway-id";
+    private final String testGatewayId = SensorTestingData.TEST_GATEWAY_ID;
 
-    private static final String TEST_SENSOR_ID = "test-sensor-id";
+    private final String testSensorId = SensorTestingData.TEST_SENSOR_ID;
 
-    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
+    private final String testEnName = DataTypeTestingData.TEST_EN_NAME;
 
-    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
-
-    private static final String TEST_EN_NAME = "test-en-name";
-
-    private static final String TEST_KR_NAME = "test-kr-name";
+    private final String testKrName = DataTypeTestingData.TEST_KR_NAME;
 
     private static final SensorStatus DEFAULT_STATUS = SensorStatus.PENDING;
 
@@ -39,13 +37,14 @@ class SensorMappingTest {
     @BeforeEach
     void setUp() {
         sensor = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
+                testGatewayId, testSensorId,
+                SensorTestingData.TEST_SENSOR_LOCATION,
+                SensorTestingData.TEST_SENSOR_SPOT
         );
         em.persist(sensor);
 
         dataType = DataType.ofNewDataType(
-                TEST_EN_NAME, TEST_KR_NAME
+                testEnName, testKrName
         );
         em.persist(dataType);
     }
@@ -53,36 +52,36 @@ class SensorMappingTest {
     @DisplayName("생성자 테스트: 파라미터 주입 테스트")
     @Test
     void testStaticConstructor() {
-        SensorMapping sensorMapping = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
+        SensorDataMapping sensorDataMapping = SensorDataMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(TEST_GATEWAY_ID, sensorMapping.getSensor().getGatewayId()),
-                () -> Assertions.assertEquals(TEST_SENSOR_ID, sensorMapping.getSensor().getSensorId()),
+                () -> Assertions.assertEquals(testGatewayId, sensorDataMapping.getSensor().getGatewayId()),
+                () -> Assertions.assertEquals(testSensorId, sensorDataMapping.getSensor().getSensorId()),
 
-                () -> Assertions.assertEquals(TEST_EN_NAME, sensorMapping.getDataType().getDataTypeEnName()),
-                () -> Assertions.assertEquals(TEST_KR_NAME, sensorMapping.getDataType().getDataTypeKrName()),
+                () -> Assertions.assertEquals(testEnName, sensorDataMapping.getDataType().getDataTypeEnName()),
+                () -> Assertions.assertEquals(testKrName, sensorDataMapping.getDataType().getDataTypeKrName()),
 
-                () -> Assertions.assertEquals(DEFAULT_STATUS, sensorMapping.getSensorStatus())
+                () -> Assertions.assertEquals(DEFAULT_STATUS, sensorDataMapping.getSensorStatus())
         );
     }
 
     @DisplayName("Entity: 삽입 테스트")
     @Test
     void testCreate() {
-        SensorMapping testSave = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
+        SensorDataMapping testSave = SensorDataMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
         em.persist(testSave);
 
         log.debug("create entity: {}", testSave);
-        Assertions.assertNotNull(em.find(SensorMapping.class, testSave.getSensorDataNo()));
+        Assertions.assertNotNull(em.find(SensorDataMapping.class, testSave.getSensorDataNo()));
     }
 
     @DisplayName("Entity: 조회 테스트")
     @Test
     void testRead() {
-        SensorMapping testRead = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
+        SensorDataMapping testRead = SensorDataMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
         em.persist(testRead);
 
-        SensorMapping actual = em.find(SensorMapping.class, testRead.getSensorDataNo());
+        SensorDataMapping actual = em.find(SensorDataMapping.class, testRead.getSensorDataNo());
         log.debug("find read entity: {}", actual);
         equals(testRead, actual);
     }
@@ -96,7 +95,7 @@ class SensorMappingTest {
         SensorStatus sensorStatus = SensorStatus.ABANDONED;
 
         // 최초 할당
-        SensorMapping testUpdate = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
+        SensorDataMapping testUpdate = SensorDataMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
         em.persist(testUpdate);
 
         // 센서 위치 정보 수정
@@ -110,7 +109,7 @@ class SensorMappingTest {
         em.flush();
         em.clear();
 
-        SensorMapping actual = em.find(SensorMapping.class, testUpdate.getSensorDataNo());
+        SensorDataMapping actual = em.find(SensorDataMapping.class, testUpdate.getSensorDataNo());
         log.debug("find update entity: {}", actual);
 
         equals(testUpdate, actual);
@@ -128,20 +127,20 @@ class SensorMappingTest {
     @DisplayName("Entity: 삭제 테스트")
     @Test
     void testDelete() {
-        SensorMapping testDelete = SensorMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
+        SensorDataMapping testDelete = SensorDataMapping.ofNewSensorDataType(sensor, dataType, DEFAULT_STATUS);
         em.persist(testDelete);
         log.debug("delete entity: {}", testDelete);
 
-        Assertions.assertNotNull(em.find(SensorMapping.class, testDelete.getSensorDataNo()));
+        Assertions.assertNotNull(em.find(SensorDataMapping.class, testDelete.getSensorDataNo()));
         em.remove(testDelete);
         em.flush();
         em.clear();
 
-        SensorMapping actual = em.find(SensorMapping.class, testDelete.getSensorDataNo());
+        SensorDataMapping actual = em.find(SensorDataMapping.class, testDelete.getSensorDataNo());
         Assertions.assertNull(actual);
     }
 
-    private void equals(SensorMapping expected, SensorMapping actual) {
+    private void equals(SensorDataMapping expected, SensorDataMapping actual) {
         Sensor expectedSensor = expected.getSensor();
         DataType expectedDataType = expected.getDataType();
 
