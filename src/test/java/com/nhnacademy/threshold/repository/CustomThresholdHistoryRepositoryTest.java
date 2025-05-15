@@ -23,10 +23,6 @@ import java.util.List;
 @CustomDataJpaTest
 class CustomThresholdHistoryRepositoryTest {
 
-    private static final String TEST_GATEWAY_ID = "test-gateway-id";
-
-    private static final String TEST_SENSOR_ID = "test-sensor-id";
-
     @Autowired
     private SensorRepository sensorRepository;
 
@@ -49,7 +45,7 @@ class CustomThresholdHistoryRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        sensors = SensorTestingData.sensors();
+        sensors = SensorTestingData.samples();
         sensorRepository.saveAll(sensors);
 
         dataTypes = DataTypeTestingData.dataTypes();

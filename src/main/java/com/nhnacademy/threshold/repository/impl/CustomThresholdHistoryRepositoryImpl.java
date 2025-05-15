@@ -6,6 +6,7 @@ import com.nhnacademy.threshold.domain.QThresholdHistory;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.repository.CustomThresholdHistoryRepository;
+import com.nhnacademy.type.domain.QDataType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,12 +26,15 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
 
     private final QSensor qSensor;
 
+    private final QDataType qDataType;
+
     public CustomThresholdHistoryRepositoryImpl(JPAQueryFactory queryFactory) {
         super(ThresholdHistory.class);
         this.queryFactory = queryFactory;
         this.qThresholdHistory = QThresholdHistory.thresholdHistory;
         this.qSensorDataMapping = QSensorDataMapping.sensorDataMapping;
         this.qSensor = QSensor.sensor;
+        this.qDataType = QDataType.dataType;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                                 RuleEngineResponse.class,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
-                                qSensorDataMapping.dataType.dataTypeEnName,
+                                qDataType.dataTypeEnName,
                                 qThresholdHistory.thresholdMin,
                                 qThresholdHistory.thresholdMax,
                                 qThresholdHistory.thresholdAvg,
@@ -55,6 +59,7 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                 .from(qThresholdHistory)
                 .innerJoin(qThresholdHistory.sensorDataMapping, qSensorDataMapping)
                 .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
                 .where(qSensor.gatewayId.eq(gatewayId)
                         .and(
                                 qThresholdHistory.calculatedAt.eq(

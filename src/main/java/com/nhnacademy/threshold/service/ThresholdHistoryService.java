@@ -1,14 +1,14 @@
 package com.nhnacademy.threshold.service;
 
 import com.nhnacademy.threshold.domain.ThresholdHistory;
+import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
-import com.nhnacademy.threshold.dto.ThresholdHistoryRegisterRequest;
 
 import java.util.List;
 
 public interface ThresholdHistoryService {
 
-    void registerRequest(ThresholdHistoryRegisterRequest request);
+    void registerRequest(ThresholdHistoryInfo request);
 
     ThresholdHistory getThresholdHistoryByThresholdHistoryNo(long thresholdHistoryNo);
 

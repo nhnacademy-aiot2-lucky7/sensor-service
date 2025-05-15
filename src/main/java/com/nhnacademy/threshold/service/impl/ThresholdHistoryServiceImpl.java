@@ -1,11 +1,12 @@
 package com.nhnacademy.threshold.service.impl;
 
+import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.common.exception.http.extend.ThresholdHistoryNotFoundException;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
+import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
-import com.nhnacademy.threshold.dto.ThresholdHistoryRegisterRequest;
 import com.nhnacademy.threshold.repository.ThresholdHistoryRepository;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
 import org.springframework.stereotype.Service;
@@ -27,21 +28,37 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
         this.thresholdHistoryRepository = thresholdHistoryRepository;
     }
 
-    /// TODO: 전용 예외처리 추가 예정...
     @Override
-    public void registerRequest(ThresholdHistoryRegisterRequest request) {
-        if (!sensorDataMappingService.isExistsSensorDataMapping(request.getGatewayId(), request.getSensorId(), request.getDataTypeEnName())) {
-            throw new RuntimeException("존재하지 않는 센서");
+    public void registerRequest(ThresholdHistoryInfo request) {
+        if (!sensorDataMappingService.isExistsSensorDataMapping(request.getSensorDataMappingInfo())) {
+            throw new SensorDataMappingNotFoundException(
+                    request.getSensorDataMappingInfo().getGatewayId(),
+                    request.getSensorDataMappingInfo().getSensorId(),
+                    request.getSensorDataMappingInfo().getDataTypeEnName()
+            );
         }
+
         SensorDataMapping sensorDataMapping =
-                sensorDataMappingService.getSensorDataMapping(request.getGatewayId(), request.getSensorId(), request.getDataTypeEnName());
+                sensorDataMappingService.getSensorDataMapping(
+                        request.getSensorDataMappingInfo()
+                );
 
         ThresholdHistory thresholdHistory = new ThresholdHistory(
-                request.getThresholdMin(), request.getThresholdMax(), request.getThresholdAvg(),
-                request.getMinRangeMin(), request.getMinRangeMax(), request.getMaxRangeMin(),
-                request.getMaxRangeMax(), request.getAvgRangeMin(), request.getAvgRangeMax(),
-                request.getDeltaMin(), request.getDeltaMax(), request.getDeltaAvg(),
-                request.getDataCount(), request.getCalculatedAt(), sensorDataMapping
+                request.getThresholdInfo().getThresholdMin(),
+                request.getThresholdInfo().getThresholdMax(),
+                request.getThresholdInfo().getThresholdAvg(),
+                request.getMinRangeInfo().getMinRangeMin(),
+                request.getMinRangeInfo().getMinRangeMax(),
+                request.getMaxRangeInfo().getMaxRangeMin(),
+                request.getMaxRangeInfo().getMaxRangeMax(),
+                request.getAvgRangeInfo().getAvgRangeMin(),
+                request.getAvgRangeInfo().getAvgRangeMax(),
+                request.getDeltaInfo().getDeltaMin(),
+                request.getDeltaInfo().getDeltaMax(),
+                request.getDeltaInfo().getDeltaAvg(),
+                request.getDataCount(),
+                request.getCalculatedAt(),
+                sensorDataMapping
         );
         thresholdHistoryRepository.save(thresholdHistory);
     }
