@@ -2,9 +2,11 @@ package com.nhnacademy.sensor.service;
 
 import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor.service.impl.SensorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Set;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -82,27 +83,37 @@ class SensorServiceTest {
                 .findById(sensorNo);
     }*/
 
-    /*@DisplayName("Sensor 서비스: 모든 sensor의 sensorId 값을 Set 형태로 반환")
+    @DisplayName("Sensor Service: ")
     @Test
-    void testGetDistinctSensorIds() {
+    void testGetSensorIndexes_success() {
         /// given
-        Set<String> mockSensorIds = testSensorIds();
-        Mockito.when(sensorRepository.findDistinctSensorIds())
-                .thenReturn(mockSensorIds);
+        Set<SensorIndexResponse> mockResponse = testSensorIndexes();
+        Mockito.when(sensorRepository.findAllSensorUniqueKeys())
+                .thenReturn(mockResponse);
 
         /// when
-        Set<String> sensorIds = sensorService.getDistinctSensorIds();
-        log.debug("find sensorIds: {}", sensorIds);
+        Set<SensorIndexResponse> responses = sensorService.getSensorIndexes();
+        responses.forEach(response ->
+                log.debug("Key({}): Value({})", response.getGatewayId(), response.getSensorId())
+        );
 
         /// then
         Mockito.verify(
                         sensorRepository,
                         Mockito.times(1)
                 )
-                .findDistinctSensorIds();
+                .findAllSensorUniqueKeys();
 
-        assertThat(sensorIds).containsExactlyInAnyOrderElementsOf(mockSensorIds);
-    }*/
+        responses.forEach(response ->
+                Assertions.assertTrue(mockResponse.contains(response))
+        );
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testGetSensorIndexes_empty() {
+
+    }
 
     private Sensor testSensor() {
         Sensor sensor = Sensor.ofNewSensor(
@@ -123,5 +134,17 @@ class SensorServiceTest {
                 "%s-%d".formatted(testSensorId, ++index),
                 "%s-%d".formatted(testSensorId, ++index)
         );
+    }
+
+    private Set<SensorIndexResponse> testSensorIndexes() {
+        return SensorTestingData.samples()
+                .stream()
+                .map(sensor ->
+                        new SensorIndexResponse(
+                                sensor.getGatewayId(),
+                                sensor.getSensorId()
+                        )
+                )
+                .collect(Collectors.toSet());
     }
 }
