@@ -3,7 +3,7 @@ package com.nhnacademy.sensor.service.impl;
 import com.nhnacademy.common.exception.http.extend.SensorAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.domain.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorInfo;
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.repository.SensorRepository;

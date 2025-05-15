@@ -1,7 +1,7 @@
 package com.nhnacademy.sensor.service;
 
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.domain.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorInfo;
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 

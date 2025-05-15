@@ -1,4 +1,4 @@
-package com.nhnacademy.sensor.domain;
+package com.nhnacademy.sensor.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

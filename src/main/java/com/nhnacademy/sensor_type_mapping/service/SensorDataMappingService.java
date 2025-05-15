@@ -1,7 +1,7 @@
 package com.nhnacademy.sensor_type_mapping.service;
 
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
-import com.nhnacademy.sensor_type_mapping.domain.SensorDataMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
 

@@ -4,7 +4,7 @@ import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundExce
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.service.SensorService;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
-import com.nhnacademy.sensor_type_mapping.domain.SensorDataMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;

@@ -1,7 +1,8 @@
-package com.nhnacademy.sensor_type_mapping.domain;
+package com.nhnacademy.sensor_type_mapping.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nhnacademy.sensor.domain.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorInfo;
+import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ public class SensorDataMappingInfo {
 
     @Valid
     @NotNull(message = "센서 정보가 누락되었습니다.")
-    @JsonProperty("sensor_info")
+    @JsonProperty("info")
     SensorInfo sensorInfo;
 
     @NotBlank(message = "데이터 타입의 영문명이 누락되었습니다.")
