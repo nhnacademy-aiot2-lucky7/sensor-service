@@ -1,5 +1,7 @@
 package com.nhnacademy.common.advice;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nhnacademy.common.exception.CommonHttpException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,14 @@ import java.util.List;
 @RestControllerAdvice
 public class CommonAdvice {
 
+    private final PropertyNamingStrategies.NamingBase namingBase;
+
+    public CommonAdvice(PropertyNamingStrategy namingStrategy) {
+        this.namingBase = (namingStrategy instanceof PropertyNamingStrategies.NamingBase namingBase)
+                ? namingBase
+                : null;
+    }
+
     @ExceptionHandler(BindException.class)
     public ResponseEntity<CommonErrorResponse> bindExceptionHandler(
             BindException e,
@@ -27,7 +37,9 @@ public class CommonAdvice {
             if (error instanceof FieldError fieldError) {
                 errors.add(
                         "{%s: %s}".formatted(
-                                fieldError.getField(),
+                                namingBase != null
+                                        ? namingBase.translate(fieldError.getField())
+                                        : fieldError.getField(),
                                 fieldError.getDefaultMessage()
                         )
                 );
