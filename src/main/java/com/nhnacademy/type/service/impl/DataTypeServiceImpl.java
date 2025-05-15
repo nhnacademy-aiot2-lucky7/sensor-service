@@ -3,9 +3,8 @@ package com.nhnacademy.type.service.impl;
 import com.nhnacademy.common.exception.http.extend.DataTypeAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.DataTypeNotFoundException;
 import com.nhnacademy.type.domain.DataType;
+import com.nhnacademy.type.domain.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
-import com.nhnacademy.type.dto.DataTypeRegisterRequest;
-import com.nhnacademy.type.dto.DataTypeUpdateRequest;
 import com.nhnacademy.type.repository.DataTypeRepository;
 import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,11 @@ public class DataTypeServiceImpl implements DataTypeService {
     }
 
     @Override
-    public void registerRequest(DataTypeRegisterRequest request) {
+    public void registerRequest(DataTypeInfo request) {
         if (isExistsDataType(request.getDataTypeEnName())) {
-            throw new DataTypeAlreadyExistsException(request);
+            throw new DataTypeAlreadyExistsException(
+                    request.getDataTypeEnName()
+            );
         }
         registerDataType(
                 request.getDataTypeEnName(),
@@ -35,7 +36,8 @@ public class DataTypeServiceImpl implements DataTypeService {
     public DataType registerDataType(String dataTypeEnName, String dataTypeKrName) {
         return dataTypeRepository.save(
                 DataType.ofNewDataType(
-                        dataTypeEnName, dataTypeKrName
+                        dataTypeEnName,
+                        dataTypeKrName
                 )
         );
     }
@@ -52,7 +54,7 @@ public class DataTypeServiceImpl implements DataTypeService {
     }
 
     @Override
-    public void updateDataType(DataTypeUpdateRequest request) {
+    public void updateDataType(DataTypeInfo request) {
         DataType dataType = getDataType(request.getDataTypeEnName());
         dataType.updateTypeKrName(request.getDataTypeKrName());
         dataTypeRepository.flush();
@@ -60,7 +62,10 @@ public class DataTypeServiceImpl implements DataTypeService {
 
     @Override
     public void removeDataType(String dataTypeEnName) {
-        dataTypeRepository.delete(getDataType(dataTypeEnName));
+        if (!isExistsDataType(dataTypeEnName)) {
+            throw new DataTypeNotFoundException(dataTypeEnName);
+        }
+        dataTypeRepository.deleteById(dataTypeEnName);
     }
 
     @Override
@@ -68,9 +73,11 @@ public class DataTypeServiceImpl implements DataTypeService {
         return dataTypeRepository.existsById(dataTypeEnName);
     }
 
+    /// 상세 정보 데이터
     @Transactional(readOnly = true)
     @Override
     public DataTypeInfoResponse getDataTypeInfoResponse(String dataTypeEnName) {
-        return DataTypeInfoResponse.from(getDataType(dataTypeEnName));
+        DataType dataType = getDataType(dataTypeEnName);
+        return DataTypeInfoResponse.from(dataType);
     }
 }

@@ -1,8 +1,7 @@
 package com.nhnacademy.type.controller;
 
+import com.nhnacademy.type.domain.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
-import com.nhnacademy.type.dto.DataTypeRegisterRequest;
-import com.nhnacademy.type.dto.DataTypeUpdateRequest;
 import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/sensor-service/api/v1/data-types")
+@RequestMapping("/data-types")
 public class DataTypeController {
 
     private final DataTypeService dataTypeService;
@@ -35,7 +34,7 @@ public class DataTypeController {
 
     @PostMapping
     public ResponseEntity<Void> registerDataType(
-            @Validated @RequestBody DataTypeRegisterRequest request
+            @Validated @RequestBody DataTypeInfo request
     ) {
         dataTypeService.registerRequest(request);
         return ResponseEntity
@@ -45,7 +44,7 @@ public class DataTypeController {
 
     @PutMapping
     public ResponseEntity<Void> updateDataType(
-            @Validated @RequestBody DataTypeUpdateRequest request
+            @Validated @RequestBody DataTypeInfo request
     ) {
         dataTypeService.updateDataType(request);
         return ResponseEntity

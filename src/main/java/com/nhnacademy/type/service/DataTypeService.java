@@ -1,13 +1,12 @@
 package com.nhnacademy.type.service;
 
 import com.nhnacademy.type.domain.DataType;
+import com.nhnacademy.type.domain.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
-import com.nhnacademy.type.dto.DataTypeRegisterRequest;
-import com.nhnacademy.type.dto.DataTypeUpdateRequest;
 
 public interface DataTypeService {
 
-    void registerRequest(DataTypeRegisterRequest request);
+    void registerRequest(DataTypeInfo request);
 
     DataType registerDataType(String dataTypeEnName, String dataTypeKrName);
 
@@ -15,7 +14,7 @@ public interface DataTypeService {
 
     DataType getReferenceDataType(String dataTypeEnName);
 
-    void updateDataType(DataTypeUpdateRequest request);
+    void updateDataType(DataTypeInfo request);
 
     void removeDataType(String dataTypeEnName);
 
