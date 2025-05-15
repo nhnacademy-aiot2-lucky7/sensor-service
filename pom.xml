@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.nhnacademy</groupId>
-    <artifactId>spring-iot-sensor-service</artifactId>
+    <artifactId>sensor-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-iot-sensor-service</name>
-    <description>spring-iot-sensor-service</description>
+    <name>sensor-service</name>
+    <description>sensor-service</description>
     <url/>
     <licenses>
         <license/>
