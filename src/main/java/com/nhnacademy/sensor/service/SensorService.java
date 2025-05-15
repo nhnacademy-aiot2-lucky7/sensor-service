@@ -1,33 +1,29 @@
 package com.nhnacademy.sensor.service;
 
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
+import com.nhnacademy.sensor.domain.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
-import com.nhnacademy.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.sensor.dto.SensorUpdateRequest;
 
-import java.util.List;
 import java.util.Set;
 
 public interface SensorService {
 
-    void registerRequest(SensorRegisterRequest request);
+    void registerRequest(SensorInfo request);
 
-    Sensor registerSensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot);
+    Sensor registerSensor(SensorInfo request);
 
-    Sensor getSensor(String gatewayId, String sensorId);
+    Sensor getSensor(SensorInfo request);
 
-    Sensor getReferenceSensor(String gatewayId, String sensorId);
+    Sensor getReferenceSensor(SensorInfo request);
 
-    void updateSensor(SensorUpdateRequest request);
+    void updateSensor(SensorInfo request);
 
-    void removeSensor(String gatewayId, String sensorId);
+    void removeSensor(SensorInfo request);
 
-    boolean isExistsSensor(String gatewayId, String sensorId);
+    boolean isExistsSensor(SensorInfo request);
 
-    SensorInfoResponse getSensorInfoResponse(String gatewayId, String sensorId);
+    SensorInfoResponse getSensorInfoResponse(SensorInfo request);
 
-    List<SensorInfoResponse> getSearchSensorInfoResponse(String gatewayId);
-
-    Set<SensorDataHandlerResponse> getSensorUniqueKeys();
+    Set<SensorIndexResponse> getSensorIndexes();
 }

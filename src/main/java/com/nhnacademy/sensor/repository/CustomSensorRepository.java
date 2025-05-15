@@ -1,6 +1,6 @@
 package com.nhnacademy.sensor.repository;
 
-import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorSearchRequest;
 
@@ -24,7 +24,7 @@ public interface CustomSensorRepository {
      * <hr>
      * {@code Key}: <b>SensorDataHandlerResponse</b>
      *
-     * @see SensorDataHandlerResponse
+     * @see SensorIndexResponse
      */
-    Set<SensorDataHandlerResponse> findAllSensorUniqueKeys();
+    Set<SensorIndexResponse> findAllSensorUniqueKeys();
 }

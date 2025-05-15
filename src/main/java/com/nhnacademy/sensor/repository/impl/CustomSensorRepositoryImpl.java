@@ -2,9 +2,9 @@ package com.nhnacademy.sensor.repository.impl;
 
 import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.dto.QSensorDataHandlerResponse;
+import com.nhnacademy.sensor.dto.QSensorIndexResponse;
 import com.nhnacademy.sensor.dto.QSensorInfoResponse;
-import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorSearchRequest;
 import com.nhnacademy.sensor.repository.CustomSensorRepository;
@@ -28,23 +28,6 @@ public class CustomSensorRepositoryImpl extends QuerydslRepositorySupport implem
         super(Sensor.class);
         this.queryFactory = queryFactory;
         this.qSensor = QSensor.sensor;
-    }
-
-    private BooleanBuilder getBooleanBuilder(SensorSearchRequest request) {
-        BooleanBuilder builder = new BooleanBuilder();
-        if (request.isNotNullGatewayId()) {
-            builder.and(qSensor.gatewayId.eq(request.getGatewayId()));
-        }
-        if (request.isNotNullSensorId()) {
-            builder.and(qSensor.sensorId.eq(request.getSensorId()));
-        }
-        if (request.isNotNullSensorLocation()) {
-            builder.and(qSensor.sensorLocation.eq(request.getSensorLocation()));
-        }
-        if (request.isNotNullSensorSpot()) {
-            builder.and(qSensor.sensorSpot.eq(request.getSensorSpot()));
-        }
-        return builder;
     }
 
     @Override
@@ -79,11 +62,11 @@ public class CustomSensorRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Set<SensorDataHandlerResponse> findAllSensorUniqueKeys() {
-        List<SensorDataHandlerResponse> uniqueList =
+    public Set<SensorIndexResponse> findAllSensorUniqueKeys() {
+        List<SensorIndexResponse> uniqueList =
                 queryFactory
                         .select(
-                                new QSensorDataHandlerResponse(
+                                new QSensorIndexResponse(
                                         qSensor.gatewayId,
                                         qSensor.sensorId
                                 )
@@ -91,10 +74,27 @@ public class CustomSensorRepositoryImpl extends QuerydslRepositorySupport implem
                         .from(qSensor)
                         .fetch();
 
-        Set<SensorDataHandlerResponse> uniqueSet = new HashSet<>(uniqueList);
+        Set<SensorIndexResponse> uniqueSet = new HashSet<>(uniqueList);
         if (uniqueList.size() != uniqueSet.size()) {
             log.warn("Sensor 테이블에 중복된 (gatewayId, sensorId) 조합이 존재할 수 있습니다. 전체 조회 건수: {}, 중복 제거 후 건수: {}", uniqueList.size(), uniqueSet.size());
         }
         return uniqueSet;
+    }
+
+    private BooleanBuilder getBooleanBuilder(SensorSearchRequest request) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (request.isNotNullGatewayId()) {
+            builder.and(qSensor.gatewayId.eq(request.getGatewayId()));
+        }
+        if (request.isNotNullSensorId()) {
+            builder.and(qSensor.sensorId.eq(request.getSensorId()));
+        }
+        if (request.isNotNullSensorLocation()) {
+            builder.and(qSensor.sensorLocation.eq(request.getSensorLocation()));
+        }
+        if (request.isNotNullSensorSpot()) {
+            builder.and(qSensor.sensorSpot.eq(request.getSensorSpot()));
+        }
+        return builder;
     }
 }

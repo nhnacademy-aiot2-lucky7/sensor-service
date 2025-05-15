@@ -1,7 +1,6 @@
 package com.nhnacademy.common.exception.http.extend;
 
 import com.nhnacademy.common.exception.http.ConflictException;
-import com.nhnacademy.sensor.dto.SensorRegisterRequest;
 
 public class SensorAlreadyExistsException extends ConflictException {
 
@@ -11,10 +10,6 @@ public class SensorAlreadyExistsException extends ConflictException {
 
     public SensorAlreadyExistsException(int sensorNo, Throwable cause) {
         super("sensor already exists: %d".formatted(sensorNo), cause);
-    }
-
-    public SensorAlreadyExistsException(SensorRegisterRequest request) {
-        this(request.getGatewayId(), request.getSensorId(), null);
     }
 
     public SensorAlreadyExistsException(String gatewayId, String sensorId) {

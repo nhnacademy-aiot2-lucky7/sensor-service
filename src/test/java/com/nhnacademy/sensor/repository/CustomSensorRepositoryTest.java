@@ -3,7 +3,7 @@ package com.nhnacademy.sensor.repository;
 import com.nhnacademy.CustomDataJpaTest;
 import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.dto.SensorSearchRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -106,7 +106,7 @@ class CustomSensorRepositoryTest {
         List<Sensor> samples = SensorTestingData.samples();
         sensorRepository.saveAll(samples);
 
-        Set<SensorDataHandlerResponse> results =
+        Set<SensorIndexResponse> results =
                 sensorRepository.findAllSensorUniqueKeys();
         Assertions.assertEquals(samples.size(), results.size());
 

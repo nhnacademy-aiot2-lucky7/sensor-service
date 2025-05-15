@@ -3,17 +3,14 @@ package com.nhnacademy.sensor.service.impl;
 import com.nhnacademy.common.exception.http.extend.SensorAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
-import com.nhnacademy.sensor.dto.SensorDataHandlerResponse;
+import com.nhnacademy.sensor.domain.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
-import com.nhnacademy.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.sensor.dto.SensorSearchRequest;
-import com.nhnacademy.sensor.dto.SensorUpdateRequest;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor.service.SensorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -26,77 +23,87 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public void registerRequest(SensorRegisterRequest request) {
-        if (isExistsSensor(request.getGatewayId(), request.getSensorId())) {
-            throw new SensorAlreadyExistsException(request);
+    public void registerRequest(SensorInfo request) {
+        if (isExistsSensor(request)) {
+            throw new SensorAlreadyExistsException(
+                    request.getGatewayId(),
+                    request.getSensorId()
+            );
         }
-        registerSensor(
-                request.getGatewayId(), request.getSensorId(),
-                request.getSensorLocation(), request.getSensorSpot()
-        );
+        registerSensor(request);
     }
 
     @Override
-    public Sensor registerSensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
+    public Sensor registerSensor(SensorInfo request) {
         return sensorRepository.save(
                 Sensor.ofNewSensor(
-                        gatewayId, sensorId,
-                        sensorLocation, sensorSpot
+                        request.getGatewayId(),
+                        request.getSensorId(),
+                        request.getSensorLocation(),
+                        request.getSensorSpot()
                 )
         );
     }
 
     @Override
-    public Sensor getSensor(String gatewayId, String sensorId) {
-        Sensor sensor = sensorRepository.findByGatewayIdAndSensorId(gatewayId, sensorId);
+    public Sensor getSensor(SensorInfo request) {
+        Sensor sensor = sensorRepository.findByGatewayIdAndSensorId(
+                request.getGatewayId(),
+                request.getSensorId()
+        );
         if (sensor == null) {
-            throw new SensorNotFoundException(gatewayId, sensorId);
+            throw new SensorNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId()
+            );
         }
         return sensor;
     }
 
     @Override
-    public Sensor getReferenceSensor(String gatewayId, String sensorId) {
-        return sensorRepository.getReferenceByGatewayIdAndSensorId(gatewayId, sensorId);
+    public Sensor getReferenceSensor(SensorInfo request) {
+        return sensorRepository.getReferenceByGatewayIdAndSensorId(
+                request.getGatewayId(),
+                request.getSensorId()
+        );
     }
 
     @Override
-    public void updateSensor(SensorUpdateRequest request) {
-        Sensor sensor = getSensor(request.getGatewayId(), request.getSensorId());
-        sensor.updateSensorPosition(request.getSensorLocation(), request.getSensorSpot());
+    public void updateSensor(SensorInfo request) {
+        Sensor sensor = getSensor(request);
+        sensor.updateSensorPosition(
+                request.getSensorLocation(),
+                request.getSensorSpot()
+        );
         sensorRepository.flush();
     }
 
     @Override
-    public void removeSensor(String gatewayId, String sensorId) {
-        sensorRepository.delete(getSensor(gatewayId, sensorId));
+    public void removeSensor(SensorInfo request) {
+        Sensor sensor = getSensor(request);
+        sensorRepository.delete(sensor);
     }
 
     @Override
-    public boolean isExistsSensor(String gatewayId, String sensorId) {
-        return sensorRepository.existsByGatewayIdAndSensorId(gatewayId, sensorId);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public SensorInfoResponse getSensorInfoResponse(String gatewayId, String sensorId) {
-        return SensorInfoResponse.from(getSensor(gatewayId, sensorId));
-    }
-
-    /// TODO: 아직 구현된 로직이 타당한지는 확정되지 않았습니다.
-    @Transactional(readOnly = true)
-    @Override
-    public List<SensorInfoResponse> getSearchSensorInfoResponse(String gatewayId) {
-        return sensorRepository.findByConditions(
-                new SensorSearchRequest(
-                        gatewayId, null, null, null
-                )
+    public boolean isExistsSensor(SensorInfo request) {
+        return sensorRepository.existsByGatewayIdAndSensorId(
+                request.getGatewayId(),
+                request.getSensorId()
         );
     }
 
+    /// 상세 정보 데이터
     @Transactional(readOnly = true)
     @Override
-    public Set<SensorDataHandlerResponse> getSensorUniqueKeys() {
+    public SensorInfoResponse getSensorInfoResponse(SensorInfo request) {
+        Sensor sensor = getSensor(request);
+        return SensorInfoResponse.from(sensor);
+    }
+
+    /// 검색용 데이터
+    @Transactional(readOnly = true)
+    @Override
+    public Set<SensorIndexResponse> getSensorIndexes() {
         return sensorRepository.findAllSensorUniqueKeys();
     }
 }

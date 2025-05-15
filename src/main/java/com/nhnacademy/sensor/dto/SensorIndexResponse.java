@@ -1,29 +1,26 @@
 package com.nhnacademy.sensor.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Getter
-public class SensorDataHandlerResponse {
+public final class SensorIndexResponse {
 
-    @JsonProperty("gateway_id")
     private final String gatewayId;
 
-    @JsonProperty("sensor_id")
     private final String sensorId;
 
     @QueryProjection
-    public SensorDataHandlerResponse(String gatewayId, String sensorId) {
+    public SensorIndexResponse(String gatewayId, String sensorId) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof SensorDataHandlerResponse that)) return false;
+        if (!(o instanceof SensorIndexResponse that)) return false;
         return Objects.equals(gatewayId, that.gatewayId)
                 && Objects.equals(sensorId, that.sensorId);
     }
