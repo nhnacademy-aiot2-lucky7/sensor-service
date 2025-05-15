@@ -1,23 +1,21 @@
 package com.nhnacademy.sensor_type_mapping.service.impl;
 
-import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.service.SensorService;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
+import com.nhnacademy.sensor_type_mapping.domain.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingRegisterRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingUpdateRequest;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.type.domain.DataType;
 import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class SensorDataMappingServiceImpl implements SensorDataMappingService {
@@ -38,40 +36,26 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     }
 
     @Override
-    public void registerRequest(SensorDataMappingRegisterRequest request) {
-        if (isExistsSensorDataMapping(request.getGatewayId(), request.getSensorId(), request.getDataTypeEnName())) {
-            throw new SensorDataMappingAlreadyExistsException(request);
+    public void registerRequest(SensorDataMappingInfo request) {
+        if (isExistsSensorDataMapping(request)) {
+            throw new SensorDataMappingNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId(),
+                    request.getDataTypeEnName()
+            );
         }
-        registerSensorDataMapping(
-                request.getGatewayId(), request.getSensorId(),
-                request.getSensorLocation(), request.getSensorSpot(),
-                request.getDataTypeEnName()
-        );
+        registerSensorDataMapping(request);
     }
 
-    private void registerSensorDataMapping(
-            String gatewayId, String sensorId, String sensorLocation,
-            String sensorSpot, String dataTypeEnName
-    ) {
-        Sensor sensor =
-                sensorService.isExistsSensor(gatewayId, sensorId) ?
-                        sensorService.getReferenceSensor(
-                                gatewayId, sensorId
-                        ) :
-                        sensorService.registerSensor(
-                                gatewayId, sensorId,
-                                sensorLocation, sensorSpot
-                        );
+    private void registerSensorDataMapping(SensorDataMappingInfo request) {
+        Sensor sensor = sensorService.isExistsSensor(request.getSensorInfo())
+                ? sensorService.getReferenceSensor(request.getSensorInfo())
+                : sensorService.registerSensor(request.getSensorInfo());
 
-        DataType dataType =
-                dataTypeService.isExistsDataType(dataTypeEnName) ?
-                        dataTypeService.getReferenceDataType(
-                                dataTypeEnName
-                        ) :
-                        dataTypeService.registerDataType(
-                                dataTypeEnName,
-                                dataTypeEnName  /// TODO: 번역기 라이브러리 적용하기
-                        );
+        /// TODO: 번역기 라이브러리 적용하기
+        DataType dataType = dataTypeService.isExistsDataType(request.getDataTypeEnName())
+                ? dataTypeService.getReferenceDataType(request.getDataTypeEnName())
+                : dataTypeService.registerDataType(request.getDataTypeEnName(), request.getDataTypeEnName());
 
         SensorDataMapping sensorDataMapping =
                 SensorDataMapping.ofNewSensorDataType(
@@ -83,44 +67,62 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     }
 
     @Override
-    public SensorDataMapping getSensorDataMapping(String gatewayId, String sensorId, String dataTypeEnName) {
-        SensorDataMapping sensorDataMapping = sensorDataMappingRepository.findByGatewayIdAndSensorIdAndDataTypeEnName(gatewayId, sensorId, dataTypeEnName);
+    public SensorDataMapping getSensorDataMapping(SensorDataMappingInfo request) {
+        SensorDataMapping sensorDataMapping =
+                sensorDataMappingRepository.findByGatewayIdAndSensorIdAndDataTypeEnName(
+                        request.getGatewayId(),
+                        request.getSensorId(),
+                        request.getDataTypeEnName()
+                );
         if (sensorDataMapping == null) {
-            throw new SensorDataMappingNotFoundException(gatewayId, sensorId, dataTypeEnName);
+            throw new SensorDataMappingNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId(),
+                    request.getDataTypeEnName()
+            );
         }
         return sensorDataMapping;
     }
 
     @Override
-    public void updateSensorDataMapping(SensorDataMappingUpdateRequest request) {
-        SensorDataMapping sensorDataMapping = getSensorDataMapping(
-                request.getGatewayId(),
-                request.getSensorId(),
-                request.getDataTypeEnName()
-        );
+    public void updateSensorDataMapping(SensorDataMappingInfo request) {
+        SensorDataMapping sensorDataMapping = getSensorDataMapping(request);
         sensorDataMapping.updateStatus(request.getSensorStatus());
         sensorDataMappingRepository.flush();
     }
 
     @Override
-    public void removeSensorDataMapping(String gatewayId, String sensorId, String dataTypeEnName) {
-        sensorDataMappingRepository.delete(getSensorDataMapping(gatewayId, sensorId, dataTypeEnName));
+    public void removeSensorDataMapping(SensorDataMappingInfo request) {
+        SensorDataMapping sensorDataMapping = getSensorDataMapping(request);
+        sensorDataMappingRepository.delete(sensorDataMapping);
+        sensorDataMappingRepository.flush();
     }
 
     @Override
-    public boolean isExistsSensorDataMapping(String gatewayId, String sensorId, String dataTypeEnName) {
-        return sensorDataMappingRepository.existsByGatewayIdAndSensorIdAndDataTypeEnName(gatewayId, sensorId, dataTypeEnName);
+    public boolean isExistsSensorDataMapping(SensorDataMappingInfo request) {
+        return sensorDataMappingRepository.existsByGatewayIdAndSensorIdAndDataTypeEnName(
+                request.getGatewayId(),
+                request.getSensorId(),
+                request.getDataTypeEnName()
+        );
     }
 
+    /// 상세 정보 데이터
+    @Transactional(readOnly = true)
     @Override
-    public List<SensorDataMappingInfoResponse> getSearchSensorDataMappingInfoResponse(
-            SensorDataMappingSearchRequest request
-    ) {
-        return sensorDataMappingRepository.findByConditions(request);
+    public SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
+        return sensorDataMappingRepository
+                .findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
+                        request.getGatewayId(),
+                        request.getSensorId(),
+                        request.getDataTypeEnName()
+                );
     }
 
+    /// 검색용 데이터
+    @Transactional(readOnly = true)
     @Override
-    public List<SensorDataMappingAiResponse> getSensorDataMappingAiResponse(String gatewayId) {
-        return sensorDataMappingRepository.findAllAiResponsesByGatewayId(gatewayId);
+    public Set<SensorDataMappingIndexResponse> getSensorDataMappingIndexes() {
+        return sensorDataMappingRepository.findAllSensorDataUniqueKeys();
     }
 }

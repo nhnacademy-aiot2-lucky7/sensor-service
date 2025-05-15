@@ -1,26 +1,22 @@
 package com.nhnacademy.sensor_type_mapping.controller;
 
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingRegisterRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingUpdateRequest;
+import com.nhnacademy.sensor_type_mapping.domain.SensorDataMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
-@RequestMapping("/sensor-service/api/v1/sensor-data-mappings")
+@RequestMapping("/sensor-data-mappings")
 public class SensorDataMappingController {
 
     private final SensorDataMappingService sensorDataMappingService;
@@ -29,31 +25,15 @@ public class SensorDataMappingController {
         this.sensorDataMappingService = sensorDataMappingService;
     }
 
-    @GetMapping("/gateway-id/{gateway-id}")
-    public ResponseEntity<List<SensorDataMappingAiResponse>> getSensorDataMappingAiResponse(
-            @PathVariable("gateway-id") String gatewayId
-    ) {
+    @GetMapping
+    public ResponseEntity<Set<SensorDataMappingIndexResponse>> getSensorDataMappingIndexes() {
         return ResponseEntity
-                .ok(
-                        sensorDataMappingService
-                                .getSensorDataMappingAiResponse(gatewayId)
-                );
-    }
-
-    @PostMapping("/search")
-    public ResponseEntity<List<SensorDataMappingInfoResponse>> search(
-            @Validated @RequestBody SensorDataMappingSearchRequest request
-    ) {
-        return ResponseEntity
-                .ok(
-                        sensorDataMappingService
-                                .getSearchSensorDataMappingInfoResponse(request)
-                );
+                .ok(sensorDataMappingService.getSensorDataMappingIndexes());
     }
 
     @PostMapping
     public ResponseEntity<Void> registerSensorDataMapping(
-            @Validated @RequestBody SensorDataMappingRegisterRequest request
+            @Validated @RequestBody SensorDataMappingInfo request
     ) {
         sensorDataMappingService.registerRequest(request);
         return ResponseEntity
@@ -63,7 +43,7 @@ public class SensorDataMappingController {
 
     @PutMapping
     public ResponseEntity<Void> updateSensorDataMapping(
-            @Validated @RequestBody SensorDataMappingUpdateRequest request
+            @Validated @RequestBody SensorDataMappingInfo request
     ) {
         sensorDataMappingService.updateSensorDataMapping(request);
         return ResponseEntity
@@ -72,4 +52,13 @@ public class SensorDataMappingController {
     }
 
     /// TODO: 삭제 기능 구현 예정...
+
+    /// TODO: 테스트
+    @PostMapping("/test")
+    public ResponseEntity<SensorDataMappingInfo> get(
+            @Validated @RequestBody SensorDataMappingInfo test
+    ) {
+        return ResponseEntity
+                .ok(test);
+    }
 }

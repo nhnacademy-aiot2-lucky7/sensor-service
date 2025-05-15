@@ -1,27 +1,32 @@
 package com.nhnacademy.sensor_type_mapping.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
-import lombok.Value;
+import com.nhnacademy.type.dto.DataTypeInfoResponse;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.Getter;
 
-@Value
-public class SensorDataMappingInfoResponse {
+@Getter
+public final class SensorDataMappingInfoResponse {
 
-    @JsonProperty("gateway_id")
-    String gatewayId;
+    @JsonProperty("sensor")
+    private final SensorInfoResponse sensorInfoResponse;
 
-    @JsonProperty("sensor_id")
-    String sensorId;
-
-    @JsonProperty("sensor_location")
-    String sensorLocation;
-
-    @JsonProperty("sensor_spot")
-    String sensorSpot;
+    @JsonProperty("data_type")
+    private final DataTypeInfoResponse dataTypeInfoResponse;
 
     @JsonProperty("sensor_status")
-    SensorStatus sensorStatus;
+    private final SensorStatus sensorStatus;
 
-    @JsonProperty("type_en_name")
-    String dataTypeEnName;
+    @QueryProjection
+    public SensorDataMappingInfoResponse(
+            SensorInfoResponse sensorInfoResponse,
+            DataTypeInfoResponse dataTypeInfoResponse,
+            SensorStatus sensorStatus
+    ) {
+        this.sensorInfoResponse = sensorInfoResponse;
+        this.dataTypeInfoResponse = dataTypeInfoResponse;
+        this.sensorStatus = sensorStatus;
+    }
 }
