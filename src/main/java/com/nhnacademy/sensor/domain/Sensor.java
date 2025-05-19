@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
+import java.util.Objects;
+
 /**
  * 센서 정보를 나타내는 JPA 엔티티입니다. <br>
  * 각 센서는 고유의 센서 ID와 게이트웨이 ID를 가지며, 설치 위치에 대한 정보도 포함합니다. <br>
@@ -110,5 +112,18 @@ public class Sensor {
         if (sensorSpot != null && !sensorSpot.isBlank()) {
             this.sensorSpot = sensorSpot;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Sensor sensor)) return false;
+        return Objects.equals(sensorNo, sensor.sensorNo)
+                && Objects.equals(gatewayId, sensor.gatewayId)
+                && Objects.equals(sensorId, sensor.sensorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sensorNo, gatewayId, sensorId);
     }
 }

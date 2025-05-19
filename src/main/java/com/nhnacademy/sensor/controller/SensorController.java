@@ -1,7 +1,7 @@
 package com.nhnacademy.sensor.controller;
 
-import com.nhnacademy.sensor.dto.SensorInfo;
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
+import com.nhnacademy.sensor.dto.SensorInfo;
 import com.nhnacademy.sensor.service.SensorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
