@@ -82,6 +82,7 @@ public class SensorServiceImpl implements SensorService {
     public void removeSensor(SensorInfo request) {
         Sensor sensor = getSensor(request);
         sensorRepository.delete(sensor);
+        sensorRepository.flush();
     }
 
     @Override

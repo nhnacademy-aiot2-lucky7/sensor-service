@@ -6,6 +6,7 @@ import com.nhnacademy.sensor.SensorTestingData;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorInfoResponse;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor.service.impl.SensorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,8 @@ class SensorServiceTest {
     void testRegisterRequest_success() {
         /// given
         SensorInfo mockRequest = testSensorInfo();
+        Sensor mockSensor = testSensor();
+        Sensor mockSensorResult = testSensorContext();
 
         Mockito.when(
                         sensorRepository.existsByGatewayIdAndSensorId(
@@ -46,6 +49,9 @@ class SensorServiceTest {
                         )
                 )
                 .thenReturn(false);
+
+        Mockito.when(sensorRepository.save(mockSensor))
+                .thenReturn(mockSensorResult);
 
         /// when
         Assertions.assertDoesNotThrow(
@@ -61,6 +67,12 @@ class SensorServiceTest {
                         mockRequest.getGatewayId(),
                         mockRequest.getSensorId()
                 );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .save(mockSensor);
     }
 
     @DisplayName("Sensor Service: ")
@@ -92,6 +104,12 @@ class SensorServiceTest {
                         mockRequest.getGatewayId(),
                         mockRequest.getSensorId()
                 );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.never()
+                )
+                .save(Mockito.any(Sensor.class));
     }
 
     @DisplayName("Sensor Service: ")
@@ -115,6 +133,7 @@ class SensorServiceTest {
                         Mockito.times(1)
                 )
                 .save(mockSensor);
+
         Assertions.assertEquals(mockSensorResult, registerSensor);
     }
 
@@ -158,8 +177,8 @@ class SensorServiceTest {
                 .thenReturn(mockSensorResult);
 
         /// when
-        Sensor getSensor = sensorService.getSensor(mockRequest);
-        log.debug("getSensor result: {}", getSensor);
+        Sensor result = sensorService.getSensor(mockRequest);
+        log.debug("getSensor result: {}", result);
 
         /// then
         Mockito.verify(
@@ -170,7 +189,8 @@ class SensorServiceTest {
                         mockRequest.getGatewayId(),
                         mockRequest.getSensorId()
                 );
-        Assertions.assertEquals(mockSensorResult, getSensor);
+
+        Assertions.assertEquals(mockSensorResult, result);
     }
 
     @DisplayName("Sensor Service: ")
@@ -206,7 +226,317 @@ class SensorServiceTest {
 
     @DisplayName("Sensor Service: ")
     @Test
-    void testGetSensorIndexes_success() {
+    void testUpdateSensor_success() {
+        /// given
+        Sensor mockSensorResult = testSensorContext();
+        SensorInfo mockRequest = new SensorInfo(
+                mockSensorResult.getGatewayId(),
+                mockSensorResult.getSensorId(),
+                "new-sensor-location",
+                "new-sensor-spot"
+        );
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(mockSensorResult);
+
+        /// when
+        Assertions.assertDoesNotThrow(
+                () -> sensorService.updateSensor(mockRequest)
+        );
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .flush();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockRequest.getSensorLocation(), mockSensorResult.getSensorLocation()),
+                () -> Assertions.assertEquals(mockRequest.getSensorSpot(), mockSensorResult.getSensorSpot())
+        );
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testUpdateSensor_failed() {
+        /// given
+        Sensor mockSensorResult = testSensorContext();
+        SensorInfo mockRequest = new SensorInfo(
+                mockSensorResult.getGatewayId(),
+                mockSensorResult.getSensorId(),
+                "new-sensor-location",
+                "new-sensor-spot"
+        );
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(null);
+
+        /// when
+        Assertions.assertThrows(
+                SensorNotFoundException.class,
+                () -> sensorService.updateSensor(mockRequest)
+        );
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.never()
+                )
+                .flush();
+
+        Assertions.assertAll(
+                () -> Assertions.assertNotEquals(mockRequest.getSensorLocation(), mockSensorResult.getSensorLocation()),
+                () -> Assertions.assertNotEquals(mockRequest.getSensorSpot(), mockSensorResult.getSensorSpot())
+        );
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testRemoveSensor_success() {
+        /// given
+        SensorInfo mockRequest = testSensorInfo();
+        Sensor mockSensorResult = testSensorContext();
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(mockSensorResult);
+
+        /// when
+        Assertions.assertDoesNotThrow(
+                () -> sensorService.removeSensor(mockRequest)
+        );
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .delete(mockSensorResult);
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .flush();
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testRemoveSensor_failed() {
+        /// given
+        SensorInfo mockRequest = testSensorInfo();
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(null);
+
+        /// when
+        Assertions.assertThrows(
+                SensorNotFoundException.class,
+                () -> sensorService.removeSensor(mockRequest)
+        );
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.never()
+                )
+                .delete(Mockito.any(Sensor.class));
+
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.never()
+                )
+                .flush();
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testIsExistsSensor_true() {
+        /// given
+        SensorInfo mockRequest = testSensorInfo();
+
+        Mockito.when(
+                        sensorRepository.existsByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(true);
+
+        /// when
+        boolean isExistsSensor = sensorService.isExistsSensor(mockRequest);
+        log.debug("isExistsSensor true?: {}", isExistsSensor);
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .existsByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Assertions.assertTrue(isExistsSensor);
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testIsExistsSensor_false() {
+        /// given
+        SensorInfo mockRequest = testSensorInfo();
+
+        Mockito.when(
+                        sensorRepository.existsByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(false);
+
+        /// when
+        boolean isExistsSensor = sensorService.isExistsSensor(mockRequest);
+        log.debug("isExistsSensor false?: {}", !isExistsSensor);
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .existsByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Assertions.assertFalse(isExistsSensor);
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testGetSensorInfoResponse_success() {
+        /// given
+        SensorInfo mockRequest = testSensorInfo();
+        Sensor mockSensorResult = testSensorContext();
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(mockSensorResult);
+
+        /// when
+        SensorInfoResponse response = sensorService.getSensorInfoResponse(mockRequest);
+        log.debug("getSensorInfoResponse result: {Key: {} / Value: {}}", response.getGatewayId(), response.getSensorId());
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(mockSensorResult.getGatewayId(), response.getGatewayId()),
+                () -> Assertions.assertEquals(mockSensorResult.getSensorId(), response.getSensorId()),
+                () -> Assertions.assertEquals(mockSensorResult.getSensorLocation(), response.getSensorLocation()),
+                () -> Assertions.assertEquals(mockSensorResult.getSensorSpot(), response.getSensorSpot())
+        );
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testGetSensorInfoResponse_failed() {
+        SensorInfo mockRequest = testSensorInfo();
+
+        Mockito.when(
+                        sensorRepository.findByGatewayIdAndSensorId(
+                                mockRequest.getGatewayId(),
+                                mockRequest.getSensorId()
+                        )
+                )
+                .thenReturn(null);
+
+        /// when
+        Assertions.assertThrows(
+                SensorNotFoundException.class,
+                () -> sensorService.getSensorInfoResponse(mockRequest)
+        );
+
+        /// then
+        Mockito.verify(
+                        sensorRepository,
+                        Mockito.times(1)
+                )
+                .findByGatewayIdAndSensorId(
+                        mockRequest.getGatewayId(),
+                        mockRequest.getSensorId()
+                );
+    }
+
+    @DisplayName("Sensor Service: ")
+    @Test
+    void testGetSensorIndexes_exists() {
         /// given
         Set<SensorIndexResponse> mockResponse = testSensorIndexes();
         Mockito.when(sensorRepository.findAllSensorUniqueKeys())
@@ -262,13 +592,12 @@ class SensorServiceTest {
 
     private Sensor testSensor() {
         SensorInfo request = testSensorInfo();
-        Sensor sensor = Sensor.ofNewSensor(
+        return Sensor.ofNewSensor(
                 request.getGatewayId(),
                 request.getSensorId(),
                 request.getSensorLocation(),
                 request.getSensorSpot()
         );
-        return sensor;
     }
 
     private Sensor testSensorContext() {
