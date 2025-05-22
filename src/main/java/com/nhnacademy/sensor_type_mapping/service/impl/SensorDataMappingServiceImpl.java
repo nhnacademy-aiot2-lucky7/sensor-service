@@ -1,12 +1,13 @@
 package com.nhnacademy.sensor_type_mapping.service.impl;
 
+import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.service.SensorService;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
@@ -38,7 +39,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     @Override
     public void registerRequest(SensorDataMappingInfo request) {
         if (isExistsSensorDataMapping(request)) {
-            throw new SensorDataMappingNotFoundException(
+            throw new SensorDataMappingAlreadyExistsException(
                     request.getGatewayId(),
                     request.getSensorId(),
                     request.getDataTypeEnName()

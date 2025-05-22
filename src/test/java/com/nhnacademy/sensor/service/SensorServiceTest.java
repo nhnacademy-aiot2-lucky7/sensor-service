@@ -34,7 +34,7 @@ class SensorServiceTest {
     @InjectMocks
     private SensorServiceImpl sensorService;
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: registerRequest() / 센서 등록 성공 - 존재하지 않는 경우 등록됨")
     @Test
     void testRegisterRequest_success() {
         /// given
@@ -75,7 +75,7 @@ class SensorServiceTest {
                 .save(mockSensor);
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: registerRequest() / 센서 등록 실패 - 이미 존재하는 경우 예외 발생")
     @Test
     void testRegisterRequest_failed() {
         /// given
@@ -112,7 +112,7 @@ class SensorServiceTest {
                 .save(Mockito.any(Sensor.class));
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: registerSensor() / 센서 저장 성공 - 새 센서 저장")
     @Test
     void testRegisterSensor_success() {
         /// given
@@ -137,7 +137,7 @@ class SensorServiceTest {
         Assertions.assertEquals(mockSensorResult, registerSensor);
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: registerSensor() / 센서 저장 실패 - 저장 중 예외 발생")
     @Test
     void testRegisterSensor_failed() {
         /// given
@@ -161,7 +161,7 @@ class SensorServiceTest {
                 .save(mockSensor);
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: getSensor() / 센서 조회 성공 - 센서가 존재함")
     @Test
     void testGetSensor_success() {
         /// given
@@ -193,7 +193,7 @@ class SensorServiceTest {
         Assertions.assertEquals(mockSensorResult, result);
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: getSensor() / 센서 조회 실패 - 센서가 존재하지 않아 예외 발생")
     @Test
     void testGetSensor_failed() {
         /// given
@@ -224,7 +224,7 @@ class SensorServiceTest {
                 );
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: updateSensor() / 센서 위치 정보 수정 성공")
     @Test
     void testUpdateSensor_success() {
         /// given
@@ -271,7 +271,7 @@ class SensorServiceTest {
         );
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: updateSensor() / 센서 수정 실패 - 존재하지 않아 예외 발생")
     @Test
     void testUpdateSensor_failed() {
         /// given
@@ -319,7 +319,7 @@ class SensorServiceTest {
         );
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: removeSensor() / 센서 삭제 성공")
     @Test
     void testRemoveSensor_success() {
         /// given
@@ -362,7 +362,7 @@ class SensorServiceTest {
                 .flush();
     }
 
-    @DisplayName("Sensor Service: ")
+    @DisplayName("Sensor Service: removeSensor() / 센서 삭제 실패 - 존재하지 않아 예외 발생")
     @Test
     void testRemoveSensor_failed() {
         /// given

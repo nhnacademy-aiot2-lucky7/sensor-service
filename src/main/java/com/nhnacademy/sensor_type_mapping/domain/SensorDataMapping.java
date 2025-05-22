@@ -26,14 +26,14 @@ import org.hibernate.annotations.Comment;
  * <p>본 엔티티는 센서와 데이터 타입 간의 N:M 관계를 명시적 매핑 테이블로 표현하며, <br>
  * 매핑 상태 변경 등 추가 속성을 가질 수 있습니다.</p>
  *
- * <p><b>테이블명:</b> {@code sensor_data_infos}</p>
+ * <p><b>테이블명:</b> {@code sensor_data_mappings}</p>
  *
  * @see Sensor
  * @see DataType
  * @see SensorStatus
  */
 @Entity
-@Table(name = "sensor_data_infos")
+@Table(name = "sensor_data_mappings")
 @Getter
 @ToString
 public class SensorDataMapping {

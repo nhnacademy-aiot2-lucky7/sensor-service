@@ -40,19 +40,19 @@ public class Sensor {
     @Comment("센서_번호")
     private Integer sensorNo;
 
-    @Column(name = "gateway_id", length = 50, nullable = false, updatable = false)
+    @Column(name = "gateway_id", length = 100, nullable = false, updatable = false)
     @Comment("게이트웨이_아이디")
     private String gatewayId;
 
-    @Column(name = "sensor_id", length = 50, nullable = false, updatable = false)
+    @Column(name = "sensor_id", length = 100, nullable = false, updatable = false)
     @Comment("센서_아이디")
     private String sensorId;
 
-    @Column(name = "sensor_location", length = 30, nullable = true)
+    @Column(name = "sensor_location", length = 50, nullable = true)
     @Comment("센서_설치_장소")
     private String sensorLocation;
 
-    @Column(name = "sensor_spot", length = 30, nullable = true)
+    @Column(name = "sensor_spot", length = 50, nullable = true)
     @Comment("센서_설치_상세위치")
     private String sensorSpot;
 

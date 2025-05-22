@@ -1,7 +1,7 @@
 package com.nhnacademy.sensor_type_mapping.controller;
 
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

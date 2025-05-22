@@ -33,11 +33,4 @@ public class SensorDataMappingIndexResponse {
     public int hashCode() {
         return Objects.hash(gatewayId, sensorId, dataTypeEnName);
     }
-
-    /// Data Handler가 필요한 Method
-    public boolean isNewInfo(String gatewayId, String sensorId, String dataTypeEnName) {
-        return this.gatewayId.equals(gatewayId)
-                || this.sensorId.equals(sensorId)
-                || this.dataTypeEnName.equals(dataTypeEnName);
-    }
 }

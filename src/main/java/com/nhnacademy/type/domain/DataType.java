@@ -22,11 +22,11 @@ import org.hibernate.annotations.Comment;
 public class DataType {
 
     @Id
-    @Column(name = "type_en_name", length = 30, nullable = false)
+    @Column(name = "type_en_name", length = 50, nullable = false)
     @Comment("데이터_타입_영문명")
     private String dataTypeEnName;
 
-    @Column(name = "type_kr_name", length = 30, nullable = false)
+    @Column(name = "type_kr_name", length = 50, nullable = false)
     @Comment("데이터_타입_한글명")
     private String dataTypeKrName;
 
