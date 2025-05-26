@@ -24,9 +24,9 @@ public class DataTypeController {
         this.dataTypeService = dataTypeService;
     }
 
-    @GetMapping("/{data-type-en-name}")
+    @GetMapping("/{type-en-name}")
     public ResponseEntity<DataTypeInfoResponse> getDataTypeInfoResponse(
-            @PathVariable("data-type-en-name") String dataTypeEnName
+            @PathVariable("type-en-name") String dataTypeEnName
     ) {
         return ResponseEntity
                 .ok(dataTypeService.getDataTypeInfoResponse(dataTypeEnName));
