@@ -1,6 +1,7 @@
 package com.nhnacademy.sensor_type_mapping.repository;
 
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
+import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
@@ -37,6 +38,8 @@ public interface CustomSensorDataMappingRepository {
     boolean existsByConditions(SensorDataMappingSearchRequest request);
 
     List<SensorDataMappingInfoResponse> findByConditions(SensorDataMappingSearchRequest request);
+
+    SearchNoResponse findSensorDataNoByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
 
     SensorDataMappingInfoResponse findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
 

@@ -17,7 +17,7 @@ public class SensorDataMappingAiResponse {
     @JsonProperty("sensor_status")
     SensorStatus sensorStatus;
 
-    @JsonProperty("type_en_name")
+    @JsonProperty("data_type_en_name")
     String dataTypeEnName;
 
     @QueryProjection

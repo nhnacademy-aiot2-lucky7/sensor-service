@@ -5,9 +5,11 @@ import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor.dto.QSensorInfoResponse;
 import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
+import com.nhnacademy.sensor_type_mapping.dto.QSearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
@@ -117,6 +119,26 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
                 .fetch();
     }
 
+    @Override
+    public SearchNoResponse findSensorDataNoByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+        return queryFactory
+                .select(
+                        new QSearchNoResponse(
+                                qSensorDataMapping.sensorDataNo
+                        )
+                )
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
+                .where(
+                        qSensor.gatewayId.eq(gatewayId)
+                                .and(qSensor.sensorId.eq(sensorId))
+                                .and(qDataType.dataTypeEnName.eq(dataTypeEnName))
+                )
+                .fetchOne();
+    }
+
+    @Override
     public SensorDataMappingInfoResponse findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(

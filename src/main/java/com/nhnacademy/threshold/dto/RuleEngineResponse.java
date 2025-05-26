@@ -12,7 +12,7 @@ public class RuleEngineResponse {
     @JsonProperty("sensor_id")
     String sensorId;
 
-    @JsonProperty("type_en_name")
+    @JsonProperty("data_type_en_name")
     String dataTypeEnName;
 
     @JsonProperty("threshold_min")

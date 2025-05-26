@@ -6,6 +6,9 @@ import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.service.SensorService;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
+import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
+import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
@@ -16,6 +19,7 @@ import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -108,16 +112,49 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
         );
     }
 
+    /// P.K 정보 데이터
+    @Transactional(readOnly = true)
+    @Override
+    public SearchNoResponse getSearchNoResponse(SearchNoRequest request) {
+        SearchNoResponse response = sensorDataMappingRepository
+                .findSensorDataNoByGatewayIdAndSensorIdAndDataTypeEnName(
+                        request.getGatewayId(),
+                        request.getSensorId(),
+                        request.getDataTypeEnName()
+                );
+        if (response == null) {
+            throw new SensorDataMappingNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId(),
+                    request.getDataTypeEnName()
+            );
+        }
+        return response;
+    }
+
     /// 상세 정보 데이터
     @Transactional(readOnly = true)
     @Override
     public SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
-        return sensorDataMappingRepository
+        SensorDataMappingInfoResponse response = sensorDataMappingRepository
                 .findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
                         request.getGatewayId(),
                         request.getSensorId(),
                         request.getDataTypeEnName()
                 );
+        if (response == null) {
+            throw new SensorDataMappingNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId(),
+                    request.getDataTypeEnName()
+            );
+        }
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SensorDataMappingAiResponse> getList(String gatewayId) {
+        return sensorDataMappingRepository.findAllAiResponsesByGatewayId(gatewayId);
     }
 
     /// 검색용 데이터
