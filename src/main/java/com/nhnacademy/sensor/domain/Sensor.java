@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
+import java.util.Objects;
+
 /**
  * 센서 정보를 나타내는 JPA 엔티티입니다. <br>
  * 각 센서는 고유의 센서 ID와 게이트웨이 ID를 가지며, 설치 위치에 대한 정보도 포함합니다. <br>
@@ -38,19 +40,19 @@ public class Sensor {
     @Comment("센서_번호")
     private Integer sensorNo;
 
-    @Column(name = "gateway_id", length = 50, nullable = false, updatable = false)
+    @Column(name = "gateway_id", length = 100, nullable = false, updatable = false)
     @Comment("게이트웨이_아이디")
     private String gatewayId;
 
-    @Column(name = "sensor_id", length = 50, nullable = false, updatable = false)
+    @Column(name = "sensor_id", length = 100, nullable = false, updatable = false)
     @Comment("센서_아이디")
     private String sensorId;
 
-    @Column(name = "sensor_location", length = 30, nullable = true)
+    @Column(name = "sensor_location", length = 50, nullable = true)
     @Comment("센서_설치_장소")
     private String sensorLocation;
 
-    @Column(name = "sensor_spot", length = 30, nullable = true)
+    @Column(name = "sensor_spot", length = 50, nullable = true)
     @Comment("센서_설치_상세위치")
     private String sensorSpot;
 
@@ -104,11 +106,24 @@ public class Sensor {
      * @param sensorSpot     새로 설정할 센서 상세 설치 위치
      */
     public void updateSensorPosition(String sensorLocation, String sensorSpot) {
-        if (sensorLocation != null) {
+        if (sensorLocation != null && !sensorLocation.isBlank()) {
             this.sensorLocation = sensorLocation;
         }
-        if (sensorSpot != null) {
+        if (sensorSpot != null && !sensorSpot.isBlank()) {
             this.sensorSpot = sensorSpot;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Sensor sensor)) return false;
+        return Objects.equals(sensorNo, sensor.sensorNo)
+                && Objects.equals(gatewayId, sensor.gatewayId)
+                && Objects.equals(sensorId, sensor.sensorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sensorNo, gatewayId, sensorId);
     }
 }

@@ -21,30 +21,6 @@ public class CustomDataTypeRepositoryImpl extends QuerydslRepositorySupport impl
         this.qDataType = QDataType.dataType;
     }
 
-    @Deprecated
-    private long countByDataTypeKrName(String dataTypeKrName) {
-        Long count = queryFactory
-                .select(qDataType.dataTypeEnName.count())
-                .from(qDataType)
-                .where(qDataType.dataTypeKrName.eq(dataTypeKrName))
-                .fetchOne();
-        return count != null ? count : 0L;
-    }
-
-    @Deprecated
-    private boolean existsByDataTypeKrName(String dataTypeKrName) {
-        return countByDataTypeKrName(dataTypeKrName) > 0L;
-    }
-
-    @Deprecated
-    private DataType findByDataTypeKrName(String dataTypeKrName) {
-        return queryFactory
-                .select(qDataType)
-                .from(qDataType)
-                .where(qDataType.dataTypeKrName.eq(dataTypeKrName))
-                .fetchOne();
-    }
-
     @Override
     public Map<String, String> findAllAsMap() {
         return queryFactory

@@ -26,17 +26,17 @@ import org.hibernate.annotations.Comment;
  * <p>본 엔티티는 센서와 데이터 타입 간의 N:M 관계를 명시적 매핑 테이블로 표현하며, <br>
  * 매핑 상태 변경 등 추가 속성을 가질 수 있습니다.</p>
  *
- * <p><b>테이블명:</b> {@code sensor_data_infos}</p>
+ * <p><b>테이블명:</b> {@code sensor_data_mappings}</p>
  *
  * @see Sensor
  * @see DataType
  * @see SensorStatus
  */
 @Entity
-@Table(name = "sensor_data_infos")
+@Table(name = "sensor_data_mappings")
 @Getter
 @ToString
-public class SensorMapping {
+public class SensorDataMapping {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,13 +50,19 @@ public class SensorMapping {
     private SensorStatus sensorStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sensor_no", referencedColumnName = "sensor_no", nullable = false, updatable = false)
+    @JoinColumn(
+            name = "sensor_no", referencedColumnName = "sensor_no",
+            nullable = false, updatable = false
+    )
     @Comment("센서_번호")
     @ToString.Exclude
     private Sensor sensor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_en_name", referencedColumnName = "type_en_name", nullable = false, updatable = false)
+    @JoinColumn(
+            name = "type_en_name", referencedColumnName = "type_en_name",
+            nullable = false, updatable = false
+    )
     @Comment("데이터_타입_영문명")
     @ToString.Exclude
     private DataType dataType;
@@ -64,7 +70,7 @@ public class SensorMapping {
     /**
      * JPA 전용 기본 생성자입니다.
      */
-    protected SensorMapping() {
+    protected SensorDataMapping() {
     }
 
     /**
@@ -74,9 +80,9 @@ public class SensorMapping {
      * @param sensor       센서 엔티티
      * @param dataType     데이터 타입 엔티티
      * @param sensorStatus 센서 상태
-     * @see SensorMapping#ofNewSensorDataType(Sensor, DataType, SensorStatus)
+     * @see SensorDataMapping#ofNewSensorDataType(Sensor, DataType, SensorStatus)
      */
-    private SensorMapping(Sensor sensor, DataType dataType, SensorStatus sensorStatus) {
+    private SensorDataMapping(Sensor sensor, DataType dataType, SensorStatus sensorStatus) {
         this.sensor = sensor;
         this.dataType = dataType;
         this.sensorStatus = sensorStatus;
@@ -90,10 +96,10 @@ public class SensorMapping {
      * @param sensor       센서 엔티티
      * @param dataType     데이터 타입 엔티티
      * @param sensorStatus 센서 상태
-     * @return 새로 생성된 {@link SensorMapping} 인스턴스
+     * @return 새로 생성된 {@link SensorDataMapping} 인스턴스
      */
-    public static SensorMapping ofNewSensorDataType(Sensor sensor, DataType dataType, SensorStatus sensorStatus) {
-        return new SensorMapping(
+    public static SensorDataMapping ofNewSensorDataType(Sensor sensor, DataType dataType, SensorStatus sensorStatus) {
+        return new SensorDataMapping(
                 sensor,
                 dataType,
                 sensorStatus

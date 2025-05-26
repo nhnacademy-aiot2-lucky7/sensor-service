@@ -1,6 +1,7 @@
 package com.nhnacademy.sensor.domain;
 
 import com.nhnacademy.CustomDataJpaTest;
+import com.nhnacademy.sensor.SensorTestingData;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -12,52 +13,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 @CustomDataJpaTest
 class SensorTest {
 
-    private static final String TEST_GATEWAY_ID = "test-gateway-id";
-
-    private static final String TEST_SENSOR_ID = "test-sensor-id";
-
-    private static final String TEST_SENSOR_LOCATION = "test-sensor-location";
-
-    private static final String TEST_SENSOR_SPOT = "test-sensor-spot";
-
     @Autowired
     private EntityManager em;
 
-    @DisplayName("생성자 테스트: 파라미터 주입 테스트")
+    @DisplayName("Sensor 생성자 테스트: 파라미터 주입 테스트")
     @Test
     void testStaticConstructor() {
-        Sensor sensor = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
-        );
+        Sensor sensor = SensorTestingData.sample();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(TEST_GATEWAY_ID, sensor.getGatewayId()),
-                () -> Assertions.assertEquals(TEST_SENSOR_ID, sensor.getSensorId()),
-                () -> Assertions.assertEquals(TEST_SENSOR_LOCATION, sensor.getSensorLocation()),
-                () -> Assertions.assertEquals(TEST_SENSOR_SPOT, sensor.getSensorSpot())
+                () -> Assertions.assertEquals(SensorTestingData.TEST_GATEWAY_ID, sensor.getGatewayId()),
+                () -> Assertions.assertEquals(SensorTestingData.TEST_SENSOR_ID, sensor.getSensorId()),
+                () -> Assertions.assertEquals(SensorTestingData.TEST_SENSOR_LOCATION, sensor.getSensorLocation()),
+                () -> Assertions.assertEquals(SensorTestingData.TEST_SENSOR_SPOT, sensor.getSensorSpot())
         );
     }
 
-    @DisplayName("Entity: 삽입 테스트")
+    @DisplayName("Sensor Entity: 삽입 테스트")
     @Test
     void testCreate() {
-        Sensor testSave = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
-        );
+        Sensor testSave = SensorTestingData.sample();
         em.persist(testSave);
 
         log.debug("create entity: {}", testSave);
         Assertions.assertNotNull(em.find(Sensor.class, testSave.getSensorNo()));
     }
 
-    @DisplayName("Entity: 조회 테스트")
+    @DisplayName("Sensor Entity: 조회 테스트")
     @Test
     void testRead() {
-        Sensor testRead = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
-        );
+        Sensor testRead = SensorTestingData.sample();
         em.persist(testRead);
 
         Sensor actual = em.find(Sensor.class, testRead.getSensorNo());
@@ -65,16 +49,13 @@ class SensorTest {
         equals(testRead, actual);
     }
 
-    @DisplayName("Entity: 수정 테스트")
+    @DisplayName("Sensor Entity: 수정 테스트")
     @Test
     void testUpdate() {
         String location = "클래스 B";
         String spot = "책상 1번";
 
-        Sensor testUpdate = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
-        );
+        Sensor testUpdate = SensorTestingData.sample();
         em.persist(testUpdate);
 
         testUpdate.updateSensorPosition(location, spot);
@@ -86,13 +67,10 @@ class SensorTest {
         equals(testUpdate, actual);
     }
 
-    @DisplayName("Entity: 삭제 테스트")
+    @DisplayName("Sensor Entity: 삭제 테스트")
     @Test
     void testDelete() {
-        Sensor testDelete = Sensor.ofNewSensor(
-                TEST_GATEWAY_ID, TEST_SENSOR_ID,
-                TEST_SENSOR_LOCATION, TEST_SENSOR_SPOT
-        );
+        Sensor testDelete = SensorTestingData.sample();
         em.persist(testDelete);
         log.debug("delete entity: {}", testDelete);
 
