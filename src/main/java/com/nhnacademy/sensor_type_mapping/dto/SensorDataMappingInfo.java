@@ -26,7 +26,7 @@ public final class SensorDataMappingInfo {
     @JsonCreator
     public SensorDataMappingInfo(
             @JsonProperty("info") SensorInfo sensorInfo,
-            @JsonProperty("data_type_en_name") String dataTypeEnName,
+            @JsonProperty("type_en_name") String dataTypeEnName,
             @JsonProperty("sensor_status") SensorStatus sensorStatus
     ) {
         this.sensorInfo = sensorInfo;
