@@ -1,5 +1,6 @@
 package com.nhnacademy.sensor_type_mapping.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class SensorDataMappingIndexResponse {
 
     private final String sensorId;
 
+    @JsonProperty("type_en_name")
     private final String dataTypeEnName;
 
     @QueryProjection
