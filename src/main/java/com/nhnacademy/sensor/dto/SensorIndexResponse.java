@@ -29,11 +29,4 @@ public final class SensorIndexResponse {
     public int hashCode() {
         return Objects.hash(gatewayId, sensorId);
     }
-
-    /// Data Handler가 필요한 Method
-    public boolean isNewSensor(String gatewayId, String sensorId) {
-        /*return !this.gatewayId.equals(gatewayId)
-                || !this.sensorId.equals(sensorId);*/
-        return !(this.gatewayId.equals(gatewayId) && this.sensorId.equals(sensorId));
-    }
 }
