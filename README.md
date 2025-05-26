@@ -1,1 +1,1 @@
-# spring-iot-sensor-service
+# sensor-service
