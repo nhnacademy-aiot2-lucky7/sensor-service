@@ -5,6 +5,7 @@ import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor.dto.QSensorInfoResponse;
 import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
+import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.QSearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingIndexResponse;
@@ -120,7 +121,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public SearchNoResponse findSensorDataNoByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(
                         new QSearchNoResponse(
@@ -139,7 +140,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public SensorDataMappingInfoResponse findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(
                         new QSensorDataMappingInfoResponse(
@@ -186,6 +187,24 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
+    public List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatuses(List<SensorStatus> sensorStatuses) {
+        return queryFactory
+                .select(
+                        new QSensorDataMappingAiResponse(
+                                qSensor.gatewayId,
+                                qSensor.sensorId,
+                                qSensorDataMapping.sensorStatus,
+                                qDataType.dataTypeEnName
+                        )
+                )
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
+                .where(getSearchStatuses(sensorStatuses))
+                .fetch();
+    }
+
+    @Override
     public Set<SensorDataMappingIndexResponse> findAllSensorDataUniqueKeys() {
         List<SensorDataMappingIndexResponse> uniqueList =
                 queryFactory
@@ -205,6 +224,14 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
             log.warn("Sensor 테이블에 중복된 (gatewayId, sensorId, dataTypeEnName) 조합이 존재할 수 있습니다. 전체 조회 건수: {}, 중복 제거 후 건수: {}", uniqueList.size(), uniqueSet.size());
         }
         return uniqueSet;
+    }
+
+    private BooleanBuilder getSearchStatuses(List<SensorStatus> sensorStatuses) {
+        BooleanBuilder builder = new BooleanBuilder();
+        for (SensorStatus sensorStatus : sensorStatuses) {
+            builder.or(qSensorDataMapping.sensorStatus.eq(sensorStatus));
+        }
+        return builder;
     }
 
     private BooleanBuilder getBooleanBuilder(SensorDataMappingSearchRequest request) {
