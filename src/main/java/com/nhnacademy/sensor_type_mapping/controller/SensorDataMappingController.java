@@ -6,6 +6,7 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @RestController
 @RequestMapping("/sensor-data-mappings")
 public class SensorDataMappingController {
@@ -31,15 +34,23 @@ public class SensorDataMappingController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<SensorDataMappingIndexResponse>> getSensorDataMappingIndexes() {
+    public ResponseEntity<Set<SensorDataMappingIndexResponse>> getIndexes() {
         return ResponseEntity
-                .ok(sensorDataMappingService.getSensorDataMappingIndexes());
+                .ok(sensorDataMappingService.getIndexes());
+    }
+
+    @GetMapping("/search-status")
+    public ResponseEntity<List<SensorDataMappingAiResponse>> getStatuses(
+            @RequestParam(required = false) List<String> status
+    ) {
+        return ResponseEntity
+                .ok(sensorDataMappingService.getStatuses(status));
     }
 
     /// TODO: P.K 값을 제물로 바쳐서 gatewayId, SensorId, DataType 3신기 소환
-    @GetMapping("/sensor-data-no/{sensor_data_no}")
+    @GetMapping("/sensor-data-no/{sensor-data-no}")
     public ResponseEntity<Void> getIndex(
-            @PathVariable("sensor_data_no") Long sensorDataNo
+            @PathVariable("sensor-data-no") Long sensorDataNo
     ) {
         return ResponseEntity
                 .noContent()
@@ -52,7 +63,7 @@ public class SensorDataMappingController {
             @PathVariable("gateway_id") String gatewayId
     ) {
         return ResponseEntity
-                .ok(sensorDataMappingService.getList(gatewayId));
+                .ok(sensorDataMappingService.getAiResponse(gatewayId));
     }
 
     // P.K 값 검색
