@@ -1,5 +1,6 @@
 package com.nhnacademy.sensor_type_mapping.service.impl;
 
+import com.nhnacademy.common.exception.http.BadRequestException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
@@ -19,6 +20,7 @@ import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -117,7 +119,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     @Override
     public SearchNoResponse getSearchNoResponse(SearchNoRequest request) {
         SearchNoResponse response = sensorDataMappingRepository
-                .findSensorDataNoByGatewayIdAndSensorIdAndDataTypeEnName(
+                .findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
                         request.getGatewayId(),
                         request.getSensorId(),
                         request.getDataTypeEnName()
@@ -137,7 +139,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     @Override
     public SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
         SensorDataMappingInfoResponse response = sensorDataMappingRepository
-                .findSensorDataMappingInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
+                .findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
                         request.getGatewayId(),
                         request.getSensorId(),
                         request.getDataTypeEnName()
@@ -153,14 +155,34 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     }
 
     @Transactional(readOnly = true)
-    public List<SensorDataMappingAiResponse> getList(String gatewayId) {
+    @Override
+    public List<SensorDataMappingAiResponse> getAiResponse(String gatewayId) {
         return sensorDataMappingRepository.findAllAiResponsesByGatewayId(gatewayId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<SensorDataMappingAiResponse> getStatuses(List<String> statuses) {
+        List<SensorStatus> sensorStatuses = new ArrayList<>();
+        try {
+            for (String status : statuses) {
+                sensorStatuses.add(
+                        SensorStatus.valueOf(status.toUpperCase())
+                );
+            }
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(
+                    "사용 가능한 값: [%s]"
+                            .formatted(SensorStatus.VALID_VALUES_STRING)
+            );
+        }
+        return sensorDataMappingRepository.findAllAiResponsesBySensorStatuses(sensorStatuses);
     }
 
     /// 검색용 데이터
     @Transactional(readOnly = true)
     @Override
-    public Set<SensorDataMappingIndexResponse> getSensorDataMappingIndexes() {
+    public Set<SensorDataMappingIndexResponse> getIndexes() {
         return sensorDataMappingRepository.findAllSensorDataUniqueKeys();
     }
 }
