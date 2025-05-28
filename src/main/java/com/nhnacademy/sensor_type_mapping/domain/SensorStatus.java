@@ -1,5 +1,7 @@
 package com.nhnacademy.sensor_type_mapping.domain;
 
+import com.nhnacademy.sensor.domain.Sensor;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
