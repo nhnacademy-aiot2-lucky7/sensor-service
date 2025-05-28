@@ -171,7 +171,10 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
                 );
             }
         } catch (IllegalArgumentException e) {
-            throw new BadRequestException("잘못된 요청");
+            throw new BadRequestException(
+                    "사용 가능한 값: [%s]"
+                            .formatted(SensorStatus.VALID_VALUES_STRING)
+            );
         }
         return sensorDataMappingRepository.findAllAiResponsesBySensorStatuses(sensorStatuses);
     }

@@ -1,5 +1,8 @@
 package com.nhnacademy.sensor_type_mapping.domain;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * 센서의 상태를 나타내는 열거형(enum)입니다. <br>
  * 센서와 데이터 타입 간 매핑의 현재 상태를 구분하는 데 사용됩니다.
@@ -26,5 +29,16 @@ public enum SensorStatus {
     /**
      * 매핑이 폐기되었거나 더 이상 사용되지 않는 상태입니다.
      */
-    ABANDONED
+    ABANDONED;
+
+    /**
+     * enum의 모든 타입을 담은 문자열입니다.
+     */
+    public static final String VALID_VALUES_STRING;
+
+    static {
+        VALID_VALUES_STRING = Arrays.stream(SensorStatus.values())
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+    }
 }
