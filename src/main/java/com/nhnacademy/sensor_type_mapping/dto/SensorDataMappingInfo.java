@@ -34,7 +34,7 @@ public final class SensorDataMappingInfo {
         this.sensorStatus = sensorStatus;
     }
 
-    public String getGatewayId() {
+    public long getGatewayId() {
         return sensorInfo.getGatewayId();
     }
 

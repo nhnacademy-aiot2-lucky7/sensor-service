@@ -9,7 +9,7 @@ import java.util.Objects;
 @Getter
 public class SensorDataMappingIndexResponse {
 
-    private final String gatewayId;
+    private final long gatewayId;
 
     private final String sensorId;
 
@@ -17,7 +17,7 @@ public class SensorDataMappingIndexResponse {
     private final String dataTypeEnName;
 
     @QueryProjection
-    public SensorDataMappingIndexResponse(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SensorDataMappingIndexResponse(long gatewayId, String sensorId, String dataTypeEnName) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
         this.dataTypeEnName = dataTypeEnName;

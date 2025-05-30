@@ -1,18 +1,22 @@
 package com.nhnacademy.threshold.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 import java.time.LocalDateTime;
 
+@Deprecated
 @Value
 public class ThresholdHistoryRegisterRequest {
 
-    @NotBlank(message = "게이트웨이 ID가 누락되었습니다.")
-    @Size(min = 2, max = 50, message = "게이트웨이 ID는 2자 이상 50자 이하로 입력해야 합니다.")
-    String gatewayId;
+    @NotNull(message = "게이트웨이 ID가 누락되었습니다.")
+    @Positive(message = "게이트웨이 ID는 (2^0) 이상으로 입력해야 합니다.")
+    @Max(value = Long.MAX_VALUE, message = "게이트웨이 ID는 (2^63 - 1) 이하로 입력해야 합니다.")
+    Long gatewayId;
 
     @NotBlank(message = "센서 ID가 누락되었습니다.")
     @Size(min = 2, max = 50, message = "센서 ID는 2자 이상 50자 이하로 입력해야 합니다.")

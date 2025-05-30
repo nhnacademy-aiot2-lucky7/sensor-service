@@ -27,7 +27,7 @@ public interface SensorDataMappingService {
 
     SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request);
 
-    List<SensorDataMappingAiResponse> getAiResponse(String gatewayId);
+    List<SensorDataMappingAiResponse> getAiResponse(long gatewayId);
 
     List<SensorDataMappingAiResponse> getStatuses(List<String> statuses);
 

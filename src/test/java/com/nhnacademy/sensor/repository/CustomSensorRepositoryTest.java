@@ -86,15 +86,15 @@ class CustomSensorRepositoryTest {
         int index = 0;
         return Stream.of(
                 Arguments.of(new SensorSearchRequest(
-                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        SensorTestingData.TEST_GATEWAY_ID + (++index),
                         null, null, null
                 )),
                 Arguments.of(new SensorSearchRequest(
-                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        SensorTestingData.TEST_GATEWAY_ID + (++index),
                         null, null, null
                 )),
                 Arguments.of(new SensorSearchRequest(
-                        "%s-%d".formatted(SensorTestingData.TEST_GATEWAY_ID, ++index),
+                        SensorTestingData.TEST_GATEWAY_ID + (++index),
                         null, null, null
                 ))
         );

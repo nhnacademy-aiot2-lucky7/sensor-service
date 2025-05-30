@@ -19,12 +19,12 @@ public interface CustomSensorDataMappingRepository {
      * INNER JOIN sensors ON sensor_data_mappings.sensor_no = sensors.sensor_no
      * WHERE gateway_id = ? AND sensor_id = ? AND data_type_en_name = ?
      */
-    long countByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
+    long countByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
     /**
-     * {@link CustomSensorDataMappingRepository#countByGatewayIdAndSensorIdAndDataTypeEnName(String, String, String)} > 0
+     * {@link CustomSensorDataMappingRepository#countByGatewayIdAndSensorIdAndDataTypeEnName(long, String, String)} > 0
      */
-    boolean existsByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
+    boolean existsByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
     /**
      * SELECT SensorDataMapping
@@ -32,7 +32,7 @@ public interface CustomSensorDataMappingRepository {
      * INNER JOIN sensors ON sensor_data_mappings.sensor_no = sensors.sensor_no
      * WHERE gateway_id = ? AND sensor_id = ? AND data_type_en_name = ?
      */
-    SensorDataMapping findByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
+    SensorDataMapping findByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
     long countByConditions(SensorDataMappingSearchRequest request);
 
@@ -40,11 +40,11 @@ public interface CustomSensorDataMappingRepository {
 
     List<SensorDataMappingInfoResponse> findByConditions(SensorDataMappingSearchRequest request);
 
-    SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
+    SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
-    SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName);
+    SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
-    List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(String gatewayId);
+    List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(long gatewayId);
 
     List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatuses(List<SensorStatus> sensorStatuses);
 

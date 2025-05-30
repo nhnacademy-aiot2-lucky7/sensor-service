@@ -12,5 +12,5 @@ public interface ThresholdHistoryService {
 
     ThresholdHistory getThresholdHistoryByThresholdHistoryNo(long thresholdHistoryNo);
 
-    List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(String gatewayId);
+    List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId);
 }

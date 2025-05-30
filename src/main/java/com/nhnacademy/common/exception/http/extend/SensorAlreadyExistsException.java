@@ -4,19 +4,11 @@ import com.nhnacademy.common.exception.http.ConflictException;
 
 public class SensorAlreadyExistsException extends ConflictException {
 
-    public SensorAlreadyExistsException(int sensorNo) {
-        this(sensorNo, null);
-    }
-
-    public SensorAlreadyExistsException(int sensorNo, Throwable cause) {
-        super("sensor already exists: %d".formatted(sensorNo), cause);
-    }
-
-    public SensorAlreadyExistsException(String gatewayId, String sensorId) {
+    public SensorAlreadyExistsException(long gatewayId, String sensorId) {
         this(gatewayId, sensorId, null);
     }
 
-    public SensorAlreadyExistsException(String gatewayId, String sensorId, Throwable cause) {
-        super("sensor already exists: {%s:%s}".formatted(gatewayId, sensorId), cause);
+    public SensorAlreadyExistsException(long gatewayId, String sensorId, Throwable cause) {
+        super("sensor already exists: {%d:%s}".formatted(gatewayId, sensorId), cause);
     }
 }
