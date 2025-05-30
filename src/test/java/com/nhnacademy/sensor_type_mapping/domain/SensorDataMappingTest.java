@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @CustomDataJpaTest
 class SensorDataMappingTest {
 
-    private final String testGatewayId = SensorTestingData.TEST_GATEWAY_ID;
+    private final long testGatewayId = SensorTestingData.TEST_GATEWAY_ID;
 
     private final String testSensorId = SensorTestingData.TEST_SENSOR_ID;
 

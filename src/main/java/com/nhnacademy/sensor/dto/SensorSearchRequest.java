@@ -3,11 +3,12 @@ package com.nhnacademy.sensor.dto;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
+@Deprecated
 @Value
 public class SensorSearchRequest {
 
     @Size(min = 2, max = 100, message = "게이트웨이 ID는 2자 이상 100자 이하로 입력해야 합니다.")
-    String gatewayId;
+    Long gatewayId;
 
     @Size(min = 2, max = 100, message = "센서 ID는 2자 이상 100자 이하로 입력해야 합니다.")
     String sensorId;
@@ -19,7 +20,7 @@ public class SensorSearchRequest {
     String sensorSpot;
 
     public boolean isNotNullGatewayId() {
-        return gatewayId != null && !gatewayId.isBlank();
+        return gatewayId != null; // && !gatewayId.isBlank();
     }
 
     public boolean isNotNullSensorId() {

@@ -84,7 +84,7 @@ class SensorRepositoryTest {
         Assertions.assertTrue(actual.isEmpty());
     }
 
-    private Sensor get(Integer sensorNo) {
+    private Sensor get(Long sensorNo) {
         Optional<Sensor> optional = sensorRepository.findById(sensorNo);
         Assertions.assertTrue(optional.isPresent());
         return optional.get();

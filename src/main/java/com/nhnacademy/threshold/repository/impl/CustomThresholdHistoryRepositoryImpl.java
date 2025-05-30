@@ -38,7 +38,7 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(String gatewayId) {
+    public List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(long gatewayId) {
         QThresholdHistory qThresholdHistorySub = new QThresholdHistory("qThresholdHistorySub");
 
         return queryFactory

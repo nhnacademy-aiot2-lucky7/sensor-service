@@ -7,7 +7,7 @@ import lombok.Value;
 public class RuleEngineResponse {
 
     @JsonProperty("gateway_id")
-    String gatewayId;
+    long gatewayId;
 
     @JsonProperty("sensor_id")
     String sensorId;

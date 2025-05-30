@@ -60,7 +60,7 @@ public class SensorDataMappingController {
     // gatewayId에 해당하는 모든 센서들의 정보 조회
     @GetMapping("/gateway-id/{gateway_id}")
     public ResponseEntity<List<SensorDataMappingAiResponse>> getList(
-            @PathVariable("gateway_id") String gatewayId
+            @PathVariable("gateway_id") Long gatewayId
     ) {
         return ResponseEntity
                 .ok(sensorDataMappingService.getAiResponse(gatewayId));

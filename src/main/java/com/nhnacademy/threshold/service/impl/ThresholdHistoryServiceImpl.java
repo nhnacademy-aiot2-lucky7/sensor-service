@@ -70,7 +70,7 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     }
 
     @Override
-    public List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(String gatewayId) {
+    public List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId) {
         return thresholdHistoryRepository.findLatestThresholdSummariesByGatewayId(gatewayId);
     }
 }

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CustomThresholdHistoryRepository {
 
-    List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(String gatewayId);
+    List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(long gatewayId);
 }

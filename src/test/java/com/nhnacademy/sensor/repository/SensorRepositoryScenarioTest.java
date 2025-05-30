@@ -40,7 +40,7 @@ class SensorRepositoryScenarioTest {
     @DisplayName("Sensor JPA: 서로 다른 gatewayId 및 sensorId 조합이면 저장 성공")
     @ParameterizedTest
     @MethodSource("testSensorData")
-    void testCreate_unique_success(String gatewayId, String sensorId) {
+    void testCreate_unique_success(long gatewayId, String sensorId) {
         Assertions.assertDoesNotThrow(
                 () -> sensorRepository.save(
                         Sensor.ofNewSensor(
@@ -54,7 +54,7 @@ class SensorRepositoryScenarioTest {
     }
 
     private static Stream<Arguments> testSensorData() {
-        String otherGatewayId = "other-gateway-id";
+        long otherGatewayId = 1L + SensorTestingData.TEST_GATEWAY_ID;
         String otherSensorId = "other-sensor-id";
         return Stream.of(
                 Arguments.of(otherGatewayId, otherSensorId),
@@ -82,7 +82,7 @@ class SensorRepositoryScenarioTest {
     @DisplayName("Sensor JPA: 데이터 조회 테스트(gatewayId & sensorId)")
     @ParameterizedTest
     @MethodSource("testGatewayIdAndSensorIdData")
-    void testFindByGatewayIdAndSensorId(String gatewayId, String sensorId) {
+    void testFindByGatewayIdAndSensorId(long gatewayId, String sensorId) {
         Sensor actual = sensorRepository.findByGatewayIdAndSensorId(gatewayId, sensorId);
 
         if (isExists(gatewayId, sensorId)) {
@@ -95,7 +95,7 @@ class SensorRepositoryScenarioTest {
     @DisplayName("Sensor JPA: 데이터의 존재 유무 테스트(gatewayId & sensorId)")
     @ParameterizedTest
     @MethodSource("testGatewayIdAndSensorIdData")
-    void testExistsByGatewayIdAndSensorId(String gatewayId, String sensorId) {
+    void testExistsByGatewayIdAndSensorId(long gatewayId, String sensorId) {
         Assertions.assertEquals(
                 isExists(gatewayId, sensorId),
                 sensorRepository.existsByGatewayIdAndSensorId(gatewayId, sensorId)
@@ -103,7 +103,7 @@ class SensorRepositoryScenarioTest {
     }
 
     private static Stream<Arguments> testGatewayIdAndSensorIdData() {
-        String otherGatewayId = "other-gateway-id";
+        long otherGatewayId = 1L + SensorTestingData.TEST_GATEWAY_ID;
         String otherSensorId = "other-sensor-id";
         return Stream.of(
                 Arguments.of(SensorTestingData.TEST_GATEWAY_ID, SensorTestingData.TEST_SENSOR_ID),
@@ -113,7 +113,7 @@ class SensorRepositoryScenarioTest {
         );
     }
 
-    private boolean isExists(String gatewayId, String sensorId) {
+    private boolean isExists(long gatewayId, String sensorId) {
         return sample.getGatewayId().equals(gatewayId)
                 && sample.getSensorId().equals(sensorId);
     }

@@ -3,10 +3,11 @@ package com.nhnacademy.sensor_type_mapping.dto;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import lombok.Value;
 
+@Deprecated
 @Value
 public class SensorDataMappingSearchRequest {
 
-    String gatewayId;
+    Long gatewayId;
 
     String sensorId;
 
@@ -19,7 +20,7 @@ public class SensorDataMappingSearchRequest {
     SensorStatus sensorStatus;
 
     public boolean isNotNullGatewayId() {
-        return gatewayId != null && !gatewayId.isBlank();
+        return gatewayId != null; // && !gatewayId.isBlank();
     }
 
     public boolean isNotNullSensorId() {
