@@ -38,11 +38,11 @@ public class Sensor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sensor_no", nullable = false)
     @Comment("센서_번호")
-    private Integer sensorNo;
+    private Long sensorNo;
 
-    @Column(name = "gateway_id", length = 100, nullable = false, updatable = false)
+    @Column(name = "gateway_id", nullable = false, updatable = false)
     @Comment("게이트웨이_아이디")
-    private String gatewayId;
+    private Long gatewayId;
 
     @Column(name = "sensor_id", length = 100, nullable = false, updatable = false)
     @Comment("센서_아이디")
@@ -70,9 +70,9 @@ public class Sensor {
      * @param sensorId       센서 ID
      * @param sensorLocation 센서 설치 장소
      * @param sensorSpot     센서 상세 설치 위치
-     * @see Sensor#ofNewSensor(String, String, String, String)
+     * @see Sensor#ofNewSensor(long, String, String, String)
      */
-    private Sensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
+    private Sensor(long gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
         this.sensorLocation = sensorLocation;
@@ -90,7 +90,7 @@ public class Sensor {
      * @param sensorSpot     센서 상세 설치 위치 (예: "천장 왼쪽 구석")
      * @return 새로 생성된 {@link Sensor} 인스턴스
      */
-    public static Sensor ofNewSensor(String gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
+    public static Sensor ofNewSensor(long gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
         return new Sensor(
                 gatewayId,
                 sensorId,

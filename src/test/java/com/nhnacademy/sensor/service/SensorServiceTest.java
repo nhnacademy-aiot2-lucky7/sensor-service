@@ -602,7 +602,7 @@ class SensorServiceTest {
 
     private Sensor testSensorContext() {
         Sensor sensor = testSensor();
-        ReflectionTestUtils.setField(sensor, "sensorNo", 1);
+        ReflectionTestUtils.setField(sensor, "sensorNo", 1L);
         return sensor;
     }
 

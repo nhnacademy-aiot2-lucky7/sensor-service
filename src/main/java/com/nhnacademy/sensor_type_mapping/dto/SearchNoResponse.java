@@ -8,10 +8,10 @@ import lombok.Getter;
 public final class SearchNoResponse {
 
     @JsonProperty("sensor_data_no")
-    private final Long sensorDataNo;
+    private final long sensorDataNo;
 
     @QueryProjection
-    public SearchNoResponse(Long sensorDataNo) {
+    public SearchNoResponse(long sensorDataNo) {
         this.sensorDataNo = sensorDataNo;
     }
 }

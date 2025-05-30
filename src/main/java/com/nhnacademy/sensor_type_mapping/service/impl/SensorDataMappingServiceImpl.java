@@ -156,7 +156,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SensorDataMappingAiResponse> getAiResponse(String gatewayId) {
+    public List<SensorDataMappingAiResponse> getAiResponse(long gatewayId) {
         return sensorDataMappingRepository.findAllAiResponsesByGatewayId(gatewayId);
     }
 

@@ -48,7 +48,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public long countByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public long countByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         Long count = queryFactory
                 .select(qSensorDataMapping.sensorDataNo.count())
                 .from(qSensorDataMapping)
@@ -64,12 +64,12 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public boolean existsByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public boolean existsByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         return countByGatewayIdAndSensorIdAndDataTypeEnName(gatewayId, sensorId, dataTypeEnName) > 0L;
     }
 
     @Override
-    public SensorDataMapping findByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SensorDataMapping findByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(qSensorDataMapping)
                 .from(qSensorDataMapping)
@@ -121,7 +121,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(
                         new QSearchNoResponse(
@@ -140,7 +140,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(String gatewayId, String sensorId, String dataTypeEnName) {
+    public SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(
                         new QSensorDataMappingInfoResponse(
@@ -169,7 +169,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(String gatewayId) {
+    public List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(long gatewayId) {
         return queryFactory
                 .select(
                         new QSensorDataMappingAiResponse(

@@ -7,7 +7,7 @@ import java.util.List;
 
 public final class SensorTestingData {
 
-    public static final String TEST_GATEWAY_ID = "test-gateway-id";
+    public static final long TEST_GATEWAY_ID = 1L;
 
     public static final String TEST_SENSOR_ID = "test-sensor-id";
 
@@ -55,7 +55,7 @@ public final class SensorTestingData {
             for (int m = 0; m < 4; m++) {
                 sensors.add(
                         Sensor.ofNewSensor(
-                                "%s-%d".formatted(TEST_GATEWAY_ID, n + 1),
+                                TEST_GATEWAY_ID + n,
                                 "%s-%d".formatted(TEST_SENSOR_ID, m + 1),
                                 loc[n][m],
                                 spot[m]

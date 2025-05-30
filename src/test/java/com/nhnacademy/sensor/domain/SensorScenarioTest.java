@@ -40,7 +40,7 @@ class SensorScenarioTest {
     @DisplayName("Sensor Entity: 서로 다른 gatewayId 및 sensorId 조합이면 저장 성공")
     @ParameterizedTest
     @MethodSource("testSensorData")
-    void testUnique_success(String gatewayId, String sensorId) {
+    void testUnique_success(long gatewayId, String sensorId) {
         Assertions.assertDoesNotThrow(
                 () -> em.persist(
                         Sensor.ofNewSensor(
@@ -54,7 +54,7 @@ class SensorScenarioTest {
     }
 
     private static Stream<Arguments> testSensorData() {
-        String otherGatewayId = "other-gateway-id";
+        long otherGatewayId = 1L + SensorTestingData.TEST_GATEWAY_ID;
         String otherSensorId = "other-sensor-id";
         return Stream.of(
                 Arguments.of(otherGatewayId, otherSensorId),

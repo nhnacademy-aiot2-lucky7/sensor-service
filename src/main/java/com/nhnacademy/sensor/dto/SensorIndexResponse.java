@@ -8,12 +8,12 @@ import java.util.Objects;
 @Getter
 public final class SensorIndexResponse {
 
-    private final String gatewayId;
+    private final long gatewayId;
 
     private final String sensorId;
 
     @QueryProjection
-    public SensorIndexResponse(String gatewayId, String sensorId) {
+    public SensorIndexResponse(long gatewayId, String sensorId) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
     }

@@ -9,7 +9,7 @@ import lombok.Getter;
 public class SensorDataMappingAiResponse {
 
     @JsonProperty("gateway_id")
-    String gatewayId;
+    long gatewayId;
 
     @JsonProperty("sensor_id")
     String sensorId;
@@ -22,7 +22,7 @@ public class SensorDataMappingAiResponse {
 
     @QueryProjection
     public SensorDataMappingAiResponse(
-            String gatewayId, String sensorId,
+            long gatewayId, String sensorId,
             SensorStatus sensorStatus, String dataTypeEnName
     ) {
         this.gatewayId = gatewayId;
