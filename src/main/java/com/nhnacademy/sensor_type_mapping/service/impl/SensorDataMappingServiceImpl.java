@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     private final SensorService sensorService;

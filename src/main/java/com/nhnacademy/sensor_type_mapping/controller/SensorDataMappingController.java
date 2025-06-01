@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
 @RestController
 @RequestMapping("/sensor-data-mappings")
 public class SensorDataMappingController {

@@ -8,11 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
-import lombok.ToString;
 
 /// TODO: Valid message 양식을 다듬기
 @Getter
-@ToString
 public final class ThresholdHistoryInfo {
 
     @Valid
