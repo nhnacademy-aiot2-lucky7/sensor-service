@@ -10,10 +10,12 @@ import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
 import com.nhnacademy.threshold.repository.ThresholdHistoryRepository;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
 
     private final ThresholdHistoryRepository thresholdHistoryRepository;
