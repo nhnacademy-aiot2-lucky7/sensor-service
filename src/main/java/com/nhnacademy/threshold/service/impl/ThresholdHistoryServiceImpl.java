@@ -7,13 +7,16 @@ import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository
 import com.nhnacademy.threshold.domain.ThresholdHistory;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
+import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.repository.ThresholdHistoryRepository;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
 
     private final ThresholdHistoryRepository thresholdHistoryRepository;
@@ -80,5 +83,16 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     @Override
     public List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId) {
         return thresholdHistoryRepository.findLatestThresholdSummariesByGatewayId(gatewayId);
+    }
+
+    @Override
+    public List<ThresholdInfoResponse> getLatestThresholdInfoBySensorDataAndLimit(
+            long gatewayId, String sensorId,
+            String typeEnName, int limit
+    ) {
+        return thresholdHistoryRepository.findLatestThresholdInfoBySensorDataAndLimit(
+                gatewayId, sensorId,
+                typeEnName, limit
+        );
     }
 }

@@ -49,7 +49,6 @@ public class DataType {
         this.dataTypeKrName = dataTypeKrName;
     }
 
-    /// TODO: 한글명은 구글 번역기 라이브러리를 활용해 즉시, 반영한다.
     /**
      * <b>정적 팩토리 메서드입니다.</b>
      * <hr>

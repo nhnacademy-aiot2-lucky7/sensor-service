@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class SensorServiceImpl implements SensorService {
 
     private final SensorRepository sensorRepository;

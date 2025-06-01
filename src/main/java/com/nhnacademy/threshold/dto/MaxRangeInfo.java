@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public final class MaxRangeInfo {
 
     @NotNull(message = "최고 임계치의 최소값을 전달받지 못했습니다.")
