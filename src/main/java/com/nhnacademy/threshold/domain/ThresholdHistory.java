@@ -14,8 +14,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "threshold_historys")
 @Getter
@@ -88,7 +86,7 @@ public class ThresholdHistory {
 
     @Column(name = "calculated_at", nullable = false, updatable = false)
     @Comment("계산된_시간")
-    private LocalDateTime calculatedAt;
+    private Long calculatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -110,7 +108,7 @@ public class ThresholdHistory {
             Double minRangeMin, Double minRangeMax, Double maxRangeMin,
             Double maxRangeMax, Double avgRangeMin, Double avgRangeMax,
             Double deltaMin, Double deltaMax, Double deltaAvg,
-            Integer dataCount, LocalDateTime calculatedAt,
+            Integer dataCount, Long calculatedAt,
             SensorDataMapping sensorDataMapping
     ) {
         this.thresholdMin = thresholdMin;
@@ -129,9 +127,4 @@ public class ThresholdHistory {
         this.calculatedAt = calculatedAt;
         this.sensorDataMapping = sensorDataMapping;
     }
-
-    /*@PrePersist
-    public void prePersist() {
-        this.calculatedAt = LocalDateTime.now();
-    }*/
 }

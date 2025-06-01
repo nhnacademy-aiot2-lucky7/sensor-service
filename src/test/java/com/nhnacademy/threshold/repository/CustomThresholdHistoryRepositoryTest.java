@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,8 +88,11 @@ class CustomThresholdHistoryRepositoryTest {
     }
 
     private List<ThresholdHistory> thresholdHistories(List<SensorDataMapping> sensorDataMappings) {
-        LocalDateTime after = LocalDateTime.now();
-        LocalDateTime before = after.minusDays(1);
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        LocalDateTime now = LocalDateTime.now();
+
+        long after = now.atZone(zoneId).toInstant().toEpochMilli();
+        long before = now.minusDays(1).atZone(zoneId).toInstant().toEpochMilli();
 
         List<ThresholdHistory> result = new ArrayList<>();
         sensorDataMappings.forEach(sensorMapping -> {
