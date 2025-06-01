@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public final class ThresholdInfo {
 
     @NotNull(message = "분석된 최저 임계치 값을 전달받지 못했습니다.")
