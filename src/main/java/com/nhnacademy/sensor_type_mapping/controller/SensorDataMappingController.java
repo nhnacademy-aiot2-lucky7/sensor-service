@@ -58,9 +58,8 @@ public class SensorDataMappingController {
                 .build();
     }
 
-    // gatewayId에 해당하는 모든 센서들의 정보 조회
-    @GetMapping("/gateway-id/{gateway_id}")
-    public ResponseEntity<List<SensorDataMappingAiResponse>> getList(
+    @GetMapping("/{gateway_id}/sensors")
+    public ResponseEntity<List<SensorDataMappingAiResponse>> getSensorsByGatewayId(
             @PathVariable("gateway_id") Long gatewayId
     ) {
         return ResponseEntity

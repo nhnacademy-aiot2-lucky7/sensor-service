@@ -179,7 +179,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
                                 qDataType.dataTypeEnName
                         )
                 )
-                .from()
+                .from(qSensorDataMapping)
                 .innerJoin(qSensorDataMapping.sensor, qSensor)
                 .innerJoin(qSensorDataMapping.dataType, qDataType)
                 .where(qSensor.gatewayId.eq(gatewayId))
