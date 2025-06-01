@@ -1,7 +1,7 @@
 package com.nhnacademy.type.service;
 
 import com.nhnacademy.type.domain.DataType;
-import com.nhnacademy.type.domain.DataTypeInfo;
+import com.nhnacademy.type.dto.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
 
 public interface DataTypeService {

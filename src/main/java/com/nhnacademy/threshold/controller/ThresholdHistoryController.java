@@ -3,6 +3,7 @@ package com.nhnacademy.threshold.controller;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/threshold-histories")
 public class ThresholdHistoryController {
@@ -47,7 +49,7 @@ public class ThresholdHistoryController {
     public ResponseEntity<Void> registerThresholdHistory(
             @Validated @RequestBody ThresholdHistoryInfo request
     ) {
-
+        thresholdHistoryService.registerRequest(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();

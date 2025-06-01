@@ -1,42 +1,81 @@
 package com.nhnacademy.threshold.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.Value;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Getter;
+import lombok.ToString;
 
-import java.time.LocalDateTime;
-
-@Value
-public class ThresholdHistoryInfo {
-
-    @Valid
-    @JsonProperty("sensor_data")
-    SensorDataMappingInfo sensorDataMappingInfo;
-
-    @Valid
-    @JsonProperty("threshold")
-    ThresholdInfo thresholdInfo;
+/// TODO: Valid message 양식을 다듬기
+@Getter
+@ToString
+public final class ThresholdHistoryInfo {
 
     @Valid
-    @JsonProperty("min_range")
-    MinRangeInfo minRangeInfo;
+    @NotNull(message = "sensor_info 매칭 실패")
+    private final SensorDataIndexInfo sensorDataIndexInfo;
 
     @Valid
-    @JsonProperty("max_range")
-    MaxRangeInfo maxRangeInfo;
+    @NotNull(message = "threshold 매칭 실패")
+    private final ThresholdInfo thresholdInfo;
 
     @Valid
-    @JsonProperty("avg_range")
-    AvgRangeInfo avgRangeInfo;
+    @NotNull(message = "min_range 매칭 실패")
+    private final MinRangeInfo minRangeInfo;
 
-    @JsonProperty("delta")
-    DeltaInfo deltaInfo;
+    @Valid
+    @NotNull(message = "max_range 매칭 실패")
+    private final MaxRangeInfo maxRangeInfo;
 
-    @NotNull(message = "계산된 데이터 개수를 전달받지 못했습니다.")
-    Integer dataCount;
+    @Valid
+    @NotNull(message = "avg_range 매칭 실패")
+    private final AvgRangeInfo avgRangeInfo;
 
-    @NotNull(message = "계산된 시간을 전달받지 못했습니다.")
-    LocalDateTime calculatedAt;
+    @Valid
+    private final DiffInfo diffInfo;
+
+    @NotNull
+    @PositiveOrZero
+    private final Integer dataCount;
+
+    @NotNull
+    @Positive(message = "잘못된 시간 형식입니다.")
+    private final Long calculatedAt;
+
+    @JsonCreator
+    public ThresholdHistoryInfo(
+            @JsonProperty("sensor_info") SensorDataIndexInfo sensorDataIndexInfo,
+            @JsonProperty("threshold") ThresholdInfo thresholdInfo,
+            @JsonProperty("min_range") MinRangeInfo minRangeInfo,
+            @JsonProperty("max_range") MaxRangeInfo maxRangeInfo,
+            @JsonProperty("avg_range") AvgRangeInfo avgRangeInfo,
+            @JsonProperty("diff") DiffInfo diffInfo,
+            @JsonProperty("data_count") Integer dataCount,
+            @JsonProperty("calculated_at") Long calculatedAt
+    ) {
+        this.sensorDataIndexInfo = sensorDataIndexInfo;
+        this.thresholdInfo = thresholdInfo;
+        this.minRangeInfo = minRangeInfo;
+        this.maxRangeInfo = maxRangeInfo;
+        this.avgRangeInfo = avgRangeInfo;
+        this.diffInfo = diffInfo;
+        this.dataCount = dataCount;
+        this.calculatedAt = calculatedAt;
+    }
+
+    public long getGatewayId() {
+        return sensorDataIndexInfo.getGatewayId();
+    }
+
+    public String getSensorId() {
+        return sensorDataIndexInfo.getSensorId();
+    }
+
+    public String getDataTypeEnName() {
+        return sensorDataIndexInfo.getTypeEnName();
+    }
 }

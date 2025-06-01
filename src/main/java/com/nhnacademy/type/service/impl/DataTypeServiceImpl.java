@@ -3,7 +3,7 @@ package com.nhnacademy.type.service.impl;
 import com.nhnacademy.common.exception.http.extend.DataTypeAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.DataTypeNotFoundException;
 import com.nhnacademy.type.domain.DataType;
-import com.nhnacademy.type.domain.DataTypeInfo;
+import com.nhnacademy.type.dto.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
 import com.nhnacademy.type.repository.DataTypeRepository;
 import com.nhnacademy.type.service.DataTypeService;
