@@ -3,6 +3,7 @@ package com.nhnacademy.sensor_type_mapping.service;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
@@ -17,7 +18,12 @@ public interface SensorDataMappingService {
 
     SensorDataMapping getSensorDataMapping(SensorDataMappingInfo request);
 
+    /**
+     * @deprecated DTO 클래스 구조를 수정할 예정...
+     */
     void updateSensorDataMapping(SensorDataMappingInfo request);
+
+    void updateSensorStatus(SensorDataIndexInfo request);
 
     void removeSensorDataMapping(SensorDataMappingInfo request);
 
