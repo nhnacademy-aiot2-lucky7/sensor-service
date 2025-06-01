@@ -1,4 +1,4 @@
-package com.nhnacademy.type.domain;
+package com.nhnacademy.type.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

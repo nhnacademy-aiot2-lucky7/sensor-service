@@ -1,6 +1,6 @@
 package com.nhnacademy.type.controller;
 
-import com.nhnacademy.type.domain.DataTypeInfo;
+import com.nhnacademy.type.dto.DataTypeInfo;
 import com.nhnacademy.type.dto.DataTypeInfoResponse;
 import com.nhnacademy.type.service.DataTypeService;
 import org.springframework.http.HttpStatus;
