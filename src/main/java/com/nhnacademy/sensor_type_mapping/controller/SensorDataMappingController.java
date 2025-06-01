@@ -2,6 +2,7 @@ package com.nhnacademy.sensor_type_mapping.controller;
 
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
@@ -87,9 +88,9 @@ public class SensorDataMappingController {
 
     @PutMapping
     public ResponseEntity<Void> updateSensorDataMapping(
-            @Validated @RequestBody SensorDataMappingInfo request
+            @Validated @RequestBody SensorDataIndexInfo request
     ) {
-        sensorDataMappingService.updateSensorDataMapping(request);
+        sensorDataMappingService.updateSensorStatus(request);
         return ResponseEntity
                 .noContent()
                 .build();

@@ -9,6 +9,7 @@ import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
@@ -91,9 +92,30 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
         return sensorDataMapping;
     }
 
+    @Deprecated
     @Override
     public void updateSensorDataMapping(SensorDataMappingInfo request) {
         SensorDataMapping sensorDataMapping = getSensorDataMapping(request);
+        sensorDataMapping.updateStatus(request.getSensorStatus());
+        sensorDataMappingRepository.flush();
+    }
+
+    /// TODO: Service 영역을 수정할 예정...
+    @Override
+    public void updateSensorStatus(SensorDataIndexInfo request) {
+        SensorDataMapping sensorDataMapping =
+                sensorDataMappingRepository.findByGatewayIdAndSensorIdAndDataTypeEnName(
+                        request.getGatewayId(),
+                        request.getSensorId(),
+                        request.getTypeEnName()
+                );
+        if (sensorDataMapping == null) {
+            throw new SensorDataMappingNotFoundException(
+                    request.getGatewayId(),
+                    request.getSensorId(),
+                    request.getTypeEnName()
+            );
+        }
         sensorDataMapping.updateStatus(request.getSensorStatus());
         sensorDataMappingRepository.flush();
     }
