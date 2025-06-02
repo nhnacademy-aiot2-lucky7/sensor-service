@@ -87,7 +87,8 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                         new QThresholdInfoResponse(
                                 qThresholdHistory.thresholdMin,
                                 qThresholdHistory.thresholdMax,
-                                qThresholdHistory.thresholdAvg
+                                qThresholdHistory.thresholdAvg,
+                                qDataType.dataTypeEnName
                         )
                 )
                 .from(qThresholdHistory)
@@ -117,7 +118,8 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                         new QThresholdInfoResponse(
                                 qThresholdHistory.thresholdMin,
                                 qThresholdHistory.thresholdMax,
-                                qThresholdHistory.thresholdAvg
+                                qThresholdHistory.thresholdAvg,
+                                qDataType.dataTypeEnName
                         )
                 )
                 .from(qThresholdHistory)
@@ -144,7 +146,8 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                         new QThresholdInfoResponse(
                                 qThresholdHistory.thresholdMin,
                                 qThresholdHistory.thresholdMax,
-                                qThresholdHistory.thresholdAvg
+                                qThresholdHistory.thresholdAvg,
+                                qDataType.dataTypeEnName
                         )
                 )
                 .from(qThresholdHistory)
