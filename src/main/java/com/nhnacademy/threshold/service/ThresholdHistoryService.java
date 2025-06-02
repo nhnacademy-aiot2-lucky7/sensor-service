@@ -15,7 +15,16 @@ public interface ThresholdHistoryService {
 
     List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId);
 
-    List<ThresholdInfoResponse> getLatestThresholdInfoBySensorDataAndLimit(
+    List<ThresholdInfoResponse> getThresholdsBySensor(
+            long gatewayId, String sensorId
+    );
+
+    ThresholdInfoResponse getLatestThresholdInfoBySensorData(
+            long gatewayId, String sensorId,
+            String typeEnName
+    );
+
+    List<ThresholdInfoResponse> getLatestThresholdsBySensorDataWithLimit(
             long gatewayId, String sensorId,
             String typeEnName, int limit
     );

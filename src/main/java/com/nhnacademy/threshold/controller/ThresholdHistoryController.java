@@ -42,25 +42,48 @@ public class ThresholdHistoryController {
      * AI 쪽에서 요청을 보내고, 대신 분석 완료된 상태만
      * 1시 30분
      */
-    public ResponseEntity<List<RuleEngineResponse>> getList() {
+    /*public ResponseEntity<List<RuleEngineResponse>> getList() {
         return ResponseEntity
                 .ok(null);
+    }*/
+    @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}")
+    public ResponseEntity<List<ThresholdInfoResponse>> getThresholdsBySensor(
+            @PathVariable("gateway-id") Long gatewayId,
+            @PathVariable("sensor-id") String sensorId
+    ) {
+        return ResponseEntity
+                .ok(
+                        thresholdHistoryService.getThresholdsBySensor(
+                                gatewayId, sensorId
+                        )
+                );
+    }
+
+    @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}/type-en-name/{type-en-name}")
+    public ResponseEntity<ThresholdInfoResponse> getThresholdsBySensorData(
+            @PathVariable("gateway-id") Long gatewayId,
+            @PathVariable("sensor-id") String sensorId,
+            @PathVariable("type-en-name") String typeEnName
+    ) {
+        return ResponseEntity
+                .ok(
+                        thresholdHistoryService.getLatestThresholdInfoBySensorData(
+                                gatewayId, sensorId,
+                                typeEnName
+                        )
+                );
     }
 
     @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}/type-en-name/{type-en-name}/limit/{limit}")
-    public ResponseEntity<List<ThresholdInfoResponse>> getList2(
+    public ResponseEntity<List<ThresholdInfoResponse>> getLatestThresholdsBySensorDataWithLimit(
             @PathVariable("gateway-id") Long gatewayId,
             @PathVariable("sensor-id") String sensorId,
             @PathVariable("type-en-name") String typeEnName,
             @PathVariable("limit") Integer limit
     ) {
-        log.info("gatewayId: {}", gatewayId);
-        log.info("sensorId: {}", sensorId);
-        log.info("typeEnName: {}", typeEnName);
-        log.info("limit: {}", limit);
         return ResponseEntity
                 .ok(
-                        thresholdHistoryService.getLatestThresholdInfoBySensorDataAndLimit(
+                        thresholdHistoryService.getLatestThresholdsBySensorDataWithLimit(
                                 gatewayId, sensorId,
                                 typeEnName, limit
                         )

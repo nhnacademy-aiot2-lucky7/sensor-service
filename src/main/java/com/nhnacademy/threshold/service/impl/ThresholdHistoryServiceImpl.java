@@ -86,11 +86,31 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     }
 
     @Override
-    public List<ThresholdInfoResponse> getLatestThresholdInfoBySensorDataAndLimit(
+    public List<ThresholdInfoResponse> getThresholdsBySensor(
+            long gatewayId, String sensorId
+    ) {
+        return thresholdHistoryRepository.findLatestThresholdInfoBySensor(
+                gatewayId, sensorId
+        );
+    }
+
+    @Override
+    public ThresholdInfoResponse getLatestThresholdInfoBySensorData(
+            long gatewayId, String sensorId,
+            String typeEnName
+    ) {
+        return thresholdHistoryRepository.findLatestThresholdInfoBySensorData(
+                gatewayId, sensorId,
+                typeEnName
+        );
+    }
+
+    @Override
+    public List<ThresholdInfoResponse> getLatestThresholdsBySensorDataWithLimit(
             long gatewayId, String sensorId,
             String typeEnName, int limit
     ) {
-        return thresholdHistoryRepository.findLatestThresholdInfoBySensorDataAndLimit(
+        return thresholdHistoryRepository.findLatestThresholdInfoBySensorDataWithLimit(
                 gatewayId, sensorId,
                 typeEnName, limit
         );

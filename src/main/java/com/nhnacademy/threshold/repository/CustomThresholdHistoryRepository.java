@@ -9,7 +9,16 @@ public interface CustomThresholdHistoryRepository {
 
     List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(long gatewayId);
 
-    List<ThresholdInfoResponse> findLatestThresholdInfoBySensorDataAndLimit(
+    List<ThresholdInfoResponse> findLatestThresholdInfoBySensor(
+            long gatewayId, String sensorId
+    );
+
+    ThresholdInfoResponse findLatestThresholdInfoBySensorData(
+            long gatewayId, String sensorId,
+            String typeEnName
+    );
+
+    List<ThresholdInfoResponse> findLatestThresholdInfoBySensorDataWithLimit(
             long gatewayId, String sensorId,
             String typeEnName, int limit
     );
