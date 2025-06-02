@@ -1,6 +1,5 @@
 package com.nhnacademy.sensor_type_mapping.service.impl;
 
-import com.nhnacademy.common.exception.http.BadRequestException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
@@ -187,16 +186,9 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     @Override
     public List<SensorDataMappingAiResponse> getStatuses(List<String> statuses) {
         List<SensorStatus> sensorStatuses = new ArrayList<>();
-        try {
-            for (String status : statuses) {
-                sensorStatuses.add(
-                        SensorStatus.valueOf(status.toUpperCase())
-                );
-            }
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException(
-                    "사용 가능한 값: [%s]"
-                            .formatted(SensorStatus.VALID_VALUES_STRING)
+        for (String status : statuses) {
+            sensorStatuses.add(
+                    SensorStatus.from(status)
             );
         }
         return sensorDataMappingRepository.findAllAiResponsesBySensorStatuses(sensorStatuses);
