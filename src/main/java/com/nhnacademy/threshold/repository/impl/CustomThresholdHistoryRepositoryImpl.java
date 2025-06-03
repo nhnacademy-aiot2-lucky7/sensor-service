@@ -4,8 +4,10 @@ import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.threshold.domain.QThresholdHistory;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
+import com.nhnacademy.threshold.dto.QThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.QThresholdInfoResponse;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
+import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.repository.CustomThresholdHistoryRepository;
 import com.nhnacademy.type.domain.QDataType;
@@ -77,18 +79,17 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<ThresholdInfoResponse> findLatestThresholdInfoBySensor(
+    public List<ThresholdHistoryResponse> findLatestThresholdInfoBySensor(
             long gatewayId, String sensorId
     ) {
         QThresholdHistory qThresholdHistorySub = new QThresholdHistory("qThresholdHistorySub");
 
         return queryFactory
                 .select(
-                        new QThresholdInfoResponse(
+                        new QThresholdHistoryResponse(
                                 qDataType.dataTypeEnName,
-                                qThresholdHistory.thresholdMin,
-                                qThresholdHistory.thresholdMax,
-                                qThresholdHistory.thresholdAvg
+                                qThresholdHistory.minRangeMin,
+                                qThresholdHistory.maxRangeMax
                         )
                 )
                 .from(qThresholdHistory)
@@ -109,17 +110,16 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public ThresholdInfoResponse findLatestThresholdInfoBySensorData(
+    public ThresholdHistoryResponse findLatestThresholdInfoBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     ) {
         return queryFactory
                 .select(
-                        new QThresholdInfoResponse(
+                        new QThresholdHistoryResponse(
                                 qDataType.dataTypeEnName,
-                                qThresholdHistory.thresholdMin,
-                                qThresholdHistory.thresholdMax,
-                                qThresholdHistory.thresholdAvg
+                                qThresholdHistory.minRangeMin,
+                                qThresholdHistory.maxRangeMax
                         )
                 )
                 .from(qThresholdHistory)

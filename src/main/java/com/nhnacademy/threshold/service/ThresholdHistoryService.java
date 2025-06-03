@@ -3,6 +3,7 @@ package com.nhnacademy.threshold.service;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
+import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public interface ThresholdHistoryService {
 
     List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId);
 
-    List<ThresholdInfoResponse> getThresholdsBySensor(
+    List<ThresholdHistoryResponse> getThresholdsBySensor(
             long gatewayId, String sensorId
     );
 
-    ThresholdInfoResponse getLatestThresholdInfoBySensorData(
+    ThresholdHistoryResponse getLatestThresholdInfoBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     );

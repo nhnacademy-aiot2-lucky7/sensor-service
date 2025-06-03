@@ -4,6 +4,11 @@ import com.nhnacademy.common.exception.http.NotFoundException;
 
 public class ThresholdHistoryNotFoundException extends NotFoundException {
 
+    /// TODO:
+    public ThresholdHistoryNotFoundException() {
+        super("thresholdHistory is not found");
+    }
+
     public ThresholdHistoryNotFoundException(long thresholdHistoryNo) {
         this(thresholdHistoryNo, null);
     }

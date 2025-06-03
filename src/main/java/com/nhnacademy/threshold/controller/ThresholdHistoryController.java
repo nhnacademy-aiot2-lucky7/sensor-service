@@ -2,6 +2,7 @@ package com.nhnacademy.threshold.controller;
 
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
+import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class ThresholdHistoryController {
                 .ok(null);
     }*/
     @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}")
-    public ResponseEntity<List<ThresholdInfoResponse>> getThresholdsBySensor(
+    public ResponseEntity<List<ThresholdHistoryResponse>> getThresholdsBySensor(
             @PathVariable("gateway-id") Long gatewayId,
             @PathVariable("sensor-id") String sensorId
     ) {
@@ -60,7 +61,7 @@ public class ThresholdHistoryController {
     }
 
     @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}/type-en-name/{type-en-name}")
-    public ResponseEntity<ThresholdInfoResponse> getThresholdsBySensorData(
+    public ResponseEntity<ThresholdHistoryResponse> getThresholdsBySensorData(
             @PathVariable("gateway-id") Long gatewayId,
             @PathVariable("sensor-id") String sensorId,
             @PathVariable("type-en-name") String typeEnName

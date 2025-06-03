@@ -7,6 +7,7 @@ import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository
 import com.nhnacademy.threshold.domain.ThresholdHistory;
 import com.nhnacademy.threshold.dto.RuleEngineResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
+import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.repository.ThresholdHistoryRepository;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
@@ -86,7 +87,7 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     }
 
     @Override
-    public List<ThresholdInfoResponse> getThresholdsBySensor(
+    public List<ThresholdHistoryResponse> getThresholdsBySensor(
             long gatewayId, String sensorId
     ) {
         return thresholdHistoryRepository.findLatestThresholdInfoBySensor(
@@ -95,14 +96,19 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     }
 
     @Override
-    public ThresholdInfoResponse getLatestThresholdInfoBySensorData(
+    public ThresholdHistoryResponse getLatestThresholdInfoBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     ) {
-        return thresholdHistoryRepository.findLatestThresholdInfoBySensorData(
-                gatewayId, sensorId,
-                typeEnName
-        );
+        ThresholdHistoryResponse response =
+                thresholdHistoryRepository.findLatestThresholdInfoBySensorData(
+                        gatewayId, sensorId,
+                        typeEnName
+                );
+        if (response == null) {
+            throw new ThresholdHistoryNotFoundException();
+        }
+        return response;
     }
 
     @Override
