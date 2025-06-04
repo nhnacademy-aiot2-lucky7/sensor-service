@@ -1,21 +1,27 @@
 package com.nhnacademy.threshold.service.impl;
 
+import com.nhnacademy.common.context.TimeZoneContext;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.common.exception.http.extend.ThresholdHistoryNotFoundException;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
-import com.nhnacademy.threshold.dto.RuleEngineResponse;
+import com.nhnacademy.threshold.dto.ThresholdBoundResponse;
+import com.nhnacademy.threshold.dto.ThresholdDiffResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
-import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.repository.ThresholdHistoryRepository;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
@@ -82,26 +88,26 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
     }
 
     @Override
-    public List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId) {
+    public List<ThresholdDiffResponse> getLatestThresholdSummariesByGatewayId(long gatewayId) {
         return thresholdHistoryRepository.findLatestThresholdSummariesByGatewayId(gatewayId);
     }
 
     @Override
-    public List<ThresholdHistoryResponse> getThresholdsBySensor(
+    public List<ThresholdBoundResponse> getLatestThresholdBoundsBySensor(
             long gatewayId, String sensorId
     ) {
-        return thresholdHistoryRepository.findLatestThresholdInfoBySensor(
+        return thresholdHistoryRepository.findLatestThresholdBoundsBySensor(
                 gatewayId, sensorId
         );
     }
 
     @Override
-    public ThresholdHistoryResponse getLatestThresholdInfoBySensorData(
+    public ThresholdBoundResponse getLatestThresholdBoundsBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     ) {
-        ThresholdHistoryResponse response =
-                thresholdHistoryRepository.findLatestThresholdInfoBySensorData(
+        ThresholdBoundResponse response =
+                thresholdHistoryRepository.findLatestThresholdBoundsBySensorData(
                         gatewayId, sensorId,
                         typeEnName
                 );
@@ -116,9 +122,25 @@ public class ThresholdHistoryServiceImpl implements ThresholdHistoryService {
             long gatewayId, String sensorId,
             String typeEnName, int limit
     ) {
-        return thresholdHistoryRepository.findLatestThresholdInfoBySensorDataWithLimit(
+        return thresholdHistoryRepository.findLatestThresholdInfosBySensorDataWithLimit(
                 gatewayId, sensorId,
                 typeEnName, limit
         );
+    }
+
+    @Override
+    public List<ThresholdDiffResponse> getThresholdDiffsByDate(String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        ZoneId zoneId = TimeZoneContext.getZoneId();
+
+        ZonedDateTime startOfDay = localDate
+                .atStartOfDay(zoneId);
+        long start = startOfDay.toInstant().toEpochMilli();
+
+        ZonedDateTime endOfDay = startOfDay
+                .plusDays(1L);       // 1일 추가
+        long end = endOfDay.toInstant().toEpochMilli();
+
+        return thresholdHistoryRepository.findThresholdDiffsByCalculatedAtRange(start, end);
     }
 }

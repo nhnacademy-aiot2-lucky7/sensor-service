@@ -1,26 +1,28 @@
 package com.nhnacademy.threshold.repository;
 
-import com.nhnacademy.threshold.dto.RuleEngineResponse;
-import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
+import com.nhnacademy.threshold.dto.ThresholdBoundResponse;
+import com.nhnacademy.threshold.dto.ThresholdDiffResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 
 import java.util.List;
 
 public interface CustomThresholdHistoryRepository {
 
-    List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(long gatewayId);
+    List<ThresholdDiffResponse> findLatestThresholdSummariesByGatewayId(long gatewayId);
 
-    List<ThresholdHistoryResponse> findLatestThresholdInfoBySensor(
+    List<ThresholdBoundResponse> findLatestThresholdBoundsBySensor(
             long gatewayId, String sensorId
     );
 
-    ThresholdHistoryResponse findLatestThresholdInfoBySensorData(
+    ThresholdBoundResponse findLatestThresholdBoundsBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     );
 
-    List<ThresholdInfoResponse> findLatestThresholdInfoBySensorDataWithLimit(
+    List<ThresholdInfoResponse> findLatestThresholdInfosBySensorDataWithLimit(
             long gatewayId, String sensorId,
             String typeEnName, int limit
     );
+
+    List<ThresholdDiffResponse> findThresholdDiffsByCalculatedAtRange(long start, long end);
 }

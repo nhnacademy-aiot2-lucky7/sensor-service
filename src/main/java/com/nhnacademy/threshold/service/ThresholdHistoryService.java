@@ -1,9 +1,9 @@
 package com.nhnacademy.threshold.service;
 
 import com.nhnacademy.threshold.domain.ThresholdHistory;
-import com.nhnacademy.threshold.dto.RuleEngineResponse;
+import com.nhnacademy.threshold.dto.ThresholdDiffResponse;
+import com.nhnacademy.threshold.dto.ThresholdBoundResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
-import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 
 import java.util.List;
@@ -14,13 +14,13 @@ public interface ThresholdHistoryService {
 
     ThresholdHistory getThresholdHistoryByThresholdHistoryNo(long thresholdHistoryNo);
 
-    List<RuleEngineResponse> getLatestThresholdSummariesByGatewayId(long gatewayId);
+    List<ThresholdDiffResponse> getLatestThresholdSummariesByGatewayId(long gatewayId);
 
-    List<ThresholdHistoryResponse> getThresholdsBySensor(
+    List<ThresholdBoundResponse> getLatestThresholdBoundsBySensor(
             long gatewayId, String sensorId
     );
 
-    ThresholdHistoryResponse getLatestThresholdInfoBySensorData(
+    ThresholdBoundResponse getLatestThresholdBoundsBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     );
@@ -29,4 +29,6 @@ public interface ThresholdHistoryService {
             long gatewayId, String sensorId,
             String typeEnName, int limit
     );
+
+    List<ThresholdDiffResponse> getThresholdDiffsByDate(String date);
 }

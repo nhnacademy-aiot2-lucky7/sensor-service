@@ -4,10 +4,11 @@ import com.nhnacademy.sensor.domain.QSensor;
 import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.threshold.domain.QThresholdHistory;
 import com.nhnacademy.threshold.domain.ThresholdHistory;
-import com.nhnacademy.threshold.dto.QThresholdHistoryResponse;
+import com.nhnacademy.threshold.dto.QThresholdBoundResponse;
+import com.nhnacademy.threshold.dto.QThresholdDiffResponse;
 import com.nhnacademy.threshold.dto.QThresholdInfoResponse;
-import com.nhnacademy.threshold.dto.RuleEngineResponse;
-import com.nhnacademy.threshold.dto.ThresholdHistoryResponse;
+import com.nhnacademy.threshold.dto.ThresholdBoundResponse;
+import com.nhnacademy.threshold.dto.ThresholdDiffResponse;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.repository.CustomThresholdHistoryRepository;
 import com.nhnacademy.type.domain.QDataType;
@@ -42,13 +43,13 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<RuleEngineResponse> findLatestThresholdSummariesByGatewayId(long gatewayId) {
+    public List<ThresholdDiffResponse> findLatestThresholdSummariesByGatewayId(long gatewayId) {
         QThresholdHistory qThresholdHistorySub = new QThresholdHistory("qThresholdHistorySub");
 
         return queryFactory
                 .select(
                         Projections.constructor(
-                                RuleEngineResponse.class,
+                                ThresholdDiffResponse.class,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
                                 qDataType.dataTypeEnName,
@@ -79,14 +80,14 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<ThresholdHistoryResponse> findLatestThresholdInfoBySensor(
+    public List<ThresholdBoundResponse> findLatestThresholdBoundsBySensor(
             long gatewayId, String sensorId
     ) {
         QThresholdHistory qThresholdHistorySub = new QThresholdHistory("qThresholdHistorySub");
 
         return queryFactory
                 .select(
-                        new QThresholdHistoryResponse(
+                        new QThresholdBoundResponse(
                                 qDataType.dataTypeEnName,
                                 qThresholdHistory.minRangeMin,
                                 qThresholdHistory.maxRangeMax
@@ -110,13 +111,13 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public ThresholdHistoryResponse findLatestThresholdInfoBySensorData(
+    public ThresholdBoundResponse findLatestThresholdBoundsBySensorData(
             long gatewayId, String sensorId,
             String typeEnName
     ) {
         return queryFactory
                 .select(
-                        new QThresholdHistoryResponse(
+                        new QThresholdBoundResponse(
                                 qDataType.dataTypeEnName,
                                 qThresholdHistory.minRangeMin,
                                 qThresholdHistory.maxRangeMax
@@ -137,7 +138,7 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<ThresholdInfoResponse> findLatestThresholdInfoBySensorDataWithLimit(
+    public List<ThresholdInfoResponse> findLatestThresholdInfosBySensorDataWithLimit(
             long gatewayId, String sensorId,
             String typeEnName, int limit
     ) {
@@ -161,6 +162,31 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                 )
                 .orderBy(qThresholdHistory.calculatedAt.desc())
                 .limit(limit)
+                .fetch();
+    }
+
+    @Override
+    public List<ThresholdDiffResponse> findThresholdDiffsByCalculatedAtRange(long start, long end) {
+        return queryFactory
+                .select(
+                        new QThresholdDiffResponse(
+                                qSensor.gatewayId,
+                                qSensor.sensorId,
+                                qDataType.dataTypeEnName,
+                                qThresholdHistory.minDiff,
+                                qThresholdHistory.maxDiff,
+                                qThresholdHistory.avgDiff,
+                                qThresholdHistory.calculatedAt
+                        )
+                )
+                .from(qThresholdHistory)
+                .innerJoin(qThresholdHistory.sensorDataMapping, qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
+                .where(
+                        qThresholdHistory.calculatedAt.goe(start)
+                                .and(qThresholdHistory.calculatedAt.lt(end))
+                )
                 .fetch();
     }
 }

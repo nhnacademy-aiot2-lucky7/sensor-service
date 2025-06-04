@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public final class ThresholdHistoryResponse {
+public final class ThresholdBoundResponse {
 
     private final String typeEnName;
 
@@ -13,7 +13,7 @@ public final class ThresholdHistoryResponse {
     private final Double maxRangeMax;
 
     @QueryProjection
-    public ThresholdHistoryResponse(
+    public ThresholdBoundResponse(
             String typeEnName,
             Double minRangeMin,
             Double maxRangeMax
