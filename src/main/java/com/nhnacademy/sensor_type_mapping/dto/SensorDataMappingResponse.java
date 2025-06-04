@@ -8,7 +8,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public final class SensorDataMappingInfoResponse {
+public final class SensorDataMappingResponse {
 
     @JsonProperty("sensor")
     private final SensorInfoResponse sensorInfoResponse;
@@ -20,7 +20,7 @@ public final class SensorDataMappingInfoResponse {
     private final SensorStatus sensorStatus;
 
     @QueryProjection
-    public SensorDataMappingInfoResponse(
+    public SensorDataMappingResponse(
             SensorInfoResponse sensorInfoResponse,
             DataTypeInfoResponse dataTypeInfoResponse,
             SensorStatus sensorStatus

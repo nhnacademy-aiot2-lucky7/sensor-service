@@ -12,7 +12,8 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.type.domain.DataType;
@@ -92,7 +93,9 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
         return sensorDataMapping;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     */
     @Override
     public void updateSensorDataMapping(SensorDataMappingInfo request) {
         SensorDataMapping sensorDataMapping = getSensorDataMapping(request);
@@ -159,8 +162,8 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     /// 상세 정보 데이터
     @Transactional(readOnly = true)
     @Override
-    public SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
-        SensorDataMappingInfoResponse response = sensorDataMappingRepository
+    public SensorDataMappingResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
+        SensorDataMappingResponse response = sensorDataMappingRepository
                 .findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
                         request.getGatewayId(),
                         request.getSensorId(),
@@ -174,6 +177,12 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
             );
         }
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<SensorDataMappingWebResponse> getSensorDataMappings(long gatewayId) {
+        return sensorDataMappingRepository.findAllWebResponseByGatewayId(gatewayId);
     }
 
     @Transactional(readOnly = true)

@@ -6,6 +6,7 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +57,16 @@ public class SensorDataMappingController {
                 .build();
     }
 
-    @GetMapping("/{gateway_id}/sensors")
-    public ResponseEntity<List<SensorDataMappingAiResponse>> getSensorsByGatewayId(
+    @GetMapping("/gateway-id/{gateway-id}/sensors")
+    public ResponseEntity<List<SensorDataMappingWebResponse>> getSensorsByGatewayId(
+            @PathVariable("gateway-id") Long gatewayId
+    ) {
+        return ResponseEntity
+                .ok(sensorDataMappingService.getSensorDataMappings(gatewayId));
+    }
+
+    @GetMapping("/gateway-id/{gateway_id}/sensor-indexes")
+    public ResponseEntity<List<SensorDataMappingAiResponse>> getSensorIndexesByGatewayId(
             @PathVariable("gateway_id") Long gatewayId
     ) {
         return ResponseEntity
