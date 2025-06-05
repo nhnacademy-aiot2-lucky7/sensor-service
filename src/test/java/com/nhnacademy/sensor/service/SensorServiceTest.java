@@ -595,6 +595,7 @@ class SensorServiceTest {
         return Sensor.ofNewSensor(
                 request.getGatewayId(),
                 request.getSensorId(),
+                SensorTestingData.TEST_SENSOR_NAME,
                 request.getSensorLocation(),
                 request.getSensorSpot()
         );

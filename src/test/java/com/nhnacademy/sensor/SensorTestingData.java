@@ -11,6 +11,8 @@ public final class SensorTestingData {
 
     public static final String TEST_SENSOR_ID = "test-sensor-id";
 
+    public static final String TEST_SENSOR_NAME = "test-sensor-name";
+
     public static final String TEST_SENSOR_LOCATION = "test-sensor-location";
 
     public static final String TEST_SENSOR_SPOT = "test-sensor-spot";
@@ -23,6 +25,7 @@ public final class SensorTestingData {
         return Sensor.ofNewSensor(
                 TEST_GATEWAY_ID,
                 TEST_SENSOR_ID,
+                TEST_SENSOR_NAME,
                 TEST_SENSOR_LOCATION,
                 TEST_SENSOR_SPOT
         );
@@ -57,6 +60,7 @@ public final class SensorTestingData {
                         Sensor.ofNewSensor(
                                 TEST_GATEWAY_ID + n,
                                 "%s-%d".formatted(TEST_SENSOR_ID, m + 1),
+                                TEST_SENSOR_NAME,
                                 loc[n][m],
                                 spot[m]
                         )

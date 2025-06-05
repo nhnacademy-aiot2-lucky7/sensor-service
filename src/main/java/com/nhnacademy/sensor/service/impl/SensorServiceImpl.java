@@ -36,10 +36,15 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public Sensor registerSensor(SensorInfo request) {
+        String sensorName = "%s".formatted(
+                request.getSensorId().substring(0, 10)
+        );
+
         return sensorRepository.save(
                 Sensor.ofNewSensor(
                         request.getGatewayId(),
                         request.getSensorId(),
+                        sensorName,
                         request.getSensorLocation(),
                         request.getSensorSpot()
                 )
