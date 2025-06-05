@@ -90,6 +90,8 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                         new QThresholdBoundResponse(
                                 qDataType.dataTypeEnName,
                                 qThresholdHistory.minRangeMin,
+                                qThresholdHistory.minRangeMax,
+                                qThresholdHistory.maxRangeMin,
                                 qThresholdHistory.maxRangeMax
                         )
                 )
@@ -120,6 +122,8 @@ public class CustomThresholdHistoryRepositoryImpl extends QuerydslRepositorySupp
                         new QThresholdBoundResponse(
                                 qDataType.dataTypeEnName,
                                 qThresholdHistory.minRangeMin,
+                                qThresholdHistory.minRangeMax,
+                                qThresholdHistory.maxRangeMin,
                                 qThresholdHistory.maxRangeMax
                         )
                 )
