@@ -10,16 +10,22 @@ public final class ThresholdBoundResponse {
 
     private final Double minRangeMin;
 
+    private final Double minRangeMax;
+
+    private final Double maxRangeMin;
+
     private final Double maxRangeMax;
 
     @QueryProjection
     public ThresholdBoundResponse(
             String typeEnName,
-            Double minRangeMin,
-            Double maxRangeMax
+            Double minRangeMin, Double minRangeMax,
+            Double maxRangeMin, Double maxRangeMax
     ) {
         this.typeEnName = typeEnName;
         this.minRangeMin = minRangeMin;
+        this.minRangeMax = minRangeMax;
+        this.maxRangeMin = maxRangeMin;
         this.maxRangeMax = maxRangeMax;
     }
 }
