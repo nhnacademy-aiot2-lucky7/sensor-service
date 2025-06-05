@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public final class SensorDataMappingWebResponse {
 
-    @JsonProperty("no")
+    @JsonProperty("sensor_data_no")
     private final Long sensorNo;
 
     @JsonProperty("gateway_id")
