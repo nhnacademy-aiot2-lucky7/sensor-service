@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 public final class ThresholdInfoResponse {
 
+    private final String typeEnName;
+
     private final Double thresholdMin;
 
     private final Double thresholdMax;
@@ -13,7 +15,13 @@ public final class ThresholdInfoResponse {
     private final Double thresholdAvg;
 
     @QueryProjection
-    public ThresholdInfoResponse(Double thresholdMin, Double thresholdMax, Double thresholdAvg) {
+    public ThresholdInfoResponse(
+            String typeEnName,
+            Double thresholdMin,
+            Double thresholdMax,
+            Double thresholdAvg
+    ) {
+        this.typeEnName = typeEnName;
         this.thresholdMin = thresholdMin;
         this.thresholdMax = thresholdMax;
         this.thresholdAvg = thresholdAvg;

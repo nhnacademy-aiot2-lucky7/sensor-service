@@ -1,6 +1,7 @@
 package com.nhnacademy.threshold.controller;
 
-import com.nhnacademy.threshold.dto.RuleEngineResponse;
+import com.nhnacademy.threshold.dto.ThresholdDiffResponse;
+import com.nhnacademy.threshold.dto.ThresholdBoundResponse;
 import com.nhnacademy.threshold.dto.ThresholdHistoryInfo;
 import com.nhnacademy.threshold.dto.ThresholdInfoResponse;
 import com.nhnacademy.threshold.service.ThresholdHistoryService;
@@ -29,7 +30,7 @@ public class ThresholdHistoryController {
     }
 
     @GetMapping("/{gateway_id}")
-    public ResponseEntity<List<RuleEngineResponse>> getGatewayInSensors(
+    public ResponseEntity<List<ThresholdDiffResponse>> getGatewayInSensors(
             @PathVariable("gateway_id") Long gatewayId
     ) {
         return ResponseEntity
@@ -42,25 +43,52 @@ public class ThresholdHistoryController {
      * AI 쪽에서 요청을 보내고, 대신 분석 완료된 상태만
      * 1시 30분
      */
-    public ResponseEntity<List<RuleEngineResponse>> getList() {
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<ThresholdDiffResponse>> getThresholdsByDate(
+            @PathVariable String date
+    ) {
         return ResponseEntity
-                .ok(null);
+                .ok(thresholdHistoryService.getThresholdDiffsByDate(date));
+    }
+
+    @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}")
+    public ResponseEntity<List<ThresholdBoundResponse>> getThresholdsBySensor(
+            @PathVariable("gateway-id") Long gatewayId,
+            @PathVariable("sensor-id") String sensorId
+    ) {
+        return ResponseEntity
+                .ok(
+                        thresholdHistoryService.getLatestThresholdBoundsBySensor(
+                                gatewayId, sensorId
+                        )
+                );
+    }
+
+    @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}/type-en-name/{type-en-name}")
+    public ResponseEntity<ThresholdBoundResponse> getThresholdsBySensorData(
+            @PathVariable("gateway-id") Long gatewayId,
+            @PathVariable("sensor-id") String sensorId,
+            @PathVariable("type-en-name") String typeEnName
+    ) {
+        return ResponseEntity
+                .ok(
+                        thresholdHistoryService.getLatestThresholdBoundsBySensorData(
+                                gatewayId, sensorId,
+                                typeEnName
+                        )
+                );
     }
 
     @GetMapping("/gateway-id/{gateway-id}/sensor-id/{sensor-id}/type-en-name/{type-en-name}/limit/{limit}")
-    public ResponseEntity<List<ThresholdInfoResponse>> getList2(
+    public ResponseEntity<List<ThresholdInfoResponse>> getLatestThresholdsBySensorDataWithLimit(
             @PathVariable("gateway-id") Long gatewayId,
             @PathVariable("sensor-id") String sensorId,
             @PathVariable("type-en-name") String typeEnName,
             @PathVariable("limit") Integer limit
     ) {
-        log.info("gatewayId: {}", gatewayId);
-        log.info("sensorId: {}", sensorId);
-        log.info("typeEnName: {}", typeEnName);
-        log.info("limit: {}", limit);
         return ResponseEntity
                 .ok(
-                        thresholdHistoryService.getLatestThresholdInfoBySensorDataAndLimit(
+                        thresholdHistoryService.getLatestThresholdsBySensorDataWithLimit(
                                 gatewayId, sensorId,
                                 typeEnName, limit
                         )

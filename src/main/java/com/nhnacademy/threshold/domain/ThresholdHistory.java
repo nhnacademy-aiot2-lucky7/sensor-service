@@ -69,15 +69,15 @@ public class ThresholdHistory {
 
     @Column(name = "min_diff", nullable = true)
     @Comment("이전_최저_임계값에_대한_변화율")
-    private Double deltaMin;
+    private Double minDiff;
 
     @Column(name = "max_diff", nullable = true)
     @Comment("이전_최고_임계값에_대한_변화율")
-    private Double deltaMax;
+    private Double maxDiff;
 
     @Column(name = "avg_diff", nullable = true)
     @Comment("이전_평균_임계값에_대한_변화율")
-    private Double deltaAvg;
+    private Double avgDiff;
 
 
     @Column(name = "data_count", nullable = false)
@@ -107,7 +107,7 @@ public class ThresholdHistory {
             Double thresholdMin, Double thresholdMax, Double thresholdAvg,
             Double minRangeMin, Double minRangeMax, Double maxRangeMin,
             Double maxRangeMax, Double avgRangeMin, Double avgRangeMax,
-            Double deltaMin, Double deltaMax, Double deltaAvg,
+            Double minDiff, Double maxDiff, Double avgDiff,
             Integer dataCount, Long calculatedAt,
             SensorDataMapping sensorDataMapping
     ) {
@@ -120,9 +120,9 @@ public class ThresholdHistory {
         this.maxRangeMax = maxRangeMax;
         this.avgRangeMin = avgRangeMin;
         this.avgRangeMax = avgRangeMax;
-        this.deltaMin = deltaMin;
-        this.deltaMax = deltaMax;
-        this.deltaAvg = deltaAvg;
+        this.minDiff = minDiff;
+        this.maxDiff = maxDiff;
+        this.avgDiff = avgDiff;
         this.dataCount = dataCount;
         this.calculatedAt = calculatedAt;
         this.sensorDataMapping = sensorDataMapping;

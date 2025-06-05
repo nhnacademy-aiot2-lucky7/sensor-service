@@ -1,6 +1,6 @@
 package com.nhnacademy.sensor_type_mapping.domain;
 
-import com.nhnacademy.sensor.domain.Sensor;
+import com.nhnacademy.common.exception.http.BadRequestException;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -39,8 +39,17 @@ public enum SensorStatus {
     public static final String VALID_VALUES_STRING;
 
     static {
-        VALID_VALUES_STRING = Arrays.stream(SensorStatus.values())
+        VALID_VALUES_STRING = Arrays.stream(values())
                 .map(Enum::name)
                 .collect(Collectors.joining(", "));
+    }
+
+    public static SensorStatus from(String name) {
+        for (SensorStatus sensorStatus : values()) {
+            if (sensorStatus.name().equalsIgnoreCase(name)) {
+                return sensorStatus;
+            }
+        }
+        throw new BadRequestException("사용 가능한 값 [%s]".formatted(VALID_VALUES_STRING));
     }
 }
