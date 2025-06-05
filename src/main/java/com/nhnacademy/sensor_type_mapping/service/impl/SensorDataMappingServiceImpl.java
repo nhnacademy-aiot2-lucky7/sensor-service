@@ -1,6 +1,5 @@
 package com.nhnacademy.sensor_type_mapping.service.impl;
 
-import com.nhnacademy.common.exception.http.BadRequestException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
 import com.nhnacademy.sensor.domain.Sensor;
@@ -13,7 +12,8 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.type.domain.DataType;
@@ -93,7 +93,9 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
         return sensorDataMapping;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     */
     @Override
     public void updateSensorDataMapping(SensorDataMappingInfo request) {
         SensorDataMapping sensorDataMapping = getSensorDataMapping(request);
@@ -160,8 +162,8 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     /// 상세 정보 데이터
     @Transactional(readOnly = true)
     @Override
-    public SensorDataMappingInfoResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
-        SensorDataMappingInfoResponse response = sensorDataMappingRepository
+    public SensorDataMappingResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request) {
+        SensorDataMappingResponse response = sensorDataMappingRepository
                 .findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(
                         request.getGatewayId(),
                         request.getSensorId(),
@@ -179,6 +181,12 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<SensorDataMappingWebResponse> getSensorDataMappings(long gatewayId) {
+        return sensorDataMappingRepository.findAllWebResponseByGatewayId(gatewayId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<SensorDataMappingAiResponse> getAiResponse(long gatewayId) {
         return sensorDataMappingRepository.findAllAiResponsesByGatewayId(gatewayId);
     }
@@ -187,16 +195,9 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     @Override
     public List<SensorDataMappingAiResponse> getStatuses(List<String> statuses) {
         List<SensorStatus> sensorStatuses = new ArrayList<>();
-        try {
-            for (String status : statuses) {
-                sensorStatuses.add(
-                        SensorStatus.valueOf(status.toUpperCase())
-                );
-            }
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException(
-                    "사용 가능한 값: [%s]"
-                            .formatted(SensorStatus.VALID_VALUES_STRING)
+        for (String status : statuses) {
+            sensorStatuses.add(
+                    SensorStatus.from(status)
             );
         }
         return sensorDataMappingRepository.findAllAiResponsesBySensorStatuses(sensorStatuses);

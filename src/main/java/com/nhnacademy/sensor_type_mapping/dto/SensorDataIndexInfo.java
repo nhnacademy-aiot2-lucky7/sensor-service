@@ -2,6 +2,8 @@ package com.nhnacademy.sensor_type_mapping.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nhnacademy.common.jackson.SensorStatusDeserializer;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -9,10 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public final class SensorDataIndexInfo {
 
     @NotNull(message = "게이트웨이 ID가 누락되었습니다.")
@@ -35,14 +35,12 @@ public final class SensorDataIndexInfo {
             @JsonProperty("gateway_id") Long gatewayId,
             @JsonProperty("sensor_id") String sensorId,
             @JsonProperty("type_en_name") String typeEnName,
-            @JsonProperty("status") String sensorStatus
+            @JsonProperty("status")
+            @JsonDeserialize(using = SensorStatusDeserializer.class) SensorStatus sensorStatus
     ) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
         this.typeEnName = typeEnName;
-        this.sensorStatus =
-                sensorStatus != null ?
-                        SensorStatus.valueOf(sensorStatus.toUpperCase())
-                        : null;
+        this.sensorStatus = sensorStatus;
     }
 }

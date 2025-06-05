@@ -9,12 +9,14 @@ import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.QSearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingIndexResponse;
-import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingResponse;
+import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.repository.CustomSensorDataMappingRepository;
 import com.nhnacademy.type.domain.QDataType;
 import com.nhnacademy.type.dto.QDataTypeInfoResponse;
@@ -100,11 +102,11 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public List<SensorDataMappingInfoResponse> findByConditions(SensorDataMappingSearchRequest request) {
+    public List<SensorDataMappingResponse> findByConditions(SensorDataMappingSearchRequest request) {
         return queryFactory
                 .select(
                         Projections.constructor(
-                                SensorDataMappingInfoResponse.class,
+                                SensorDataMappingResponse.class,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
                                 qSensor.sensorLocation,
@@ -140,10 +142,10 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
+    public SensorDataMappingResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName) {
         return queryFactory
                 .select(
-                        new QSensorDataMappingInfoResponse(
+                        new QSensorDataMappingResponse(
                                 new QSensorInfoResponse(
                                         qSensor.gatewayId,
                                         qSensor.sensorId,
@@ -166,6 +168,26 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
                                 .and(qDataType.dataTypeEnName.eq(dataTypeEnName))
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<SensorDataMappingWebResponse> findAllWebResponseByGatewayId(long gatewayId) {
+        return queryFactory
+                .select(
+                        new QSensorDataMappingWebResponse(
+                                qSensor.sensorNo,
+                                qSensor.gatewayId,
+                                qSensor.sensorId,
+                                qDataType.dataTypeEnName,
+                                qSensor.sensorLocation,
+                                qSensor.sensorSpot
+                        )
+                )
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
+                .where(qSensor.gatewayId.eq(gatewayId))
+                .fetch();
     }
 
     @Override

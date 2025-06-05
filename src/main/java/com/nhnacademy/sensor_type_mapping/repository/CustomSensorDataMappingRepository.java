@@ -5,8 +5,9 @@ import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 
 import java.util.List;
 import java.util.Set;
@@ -38,11 +39,13 @@ public interface CustomSensorDataMappingRepository {
 
     boolean existsByConditions(SensorDataMappingSearchRequest request);
 
-    List<SensorDataMappingInfoResponse> findByConditions(SensorDataMappingSearchRequest request);
+    List<SensorDataMappingResponse> findByConditions(SensorDataMappingSearchRequest request);
 
     SearchNoResponse findNoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
-    SensorDataMappingInfoResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
+    SensorDataMappingResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
+
+    List<SensorDataMappingWebResponse> findAllWebResponseByGatewayId(long gatewayId);
 
     List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(long gatewayId);
 
