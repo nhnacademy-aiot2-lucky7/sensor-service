@@ -15,7 +15,7 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataSummaryResponse;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.type.domain.DataType;
@@ -193,7 +193,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SensorDataMappingWebResponse> getSensorDataMappings(long gatewayId) {
+    public List<SensorDataSummaryResponse> getSensorDataMappings(long gatewayId) {
         return sensorDataMappingRepository.findAllWebResponseByGatewayId(gatewayId);
     }
 

@@ -7,7 +7,7 @@ import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataSummaryResponse;
 
 import java.util.List;
 import java.util.Set;
@@ -45,7 +45,7 @@ public interface CustomSensorDataMappingRepository {
 
     SensorDataMappingResponse findInfoResponseByGatewayIdAndSensorIdAndDataTypeEnName(long gatewayId, String sensorId, String dataTypeEnName);
 
-    List<SensorDataMappingWebResponse> findAllWebResponseByGatewayId(long gatewayId);
+    List<SensorDataSummaryResponse> findAllWebResponseByGatewayId(long gatewayId);
 
     List<SensorDataMappingAiResponse> findAllAiResponsesByGatewayId(long gatewayId);
 
