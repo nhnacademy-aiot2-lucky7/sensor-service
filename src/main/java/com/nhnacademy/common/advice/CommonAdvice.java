@@ -38,7 +38,7 @@ public class CommonAdvice {
         e.getBindingResult().getAllErrors().forEach(error -> {
             if (error instanceof FieldError fieldError) {
                 errors.add(
-                        "{\"field\":\"%s\", \"rejected_value\":\"%s\", \"message\":\"%s\"}".formatted(
+                        "{'field':'%s', 'rejected_value':'%s', 'message':'%s'}".formatted(
                                 namingBase != null
                                         ? namingBase.translate(fieldError.getField())
                                         : fieldError.getField(),

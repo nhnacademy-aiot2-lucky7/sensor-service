@@ -48,6 +48,10 @@ public class Sensor {
     @Comment("센서_아이디")
     private String sensorId;
 
+    @Column(name = "sensor_name", length = 50, nullable = false)
+    @Comment("센서_이름")
+    private String sensorName;
+
     @Column(name = "sensor_location", length = 50, nullable = true)
     @Comment("센서_설치_장소")
     private String sensorLocation;
@@ -68,13 +72,15 @@ public class Sensor {
      *
      * @param gatewayId      게이트웨이 ID
      * @param sensorId       센서 ID
+     * @param sensorName     센서 이름
      * @param sensorLocation 센서 설치 장소
      * @param sensorSpot     센서 상세 설치 위치
-     * @see Sensor#ofNewSensor(long, String, String, String)
+     * @see Sensor#ofNewSensor(long, String, String, String, String)
      */
-    private Sensor(long gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
+    private Sensor(long gatewayId, String sensorId, String sensorName, String sensorLocation, String sensorSpot) {
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
+        this.sensorName = sensorName;
         this.sensorLocation = sensorLocation;
         this.sensorSpot = sensorSpot;
     }
@@ -86,17 +92,23 @@ public class Sensor {
      *
      * @param gatewayId      게이트웨이 ID
      * @param sensorId       센서 ID
+     * @param sensorName     센서 이름
      * @param sensorLocation 센서 설치 장소 (예: "서버실 1번 룸")
      * @param sensorSpot     센서 상세 설치 위치 (예: "천장 왼쪽 구석")
      * @return 새로 생성된 {@link Sensor} 인스턴스
      */
-    public static Sensor ofNewSensor(long gatewayId, String sensorId, String sensorLocation, String sensorSpot) {
+    public static Sensor ofNewSensor(long gatewayId, String sensorId, String sensorName, String sensorLocation, String sensorSpot) {
         return new Sensor(
                 gatewayId,
                 sensorId,
+                sensorName,
                 sensorLocation,
                 sensorSpot
         );
+    }
+
+    public void updateSensorName(String sensorName) {
+        this.sensorName = sensorName;
     }
 
     /**

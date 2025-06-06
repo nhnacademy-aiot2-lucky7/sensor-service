@@ -7,16 +7,16 @@ import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.QSearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.QSensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingResponse;
-import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.repository.CustomSensorDataMappingRepository;
 import com.nhnacademy.type.domain.QDataType;
 import com.nhnacademy.type.dto.QDataTypeInfoResponse;
@@ -171,13 +171,14 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public List<SensorDataMappingWebResponse> findAllWebResponseByGatewayId(long gatewayId) {
+    public List<SensorDataDetailResponse> findAllWebResponseByGatewayId(long gatewayId) {
         return queryFactory
                 .select(
-                        new QSensorDataMappingWebResponse(
+                        new QSensorDataDetailResponse(
                                 qSensor.sensorNo,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
+                                qSensor.sensorName,
                                 qDataType.dataTypeEnName,
                                 qSensor.sensorLocation,
                                 qSensor.sensorSpot
@@ -246,6 +247,17 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
             log.warn("Sensor 테이블에 중복된 (gatewayId, sensorId, dataTypeEnName) 조합이 존재할 수 있습니다. 전체 조회 건수: {}, 중복 제거 후 건수: {}", uniqueList.size(), uniqueSet.size());
         }
         return uniqueSet;
+    }
+
+    @Override
+    public int countByGatewayId(long gatewayId) {
+        Long count = queryFactory
+                .select(qSensorDataMapping.sensorDataNo.count())
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .where(qSensor.gatewayId.eq(gatewayId))
+                .fetchOne();
+        return count != null ? count.intValue() : 0;
     }
 
     private BooleanBuilder getSearchStatuses(List<SensorStatus> sensorStatuses) {

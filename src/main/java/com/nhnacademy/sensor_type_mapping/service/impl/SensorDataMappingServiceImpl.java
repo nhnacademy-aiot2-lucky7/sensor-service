@@ -2,18 +2,20 @@ package com.nhnacademy.sensor_type_mapping.service.impl;
 
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingAlreadyExistsException;
 import com.nhnacademy.common.exception.http.extend.SensorDataMappingNotFoundException;
+import com.nhnacademy.infrastructure.adapter.GatewayServiceAdapter;
+import com.nhnacademy.infrastructure.dto.GatewayCountUpdateRequest;
 import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.service.SensorService;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.repository.SensorDataMappingRepository;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import com.nhnacademy.type.domain.DataType;
@@ -35,13 +37,17 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     private final SensorDataMappingRepository sensorDataMappingRepository;
 
+    private final GatewayServiceAdapter gatewayServiceAdapter;
+
     public SensorDataMappingServiceImpl(
             SensorService sensorService, DataTypeService dataTypeService,
-            SensorDataMappingRepository sensorDataMappingRepository
+            SensorDataMappingRepository sensorDataMappingRepository,
+            GatewayServiceAdapter gatewayServiceAdapter
     ) {
         this.sensorService = sensorService;
         this.dataTypeService = dataTypeService;
         this.sensorDataMappingRepository = sensorDataMappingRepository;
+        this.gatewayServiceAdapter = gatewayServiceAdapter;
     }
 
     @Override
@@ -61,7 +67,6 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
                 ? sensorService.getReferenceSensor(request.getSensorInfo())
                 : sensorService.registerSensor(request.getSensorInfo());
 
-        /// TODO: 번역기 라이브러리 적용하기
         DataType dataType = dataTypeService.isExistsDataType(request.getDataTypeEnName())
                 ? dataTypeService.getReferenceDataType(request.getDataTypeEnName())
                 : dataTypeService.registerDataType(request.getDataTypeEnName(), request.getDataTypeEnName());
@@ -73,6 +78,13 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
                         SensorStatus.PENDING
                 );
         sensorDataMappingRepository.save(sensorDataMapping);
+
+        long gatewayId = sensor.getGatewayId();
+        GatewayCountUpdateRequest updateRequest = new GatewayCountUpdateRequest(
+                gatewayId,
+                sensorDataMappingRepository.countByGatewayId(gatewayId)
+        );
+        gatewayServiceAdapter.updateGatewaySensorCount(updateRequest);
     }
 
     @Override
@@ -181,7 +193,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SensorDataMappingWebResponse> getSensorDataMappings(long gatewayId) {
+    public List<SensorDataDetailResponse> getSensorDataMappings(long gatewayId) {
         return sensorDataMappingRepository.findAllWebResponseByGatewayId(gatewayId);
     }
 

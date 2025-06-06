@@ -46,6 +46,7 @@ class SensorScenarioTest {
                         Sensor.ofNewSensor(
                                 gatewayId,
                                 sensorId,
+                                SensorTestingData.TEST_SENSOR_NAME,
                                 null,
                                 null
                         )
@@ -72,6 +73,7 @@ class SensorScenarioTest {
                         Sensor.ofNewSensor(
                                 SensorTestingData.TEST_GATEWAY_ID,
                                 SensorTestingData.TEST_SENSOR_ID,
+                                SensorTestingData.TEST_SENSOR_NAME,
                                 null,
                                 null
                         )
