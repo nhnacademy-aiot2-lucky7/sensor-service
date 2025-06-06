@@ -6,12 +6,15 @@ import com.nhnacademy.sensor.domain.Sensor;
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfo;
 import com.nhnacademy.sensor.dto.SensorInfoResponse;
+import com.nhnacademy.sensor.dto.SensorNameUpdateRequest;
+import com.nhnacademy.sensor.dto.SensorPositionUpdateRequest;
 import com.nhnacademy.sensor.repository.SensorRepository;
 import com.nhnacademy.sensor.service.SensorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -36,8 +39,9 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public Sensor registerSensor(SensorInfo request) {
-        String sensorName = "%s".formatted(
-                request.getSensorId().substring(0, 10)
+        String sensorName = "%s-%d".formatted(
+                UUID.randomUUID().toString().substring(0, 8),
+                System.currentTimeMillis()
         );
 
         return sensorRepository.save(
@@ -66,6 +70,20 @@ public class SensorServiceImpl implements SensorService {
         return sensor;
     }
 
+    public Sensor getSensor(long gatewayId, String sensorId) {
+        Sensor sensor = sensorRepository.findByGatewayIdAndSensorId(
+                gatewayId,
+                sensorId
+        );
+        if (sensor == null) {
+            throw new SensorNotFoundException(
+                    gatewayId,
+                    sensorId
+            );
+        }
+        return sensor;
+    }
+
     @Override
     public Sensor getReferenceSensor(SensorInfo request) {
         return sensorRepository.getReferenceByGatewayIdAndSensorId(
@@ -75,11 +93,24 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public void updateSensor(SensorInfo request) {
-        Sensor sensor = getSensor(request);
+    public void updateSensorName(SensorNameUpdateRequest request) {
+        Sensor sensor = getSensor(
+                request.getGatewayId(),
+                request.getSensorId()
+        );
+        sensor.updateSensorName(request.getSensorName());
+        sensorRepository.flush();
+    }
+
+    @Override
+    public void updateSensorPosition(SensorPositionUpdateRequest request) {
+        Sensor sensor = getSensor(
+                request.getGatewayId(),
+                request.getSensorId()
+        );
         sensor.updateSensorPosition(
-                request.getSensorLocation(),
-                request.getSensorSpot()
+                request.getLocation(),
+                request.getSpot()
         );
         sensorRepository.flush();
     }
