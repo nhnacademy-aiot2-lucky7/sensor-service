@@ -7,16 +7,16 @@ import com.nhnacademy.sensor_type_mapping.domain.QSensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.nhnacademy.sensor_type_mapping.dto.QSearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.QSensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.QSensorDataMappingResponse;
-import com.nhnacademy.sensor_type_mapping.dto.QSensorDataSummaryResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingSearchRequest;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataSummaryResponse;
 import com.nhnacademy.sensor_type_mapping.repository.CustomSensorDataMappingRepository;
 import com.nhnacademy.type.domain.QDataType;
 import com.nhnacademy.type.dto.QDataTypeInfoResponse;
@@ -171,10 +171,10 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public List<SensorDataSummaryResponse> findAllWebResponseByGatewayId(long gatewayId) {
+    public List<SensorDataDetailResponse> findAllWebResponseByGatewayId(long gatewayId) {
         return queryFactory
                 .select(
-                        new QSensorDataSummaryResponse(
+                        new QSensorDataDetailResponse(
                                 qSensor.sensorNo,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,

@@ -3,12 +3,12 @@ package com.nhnacademy.sensor_type_mapping.service;
 import com.nhnacademy.sensor_type_mapping.domain.SensorDataMapping;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingResponse;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataSummaryResponse;
 
 import java.util.List;
 import java.util.Set;
@@ -34,7 +34,7 @@ public interface SensorDataMappingService {
 
     SensorDataMappingResponse getSensorDataMappingInfoResponse(SensorDataMappingInfo request);
 
-    List<SensorDataSummaryResponse> getSensorDataMappings(long gatewayId);
+    List<SensorDataDetailResponse> getSensorDataMappings(long gatewayId);
 
     List<SensorDataMappingAiResponse> getAiResponse(long gatewayId);
 

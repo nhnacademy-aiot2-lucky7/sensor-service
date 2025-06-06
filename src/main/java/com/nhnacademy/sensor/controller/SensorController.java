@@ -2,6 +2,8 @@ package com.nhnacademy.sensor.controller;
 
 import com.nhnacademy.sensor.dto.SensorIndexResponse;
 import com.nhnacademy.sensor.dto.SensorInfo;
+import com.nhnacademy.sensor.dto.SensorNameUpdateRequest;
+import com.nhnacademy.sensor.dto.SensorPositionUpdateRequest;
 import com.nhnacademy.sensor.service.SensorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,15 +43,25 @@ public class SensorController {
                 .build();
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateSensor(
-            @Validated @RequestBody SensorInfo request
+    @PutMapping("/update-sensor-name")
+    public ResponseEntity<Void> updateSensorName(
+            @Validated @RequestBody SensorNameUpdateRequest request
     ) {
-        sensorService.updateSensor(request);
+        sensorService.updateSensorName(request);
         return ResponseEntity
                 .noContent()
                 .build();
     }
 
+    @PutMapping("/update-sensor-position")
+    public ResponseEntity<Void> updateSensorPosition(
+            @Validated @RequestBody SensorPositionUpdateRequest request
+    ) {
+        sensorService.updateSensorPosition(request);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+    
     /// TODO: 삭제의 경우는 SensorDataMapping랑 연계해서 삭제해야 합니다.
 }

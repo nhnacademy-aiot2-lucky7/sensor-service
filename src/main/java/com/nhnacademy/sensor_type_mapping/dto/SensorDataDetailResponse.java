@@ -5,7 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public final class SensorDataSummaryResponse {
+public final class SensorDataDetailResponse {
 
     @JsonProperty("sensor_data_no")
     private final Long sensorNo;
@@ -29,7 +29,7 @@ public final class SensorDataSummaryResponse {
     private final String sensorSpot;
 
     @QueryProjection
-    public SensorDataSummaryResponse(
+    public SensorDataDetailResponse(
             Long sensorNo, Long gatewayId, String sensorId, String sensorName,
             String typeEnName, String sensorLocation, String sensorSpot
     ) {
