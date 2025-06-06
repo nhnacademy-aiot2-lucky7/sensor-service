@@ -22,10 +22,6 @@ import java.util.Optional;
 @CustomDataJpaTest
 class SensorDataMappingRepositoryTest {
 
-    private final String testSensorId = "test-sensor-id";
-
-    private final String testEnName = DataTypeTestingData.TEST_EN_NAME;
-
     private static final SensorStatus DEFAULT_STATUS = SensorStatus.PENDING;
 
     @Autowired
@@ -47,14 +43,16 @@ class SensorDataMappingRepositoryTest {
     void setUp() {
         sensor = Sensor.ofNewSensor(
                 SensorTestingData.TEST_GATEWAY_ID,
-                testSensorId,
+                SensorTestingData.TEST_SENSOR_ID,
+                SensorTestingData.TEST_SENSOR_NAME,
                 SensorTestingData.TEST_SENSOR_LOCATION,
                 SensorTestingData.TEST_SENSOR_SPOT
         );
         sensorRepository.save(sensor);
 
         dataType = DataType.ofNewDataType(
-                testEnName, DataTypeTestingData.TEST_KR_NAME
+                DataTypeTestingData.TEST_EN_NAME,
+                DataTypeTestingData.TEST_KR_NAME
         );
         dataTypeRepository.save(dataType);
 

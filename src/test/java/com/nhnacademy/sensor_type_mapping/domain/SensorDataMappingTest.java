@@ -37,14 +37,17 @@ class SensorDataMappingTest {
     @BeforeEach
     void setUp() {
         sensor = Sensor.ofNewSensor(
-                testGatewayId, testSensorId,
+                testGatewayId,
+                testSensorId,
+                SensorTestingData.TEST_SENSOR_NAME,
                 SensorTestingData.TEST_SENSOR_LOCATION,
                 SensorTestingData.TEST_SENSOR_SPOT
         );
         em.persist(sensor);
 
         dataType = DataType.ofNewDataType(
-                testEnName, testKrName
+                testEnName,
+                testKrName
         );
         em.persist(dataType);
     }

@@ -248,6 +248,17 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
         return uniqueSet;
     }
 
+    @Override
+    public int countByGatewayId(long gatewayId) {
+        Long count = queryFactory
+                .select(qSensorDataMapping.sensorDataNo.count())
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .where(qSensor.gatewayId.eq(gatewayId))
+                .fetchOne();
+        return count != null ? count.intValue() : 0;
+    }
+
     private BooleanBuilder getSearchStatuses(List<SensorStatus> sensorStatuses) {
         BooleanBuilder builder = new BooleanBuilder();
         for (SensorStatus sensorStatus : sensorStatuses) {

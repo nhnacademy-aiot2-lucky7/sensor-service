@@ -33,7 +33,15 @@ public class SensorDataMappingController {
         this.sensorDataMappingService = sensorDataMappingService;
     }
 
+    /// TODO: Web 요청 용도
     @GetMapping
+    public ResponseEntity<List<Void>> getSensorDataSummariesByGatewayId() {
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @GetMapping("/sensor-indexes")
     public ResponseEntity<Set<SensorDataMappingIndexResponse>> getIndexes() {
         return ResponseEntity
                 .ok(sensorDataMappingService.getIndexes());

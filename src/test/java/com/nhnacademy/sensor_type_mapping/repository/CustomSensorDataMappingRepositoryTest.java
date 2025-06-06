@@ -178,8 +178,8 @@ class CustomSensorDataMappingRepositoryTest {
 
     private List<Sensor> testSensors() {
         return List.of(
-                Sensor.ofNewSensor(1L, "24e124126c152919", "클래스 A", "후문"),
-                Sensor.ofNewSensor(2L, "24e124700d084198", "클래스 B", "책상 라인 1번")
+                Sensor.ofNewSensor(1L, "24e124126c152919", "온도 센서", "클래스 A", "후문"),
+                Sensor.ofNewSensor(2L, "24e124700d084198", "습도 센서", "클래스 B", "책상 라인 1번")
         );
     }
 
