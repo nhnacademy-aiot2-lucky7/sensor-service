@@ -2,11 +2,11 @@ package com.nhnacademy.sensor_type_mapping.controller;
 
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoRequest;
 import com.nhnacademy.sensor_type_mapping.dto.SearchNoResponse;
+import com.nhnacademy.sensor_type_mapping.dto.SensorDataDetailResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataIndexInfo;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingAiResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingIndexResponse;
 import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingInfo;
-import com.nhnacademy.sensor_type_mapping.dto.SensorDataMappingWebResponse;
 import com.nhnacademy.sensor_type_mapping.service.SensorDataMappingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +33,12 @@ public class SensorDataMappingController {
         this.sensorDataMappingService = sensorDataMappingService;
     }
 
-    /// TODO: Web 요청 용도
-    @GetMapping
-    public ResponseEntity<List<Void>> getSensorDataSummariesByGatewayId() {
+    @GetMapping("/gateway-id/{gateway-id}/sensors")
+    public ResponseEntity<List<SensorDataDetailResponse>> getSensorDataDetailsByGatewayId(
+            @PathVariable("gateway-id") Long gatewayId
+    ) {
         return ResponseEntity
-                .noContent()
-                .build();
+                .ok(sensorDataMappingService.getSensorDataMappings(gatewayId));
     }
 
     @GetMapping("/sensor-indexes")
@@ -63,14 +63,6 @@ public class SensorDataMappingController {
         return ResponseEntity
                 .noContent()
                 .build();
-    }
-
-    @GetMapping("/gateway-id/{gateway-id}/sensors")
-    public ResponseEntity<List<SensorDataMappingWebResponse>> getSensorsByGatewayId(
-            @PathVariable("gateway-id") Long gatewayId
-    ) {
-        return ResponseEntity
-                .ok(sensorDataMappingService.getSensorDataMappings(gatewayId));
     }
 
     @GetMapping("/gateway-id/{gateway_id}/sensor-indexes")
