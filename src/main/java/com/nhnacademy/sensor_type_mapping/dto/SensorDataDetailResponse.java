@@ -16,7 +16,6 @@ public final class SensorDataDetailResponse {
     @JsonProperty("sensor_id")
     private final String sensorId;
 
-    @JsonProperty("name")
     private final String sensorName;
 
     @JsonProperty("type_en_name")
