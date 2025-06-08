@@ -21,6 +21,9 @@ public final class SensorDataDetailResponse {
     @JsonProperty("type_en_name")
     private final String typeEnName;
 
+    @JsonProperty("type_unit")
+    private final String typeUnit;
+
     @JsonProperty("location")
     private final String sensorLocation;
 
@@ -30,13 +33,14 @@ public final class SensorDataDetailResponse {
     @QueryProjection
     public SensorDataDetailResponse(
             Long sensorNo, Long gatewayId, String sensorId, String sensorName,
-            String typeEnName, String sensorLocation, String sensorSpot
+            String typeEnName, String typeUnit, String sensorLocation, String sensorSpot
     ) {
         this.sensorNo = sensorNo;
         this.gatewayId = gatewayId;
         this.sensorId = sensorId;
         this.sensorName = sensorName;
         this.typeEnName = typeEnName;
+        this.typeUnit = typeUnit;
         this.sensorLocation = sensorLocation;
         this.sensorSpot = sensorSpot;
     }

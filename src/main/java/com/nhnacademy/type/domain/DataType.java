@@ -30,6 +30,10 @@ public class DataType {
     @Comment("데이터_타입_한글명")
     private String dataTypeKrName;
 
+    @Column(name = "type_unit", length = 10, nullable = true)
+    @Comment("데이터_타입_단위")
+    private String dataTypeUnit;
+
     /**
      * JPA 전용 기본 생성자입니다.
      */
@@ -44,9 +48,10 @@ public class DataType {
      * @param dataTypeKrName 데이터 타입의 한글 이름
      * @see DataType#ofNewDataType(String, String)
      */
-    private DataType(String dataTypeEnName, String dataTypeKrName) {
+    private DataType(String dataTypeEnName, String dataTypeKrName, String dataTypeUnit) {
         this.dataTypeEnName = dataTypeEnName;
         this.dataTypeKrName = dataTypeKrName;
+        this.dataTypeUnit = dataTypeUnit;
     }
 
     /**
@@ -61,7 +66,8 @@ public class DataType {
     public static DataType ofNewDataType(String dataTypeEnName, String dataTypeKrName) {
         return new DataType(
                 dataTypeEnName,
-                dataTypeKrName
+                dataTypeKrName,
+                null
         );
     }
 
