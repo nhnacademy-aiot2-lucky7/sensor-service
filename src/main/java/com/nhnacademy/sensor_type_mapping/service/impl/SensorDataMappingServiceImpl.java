@@ -223,7 +223,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
                     SensorStatus.from(status)
             );
         }
-        return sensorDataMappingRepository.findAllAiResponsesBySensorStatusesAndGatewayID(gatewayId, sensorStatuses);
+        return sensorDataMappingRepository.findAllAiResponsesBySensorStatusesAndGatewayId(gatewayId, sensorStatuses);
     }
 
     /// 검색용 데이터
