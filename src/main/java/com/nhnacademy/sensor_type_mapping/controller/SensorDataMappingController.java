@@ -56,12 +56,12 @@ public class SensorDataMappingController {
     }
 
     @GetMapping("/gateway-id/{gateway-id}/search-status")
-    public ResponseEntity<List<SensorDataMappingAiResponse>> getStatusesByGatewayId(
+    public ResponseEntity<List<SensorDataDetailResponse>> getSensorsByStatusAndGatewayId(
             @PathVariable("gateway-id") Long gatewayId,
             @RequestParam(required = false) List<String> status
     ) {
         return ResponseEntity
-                .ok(sensorDataMappingService.getStatusesByGatewayId(gatewayId, status));
+                .ok(sensorDataMappingService.getSensorsByStatusAndGatewayId(gatewayId, status));
     }
 
     /// TODO: P.K 값을 제물로 바쳐서 gatewayId, SensorId, DataType 3신기 소환

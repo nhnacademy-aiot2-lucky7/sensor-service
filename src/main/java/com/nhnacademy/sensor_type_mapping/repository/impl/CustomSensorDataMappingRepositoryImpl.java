@@ -231,11 +231,14 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     public List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses) {
         return queryFactory
                 .select(
-                        new QSensorDataMappingAiResponse(
+                        new QSensorDataDetailResponse(
+                                qSensor.sensorNo,
                                 qSensor.gatewayId,
                                 qSensor.sensorId,
-                                qSensorDataMapping.sensorStatus,
-                                qDataType.dataTypeEnName
+                                qSensor.sensorName,
+                                qDataType.dataTypeEnName,
+                                qSensor.sensorLocation,
+                                qSensor.sensorSpot
                         )
                 )
                 .from(qSensorDataMapping)

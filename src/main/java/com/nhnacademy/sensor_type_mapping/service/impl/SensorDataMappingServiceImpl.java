@@ -216,7 +216,7 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
     }
 
     @Override
-    public List<SensorDataMappingAiResponse> getStatusesByGatewayId(Long gatewayId, List<String> statuses) {
+    public List<SensorDataDetailResponse> getSensorsByStatusAndGatewayId(Long gatewayId, List<String> statuses) {
         List<SensorStatus> sensorStatuses = new ArrayList<>();
         for (String status : statuses) {
             sensorStatuses.add(
