@@ -228,6 +228,24 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
+    public List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses) {
+        return queryFactory
+                .select(
+                        new QSensorDataMappingAiResponse(
+                                qSensor.gatewayId,
+                                qSensor.sensorId,
+                                qSensorDataMapping.sensorStatus,
+                                qDataType.dataTypeEnName
+                        )
+                )
+                .from(qSensorDataMapping)
+                .innerJoin(qSensorDataMapping.sensor, qSensor)
+                .innerJoin(qSensorDataMapping.dataType, qDataType)
+                .where(getSearchStatuses(sensorStatuses), getGatewayId(gatewayId))
+                .fetch();
+    }
+
+    @Override
     public Set<SensorDataMappingIndexResponse> findAllSensorDataUniqueKeys() {
         List<SensorDataMappingIndexResponse> uniqueList =
                 queryFactory
@@ -265,6 +283,12 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
         for (SensorStatus sensorStatus : sensorStatuses) {
             builder.or(qSensorDataMapping.sensorStatus.eq(sensorStatus));
         }
+        return builder;
+    }
+
+    private BooleanBuilder getGatewayId(Long gatewayId) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qSensor.gatewayId.eq(gatewayId));
         return builder;
     }
 

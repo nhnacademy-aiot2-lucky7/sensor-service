@@ -215,6 +215,17 @@ public class SensorDataMappingServiceImpl implements SensorDataMappingService {
         return sensorDataMappingRepository.findAllAiResponsesBySensorStatuses(sensorStatuses);
     }
 
+    @Override
+    public List<SensorDataMappingAiResponse> getStatusesByGatewayId(Long gatewayId, List<String> statuses) {
+        List<SensorStatus> sensorStatuses = new ArrayList<>();
+        for (String status : statuses) {
+            sensorStatuses.add(
+                    SensorStatus.from(status)
+            );
+        }
+        return sensorDataMappingRepository.findAllAiResponsesBySensorStatusesAndGatewayID(gatewayId, sensorStatuses);
+    }
+
     /// 검색용 데이터
     @Transactional(readOnly = true)
     @Override

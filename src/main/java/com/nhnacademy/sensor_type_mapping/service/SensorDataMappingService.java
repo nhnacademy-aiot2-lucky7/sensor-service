@@ -40,5 +40,7 @@ public interface SensorDataMappingService {
 
     List<SensorDataMappingAiResponse> getStatuses(List<String> statuses);
 
+    List<SensorDataMappingAiResponse> getStatusesByGatewayId(Long gatewayId, List<String> statuses);
+
     Set<SensorDataMappingIndexResponse> getIndexes();
 }
