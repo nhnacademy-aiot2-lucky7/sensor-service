@@ -46,7 +46,7 @@ public interface CustomSensorDataMappingRepository {
 
     List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatuses(List<SensorStatus> sensorStatuses);
 
-    List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses);
+    List<SensorDataDetailResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses);
 
     Set<SensorDataMappingIndexResponse> findAllSensorDataUniqueKeys();
 

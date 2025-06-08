@@ -228,7 +228,7 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public List<SensorDataMappingAiResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses) {
+    public List<SensorDataDetailResponse> findAllAiResponsesBySensorStatusesAndGatewayId(Long gatewayId, List<SensorStatus> sensorStatuses) {
         return queryFactory
                 .select(
                         new QSensorDataDetailResponse(
