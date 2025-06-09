@@ -37,7 +37,7 @@ public final class SensorDataDetailResponse {
     @QueryProjection
     public SensorDataDetailResponse(
             Long sensorNo, Long gatewayId, String sensorId, String sensorName,
-            String typeEnName, String typeUnit, String sensorLocation, String sensorSpot, String status
+            String typeEnName, String typeUnit, String sensorLocation, String sensorSpot, SensorStatus status
     ) {
         this.sensorNo = sensorNo;
         this.gatewayId = gatewayId;
