@@ -1,6 +1,7 @@
 package com.nhnacademy.sensor_type_mapping.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nhnacademy.sensor_type_mapping.domain.SensorStatus;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
@@ -30,10 +31,13 @@ public final class SensorDataDetailResponse {
     @JsonProperty("spot")
     private final String sensorSpot;
 
+    @JsonProperty("status")
+    private final SensorStatus status;
+
     @QueryProjection
     public SensorDataDetailResponse(
             Long sensorNo, Long gatewayId, String sensorId, String sensorName,
-            String typeEnName, String typeUnit, String sensorLocation, String sensorSpot
+            String typeEnName, String typeUnit, String sensorLocation, String sensorSpot, String status
     ) {
         this.sensorNo = sensorNo;
         this.gatewayId = gatewayId;
@@ -43,5 +47,6 @@ public final class SensorDataDetailResponse {
         this.typeUnit = typeUnit;
         this.sensorLocation = sensorLocation;
         this.sensorSpot = sensorSpot;
+        this.status = status;
     }
 }

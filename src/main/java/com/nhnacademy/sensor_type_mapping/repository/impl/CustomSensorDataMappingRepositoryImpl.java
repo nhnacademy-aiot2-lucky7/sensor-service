@@ -182,7 +182,8 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
                                 qDataType.dataTypeEnName,
                                 qDataType.dataTypeUnit,
                                 qSensor.sensorLocation,
-                                qSensor.sensorSpot
+                                qSensor.sensorSpot,
+                                qSensorDataMapping.sensorStatus
                         )
                 )
                 .from(qSensorDataMapping)
@@ -240,7 +241,8 @@ public class CustomSensorDataMappingRepositoryImpl extends QuerydslRepositorySup
                                 qDataType.dataTypeEnName,
                                 qDataType.dataTypeUnit,
                                 qSensor.sensorLocation,
-                                qSensor.sensorSpot
+                                qSensor.sensorSpot,
+                                qSensorDataMapping.sensorStatus
                         )
                 )
                 .from(qSensorDataMapping)
