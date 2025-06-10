@@ -46,6 +46,7 @@ public class DataType {
      *
      * @param dataTypeEnName 데이터 타입의 영문 이름
      * @param dataTypeKrName 데이터 타입의 한글 이름
+     * @param dataTypeUnit   데이터 타입의 단위
      * @see DataType#ofNewDataType(String, String)
      */
     private DataType(String dataTypeEnName, String dataTypeKrName, String dataTypeUnit) {
