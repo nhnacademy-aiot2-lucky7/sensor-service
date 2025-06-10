@@ -50,6 +50,9 @@ public enum SensorStatus {
                 return sensorStatus;
             }
         }
-        throw new BadRequestException("사용 가능한 값 [%s]".formatted(VALID_VALUES_STRING));
+        throw new BadRequestException(
+                "'sensor_status'에 사용 가능한 값 [%s]"
+                        .formatted(VALID_VALUES_STRING)
+        );
     }
 }
